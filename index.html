@@ -1,9 +1,12 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#335882">
+
+    <meta name="description" content="Sign in to the Brampton Develop Training and Development Portal.">
 
     <title>Sign in - Brampton Develop</title>
 
@@ -75,6 +78,13 @@
             border-bottom: 2px solid #335882;
         }
 
+        input:focus-visible,
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid #335882;
+            outline-offset: 4px;
+        }
+
         a {
             color: #335882;
             text-decoration: none;
@@ -95,6 +105,14 @@
             line-height: 1.5;
             white-space: pre-wrap;
             margin-top: 16px;
+        }
+
+        #message:empty {
+            display: none;
+        }
+
+        #message.success {
+            color: #107c10;
         }
 
         button {
@@ -137,6 +155,12 @@
                 padding: 30px 24px;
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            button {
+                transition: none;
+            }
+        }
     </style>
 </head>
 
@@ -146,18 +170,23 @@
             class="logo"
             src="assets/logo.svg"
             alt="Brampton Develop"
+            width="46"
+            height="46"
         >
 
         <h1>Sign in</h1>
         <p class="intro">Use your Brampton Develop work account.</p>
 
-        <form id="loginForm" action="javascript:void(0)" method="post">            
+        <form id="loginForm" action="/api/login" method="post">
             <label for="email">Email address or username</label>
             <input
                 id="email"
-                name="email"
+                name="username"
                 type="text"
                 autocomplete="username"
+                autocapitalize="none"
+                spellcheck="false"
+                maxlength="254"
                 required
                 autofocus
             >
@@ -168,6 +197,7 @@
                 name="password"
                 type="password"
                 autocomplete="current-password"
+                maxlength="1024"
                 required
             >
 
@@ -175,7 +205,11 @@
                 <a href="forgot-password.html">Forgot my password</a>
             </div>
 
-            <p id="message" role="alert" aria-live="polite"></p>
+            <p
+                id="message"
+                role="alert"
+                aria-live="polite"
+            ></p>
 
             <button id="submitButton" type="submit">
                 Sign in
@@ -185,34 +219,29 @@
 
     <div class="footer">Brampton Develop</div>
 
-    <!-- Load configuration, Supabase, then initialise the client. -->
-    <script src="js/config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/loader.js"></script>
-
     <script>
-        (async () => {
+        (() => {
+            "use strict";
+
             const form = document.getElementById("loginForm");
-            const emailInput = document.getElementById("email");
+            const usernameInput = document.getElementById("email");
             const passwordInput = document.getElementById("password");
             const message = document.getElementById("message");
             const button = document.getElementById("submitButton");
 
             function showMessage(text, success = false) {
                 message.textContent = text;
-                message.style.color = success ? "#107c10" : "#a4262c";
+                message.classList.toggle("success", success);
             }
 
-            function setBusy(busy, text = "Sign in") {
+            function setBusy(busy) {
                 button.disabled = busy;
-                button.textContent = busy ? "Signing in…" : text;
+                button.textContent = busy ? "Signing in…" : "Sign in";
+                usernameInput.readOnly = busy;
+                passwordInput.readOnly = busy;
             }
 
-            function getClient() {
-                return window.supabaseClient || null;
-            }
-
-            const params = new URLSearchParams(location.search);
+            const params = new URLSearchParams(window.location.search);
 
             if (params.get("status") === "deactivated") {
                 showMessage(
@@ -220,92 +249,13 @@
                 );
             }
 
-            if (!window.APP?.supabase) {
-                showMessage(
-                    "The website configuration could not be loaded. Please contact support."
-                );
-                console.error(
-                    "[Brampton Develop] window.APP is missing. Check js/config.js."
-                );
-                return;
-            }
-
-            if (!window.supabase?.createClient) {
-                showMessage(
-                    "Sign-in services could not be loaded. Please refresh the page or contact support."
-                );
-                console.error(
-                    "[Brampton Develop] Supabase library is unavailable."
-                );
-                return;
-            }
-
-            if (!getClient()) {
-                showMessage(
-                    "Sign-in services could not be initialised. Please contact support."
-                );
-                console.error(
-                    "[Brampton Develop] Supabase client is missing. Check js/loader.js."
-                );
-                return;
-            }
-
-            const client = getClient();
-
-            async function checkExistingSession() {
-                try {
-                    const { data, error } = await client.auth.getSession();
-
-                    if (error || !data.session) return;
-
-                    const { data: userData, error: userError } =
-                        await client.auth.getUser();
-
-                    if (userError || !userData.user) {
-                        await client.auth.signOut();
-                        return;
-                    }
-
-                    const { data: profile, error: profileError } =
-                        await client
-                            .from("profiles")
-                            .select("is_active")
-                            .eq("id", userData.user.id)
-                            .maybeSingle();
-
-                    if (
-                        !profileError &&
-                        profile &&
-                        profile.is_active === true
-                    ) {
-                        location.replace("dashboard.html");
-                        return;
-                    }
-
-                    await client.auth.signOut();
-
-                    if (!profileError && profile?.is_active === false) {
-                        showMessage(
-                            "Your account has been deactivated. Contact your administrator."
-                        );
-                    }
-                } catch (error) {
-                    console.error(
-                        "[Brampton Develop] Session check failed:",
-                        error
-                    );
-                }
-            }
-
-            await checkExistingSession();
-
-            form.addEventListener("submit", async (event) => {
+            form.addEventListener("submit", async event => {
                 event.preventDefault();
 
-                const email = emailInput.value.trim();
+                const username = usernameInput.value.trim();
                 const password = passwordInput.value;
 
-                if (!email || !password) {
+                if (!username || !password) {
                     showMessage("Enter your username and password.");
                     return;
                 }
@@ -314,65 +264,52 @@
                 showMessage("Signing in…", true);
 
                 try {
-                    const { error: signInError } =
-                        await client.auth.signInWithPassword({
-                            email,
+                    const response = await fetch("/api/login", {
+                        method: "POST",
+                        credentials: "same-origin",
+                        cache: "no-store",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username,
                             password
-                        });
+                        })
+                    });
 
-                    if (signInError) {
-                        showMessage(
-                            "We couldn't sign you in with those details."
-                        );
-                        setBusy(false);
+                    const result = await response.json().catch(() => null);
+
+                    if (!response.ok || !result || result.success !== true) {
+                        if (response.status === 403) {
+                            showMessage(
+                                result?.error ||
+                                "Your account cannot sign in. Contact your administrator."
+                            );
+                        } else if (response.status === 401) {
+                            showMessage(
+                                "We couldn't sign you in with those details."
+                            );
+                        } else {
+                            showMessage(
+                                result?.error ||
+                                "Sign-in services are temporarily unavailable. Please try again."
+                            );
+                        }
+
                         return;
                     }
 
-                    const { data: userData, error: userError } =
-                        await client.auth.getUser();
-
-                    if (userError || !userData.user) {
-                        await client.auth.signOut();
-                        showMessage("Unable to verify your account.");
-                        setBusy(false);
-                        return;
-                    }
-
-                    const { data: profile, error: profileError } =
-                        await client
-                            .from("profiles")
-                            .select("is_active")
-                            .eq("id", userData.user.id)
-                            .maybeSingle();
-
-                    if (
-                        profileError ||
-                        !profile ||
-                        profile.is_active !== true
-                    ) {
-                        await client.auth.signOut();
-
-                        showMessage(
-                            profile?.is_active === false
-                                ? "Your account has been deactivated. Contact your administrator."
-                                : "Your account has not been configured. Contact your administrator."
-                        );
-
-                        setBusy(false);
-                        return;
-                    }
-
-                    location.replace("dashboard.html");
+                    window.location.replace("dashboard.html");
                 } catch (error) {
                     console.error(
-                        "[Brampton Develop] Sign-in failed:",
-                        error
+                        "[Brampton Develop] Server-side login request failed."
                     );
 
                     showMessage(
-                        "An unexpected error occurred. Please try again."
+                        "Unable to contact the sign-in service. Please try again."
                     );
-
+                } finally {
                     setBusy(false);
                 }
             });
@@ -380,3 +317,4 @@
     </script>
 </body>
 </html>
+```
