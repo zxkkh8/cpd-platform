@@ -1,14 +1,4 @@
-/*
-=========================================
-BRAMPTON DEVELOP CONFIGURATION
-=========================================
-EDIT THIS FILE ONLY
-=========================================
-*/
-
 const APP = {
-
-    /* Branding */
 
     companyName: "Brampton Develop",
 
@@ -24,10 +14,6 @@ const APP = {
     favicon:
         "assets/favicon.ico",
 
-
-
-    /* Links */
-
     forgotPasswordUrl:
         "#",
 
@@ -40,10 +26,6 @@ const APP = {
     termsUrl:
         "#",
 
-
-
-    /* Supabase */
-
     supabase: {
 
         url:
@@ -54,10 +36,6 @@ const APP = {
 
     },
 
-
-
-    /* Pages */
-
     loginPage:
         "index.html",
 
@@ -67,44 +45,13 @@ const APP = {
     logoutPage:
         "index.html",
 
-
-
-    /* Forms */
-
     defaultPassMark:
         80,
 
     defaultCPDHours:
         1,
 
-
-
-    /* Certificates */
-
     certificatePrefix:
-        "BD",
-
-
-
-    /* Theme */
-
-    theme: {
-
-        primary:
-            "#0078D4",
-
-        secondary:
-            "#24315B",
-
-        success:
-            "#107C10",
-
-        warning:
-            "#FFB900",
-
-        danger:
-            "#D83B01"
-
-    }
+        "BD"
 
 };
