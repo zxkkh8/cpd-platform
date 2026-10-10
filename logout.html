@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Signing out - Brampton Develop</title>
+
+<style>
+:root {
+    --brand: #335882;
+    --brand-dark: #274666;
+    --background: #f5f7fa;
+    --surface: #ffffff;
+    --text: #202a36;
+    --muted: #687587;
+    --border: #e4e8ee;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+    color: var(--text);
+}
+
+header {
+    min-height: 78px;
+    padding: 18px 6%;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand img {
+    max-width: 135px;
+    max-height: 42px;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 650;
+    letter-spacing: -.3px;
+}
+
+.brand-subtitle {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+main {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: 35px 20px;
+}
+
+.card {
+    width: 100%;
+    max-width: 440px;
+    padding: 42px 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(30, 50, 75, .06);
+    text-align: center;
+    animation: appear .4s ease both;
+}
+
+.status-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #edf3f9;
+    color: var(--brand);
+}
+
+.status-icon svg {
+    width: 31px;
+    height: 31px;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #dce5ef;
+    border-top-color: var(--brand);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 650;
+    letter-spacing: -.5px;
+    line-height: 1.35;
+}
+
+.description {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.progress-track {
+    height: 3px;
+    margin-top: 29px;
+    overflow: hidden;
+    background: #e8edf3;
+    border-radius: 10px;
+}
+
+.progress-bar {
+    width: 35%;
+    height: 100%;
+    background: var(--brand);
+    border-radius: 10px;
+    animation: progress 1.5s ease-in-out infinite;
+}
+
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 43px;
+    margin-top: 25px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--brand);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.button:hover {
+    background: var(--brand-dark);
+}
+
+.security-note {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+footer {
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes progress {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(390%); }
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 35px 24px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <img src="assets/logo.svg"
+             alt="Brampton Develop logo"
+             onerror="this.style.display='none'">
+
+        <div>
+            <div class="brand-name">Brampton Develop</div>
+            <div class="brand-subtitle">
+                Development &amp; Training Portal
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="card" aria-live="polite">
+
+        <!-- Loading -->
+        <div id="loadingState">
+            <div class="status-icon">
+                <div class="spinner" aria-label="Loading"></div>
+            </div>
+
+            <h1>Signing you out</h1>
+
+            <p class="description">
+                Please wait while we securely sign you out
+                of your account.
+            </p>
+
+            <div class="progress-track">
+                <div class="progress-bar"></div>
+            </div>
+
+            <div class="security-note">
+                Please do not close this window while
+                sign-out is in progress.
+            </div>
+        </div>
+
+        <!-- Successful sign-out -->
+        <div id="successState" hidden>
+            <div class="status-icon">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+            </div>
+
+            <h1>You've successfully signed out</h1>
+
+            <p class="description">
+                You have been signed out of Brampton Develop.
+                For your security, please close all browser
+                windows to complete the process.
+            </p>
+
+            <a class="button" href="login.html">
+                Return to sign in
+            </a>
+
+            <div class="security-note">
+                Your sign-out process is complete.
+                You can safely leave this page.
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div id="errorState" hidden>
+            <div class="status-icon">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 8v4"></path>
+                    <path d="M12 16h.01"></path>
+                </svg>
+            </div>
+
+            <h1>Unable to sign out</h1>
+
+            <p class="description">
+                We couldn't complete sign-out with the
+                authentication service. Please try again.
+            </p>
+
+            <button class="button" id="retryButton" type="button">
+                Try again
+            </button>
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    Brampton Develop &copy; <span id="year"></span>
+</footer>
+
+<script src="js/loader.js"></script>
+
+<script>
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+const loadingState = document.getElementById("loadingState");
+const successState = document.getElementById("successState");
+const errorState = document.getElementById("errorState");
+const retryButton = document.getElementById("retryButton");
+
+let signingOut = false;
+
+function showState(state) {
+    loadingState.hidden = state !== "loading";
+    successState.hidden = state !== "success";
+    errorState.hidden = state !== "error";
+}
+
+function clearLocalAccount() {
+    try {
+        localStorage.removeItem("currentUser");
+        sessionStorage.removeItem("currentUser");
+    } catch (error) {
+        console.warn("Unable to clear saved account details.", error);
+    }
+}
+
+async function signOut() {
+    if (signingOut) return;
+
+    signingOut = true;
+    showState("loading");
+
+    try {
+        const client = window.supabaseClient;
+
+        if (client && client.auth) {
+            const { error } = await client.auth.signOut();
+
+            if (error) {
+                throw error;
+            }
+        }
+
+        clearLocalAccount();
+        showState("success");
+
+    } catch (error) {
+        console.error("Sign-out failed:", error);
+        showState("error");
+
+    } finally {
+        signingOut = false;
+    }
+}
+
+retryButton.addEventListener("click", signOut);
+
+signOut();
+</script>
+
+</body>
+</html>
