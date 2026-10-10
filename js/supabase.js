@@ -23,16 +23,8 @@ window.supabaseClient = window.supabase.createClient(
 );
 
 const supabaseClient = window.supabaseClient;
-
 async function loginUser(username, password) {
     try {
-        /*
-        This implementation expects username to be the
-        user's actual Supabase Auth email address.
-
-        For username-only login, use a secure server-side
-        username-to-email lookup instead.
-        */
 
         const { data, error } =
             await supabaseClient.auth.signInWithPassword({
