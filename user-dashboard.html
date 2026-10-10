@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Dashboard | Brampton Develop</title>
+  <script src="js/loader.js"></script>
+  <style>
+    :root { --brand: #335882; --bg: #f5f7fa; --text: #202938; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: "Segoe UI", Arial, sans-serif; }
+    header { background: white; border-bottom: 1px solid #e4e8ef; padding: 16px 5%; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 650; }
+    .brand img { width: 42px; height: 42px; object-fit: contain; }
+    main { max-width: 1100px; margin: 36px auto; padding: 0 20px; }
+    h1 { font-size: 30px; margin-bottom: 8px; }
+    .muted { color: #687588; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 28px; }
+    .card { background: white; padding: 22px; border: 1px solid #e3e8ef; border-radius: 12px; }
+    .card h2 { font-size: 17px; margin-top: 0; }
+    .value { font-size: 20px; font-weight: 650; overflow-wrap: anywhere; }
+    .profile { margin-top: 22px; }
+    a { color: var(--brand); text-decoration: none; font-weight: 600; }
+    button { background: var(--brand); color: white; border: 0; padding: 10px 15px; border-radius: 6px; cursor: pointer; font: inherit; }
+    .toplinks { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    #status { margin-top: 16px; }
+    @media(max-width: 750px) { .grid { grid-template-columns: 1fr; } header { padding: 14px 20px; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <img src="assets/logo.svg" alt="Brampton Develop">
+    <span>Brampton Develop</span>
+  </div>
+  <nav class="toplinks">
+    <a href="profile.html">My profile</a>
+    <a href="users.html" id="adminLink" hidden>Manage accounts</a>
+    <button id="logoutButton" type="button">Sign out</button>
+  </nav>
+</header>
+
+<main>
+  <p class="muted">BRAMPTON DEVELOP / STAFF PORTAL</p>
+  <h1 id="welcome">Welcome</h1>
+  <p class="muted">Your workspace and account information.</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2>My account</h2>
+      <p class="muted">Full name</p>
+      <div class="value" id="fullName">Loading…</div>
+    </section>
+    <section class="card">
+      <h2>Account role</h2>
+      <p class="muted">Your assigned access level</p>
+      <div class="value" id="role">Loading…</div>
+    </section>
+    <section class="card">
+      <h2>Account status</h2>
+      <p class="muted">Current account access</p>
+      <div class="value" id="accountStatus">Checking…</div>
+    </section>
+  </div>
+
+  <section class="card profile">
+    <h2>Account details</h2>
+    <p><strong>Email:</strong> <span id="email">Loading…</span></p>
+    <p><strong>Account ID:</strong> <span id="accountId">Loading…</span></p>
+    <p class="muted">If your details or permissions are incorrect, contact your Brampton Develop administrator.</p>
+    <p id="status" role="status" aria-live="polite"></p>
+    <a href="profile.html">View and edit your profile →</a>
+  </section>
+</main>
+
+<script>
+(async () => {
+  const client = window.supabaseClient;
+  if (!client) {
+    document.getElementById("status").textContent = "Unable to load authentication. Check js/loader.js.";
+    return;
+  }
+
+  const { data: authData, error: authError } = await client.auth.getUser();
+  if (authError || !authData?.user) {
+    location.replace("index.html");
+    return;
+  }
+
+  const user = authData.user;
+  const { data: profile, error } = await client
+    .from("profiles")
+    .select("id,email,full_name,role,is_active")
+    .eq("id", user.id)
+    .single();
+
+  if (error || !profile) {
+    document.getElementById("status").textContent =
+      "Your profile could not be loaded. Please contact your administrator.";
+    return;
+  }
+
+  if (profile.is_active !== true) {
+    await client.auth.signOut();
+    location.replace("index.html?status=deactivated");
+    return;
+  }
+
+  const name = profile.full_name || user.user_metadata?.full_name || "Staff member";
+  document.getElementById("welcome").textContent = `Welcome, ${name}`;
+  document.getElementById("fullName").textContent = name;
+  document.getElementById("role").textContent = profile.role || "Staff";
+  document.getElementById("accountStatus").textContent = "Active";
+  document.getElementById("email").textContent = profile.email || user.email || "Not available";
+  document.getElementById("accountId").textContent = profile.id;
+
+  if (profile.role === "admin") {
+    document.getElementById("adminLink").hidden = false;
+  }
+
+  document.getElementById("logoutButton").addEventListener("click", async () => {
+    await client.auth.signOut();
+    location.replace("index.html");
+  });
+})();
+</script>
+</body>
+</html>
