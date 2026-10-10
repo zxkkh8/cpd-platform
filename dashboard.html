@@ -1,213 +1,395 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+<title>Dashboard - Brampton Develop</title>
 
 <style>
+
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:"Segoe UI","Segoe UI Variable",sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI","Segoe UI Variable",sans-serif;
 }
 
 body{
-display:flex;
-background:#f3f5f9;
+    background:#f3f2f1;
+    color:#323130;
 }
 
 .sidebar{
-width:260px;
-height:100vh;
-background:#124191;
-color:white;
-padding:20px;
-position:fixed;
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#ffffff;
+    border-right:1px solid #edebe9;
+    overflow:auto;
 }
 
-.logo{
-text-align:center;
-margin-bottom:40px;
+.brand{
+    padding:24px;
+    border-bottom:1px solid #edebe9;
 }
 
-.logo img{
-height:70px;
+.brand img{
+    height:60px;
+    width:auto;
+    display:block;
+    margin-bottom:12px;
 }
 
-.menu a{
-display:flex;
-align-items:center;
-gap:12px;
-padding:14px;
-margin-bottom:10px;
-color:white;
-text-decoration:none;
-border-radius:8px;
+.brand h1{
+    font-size:24px;
+    font-weight:600;
 }
 
-.menu a:hover{
-background:rgba(255,255,255,.15);
+.brand p{
+    color:#605e5c;
+    font-size:13px;
+}
+
+.nav{
+    padding:15px;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border-radius:4px;
+    text-decoration:none;
+    color:#323130;
+    margin-bottom:4px;
+    transition:.2s;
+}
+
+.nav a:hover{
+    background:#f3f2f1;
+}
+
+.nav a.active{
+    background:#deecf9;
+    color:#005a9e;
+    font-weight:600;
+}
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+}
+
+.topbar{
+    background:#ffffff;
+    border-bottom:1px solid #edebe9;
+    padding:20px 30px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.page-title h2{
+    font-size:28px;
+    font-weight:600;
+}
+
+.page-title p{
+    color:#605e5c;
+    margin-top:4px;
+}
+
+.user-info{
+    text-align:right;
+}
+
+.user-info span{
+    display:block;
+    color:#605e5c;
+    font-size:14px;
 }
 
 .content{
-margin-left:260px;
-padding:30px;
-width:100%;
+    padding:30px;
 }
 
-.cards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:20px;
-margin-bottom:30px;
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:30px;
 }
 
-.card{
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 3px 10px rgba(0,0,0,.05);
+.stat-card{
+    background:white;
+    padding:25px;
+    border-radius:4px;
+    border:1px solid #edebe9;
 }
 
-.card h3{
-color:#64748b;
-font-size:14px;
+.stat-card h3{
+    color:#605e5c;
+    font-size:14px;
+    margin-bottom:10px;
 }
 
-.card h2{
-font-size:32px;
-margin-top:10px;
-color:#124191;
+.stat-card h1{
+    font-size:36px;
+    font-weight:600;
 }
 
-.table-box{
-background:white;
-padding:25px;
-border-radius:12px;
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:white;
+    border:1px solid #edebe9;
+    border-radius:4px;
+    overflow:hidden;
+}
+
+.panel-header{
+    padding:20px;
+    border-bottom:1px solid #edebe9;
+    font-weight:600;
+}
+
+.panel-body{
+    padding:20px;
 }
 
 table{
-width:100%;
-border-collapse:collapse;
+    width:100%;
+    border-collapse:collapse;
 }
 
-th,
-td{
-padding:14px;
-text-align:left;
-border-bottom:1px solid #e5e7eb;
+th{
+    text-align:left;
+    padding:12px;
+    background:#faf9f8;
 }
+
+td{
+    padding:12px;
+    border-bottom:1px solid #edebe9;
+}
+
+.quick-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.quick-actions a{
+    background:#0078d4;
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    border-radius:4px;
+    text-align:center;
+}
+
+.quick-actions a:hover{
+    background:#106ebe;
+}
+
+@media(max-width:1000px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
 </head>
-
 <body>
 
 <div class="sidebar">
 
-    <div class="logo">
-        assets/logo.svg
+    <div class="brand">
+
+        <img id="sidebarLogo" alt="Logo">
+
+        <h1 id="companyName">
+            Brampton Develop
+        </h1>
+
+        <p id="portalName">
+            Professional Development & Training Portal
+        </p>
+
     </div>
 
-    <div class="menu">
+    <div class="nav">
 
-        dashboard.html
-            assets/dashboard.svg
+        <a href="dashboard.html" class="active">
             Dashboard
         </a>
 
-        forms.html
-            assets/forms.svg
+        <a href="forms.html">
             Forms
         </a>
 
-        responses.html
-            assets/results.svg
-            Results
+        <a href="responses.html">
+            Responses
         </a>
 
-        certificates.html
-            assets/certificate.svg
+        <a href="certificates.html">
             Certificates
         </a>
 
-        users.html
-            assets/users.svg
+        <a href="users.html">
             Users
+        </a>
+
+        settings.html
+            Settings
         </a>
 
     </div>
 
 </div>
 
-<div class="content">
+<div class="main">
 
-    <h1>Dashboard</h1>
+    <div class="topbar">
 
-    <br>
+        <div class="page-title">
 
-    <div class="cards">
+            <h2>Dashboard</h2>
 
-        <div class="card">
-            <h3>Total Forms</h3>
-            <h2>24</h2>
+            <p>Overview of platform activity</p>
+
         </div>
 
-        <div class="card">
-            <h3>Responses</h3>
-            <h2>1,482</h2>
-        </div>
+        <div class="user-info">
 
-        <div class="card">
-            <h3>Users</h3>
-            <h2>126</h2>
-        </div>
+            <strong id="currentUser">
+                Loading...
+            </strong>
 
-        <div class="card">
-            <h3>Certificates</h3>
-            <h2>852</h2>
+            <span>
+                Logged In
+            </span>
+
         </div>
 
     </div>
 
-    <div class="table-box">
+    <div class="content">
 
-        <h2>Recent Forms</h2>
+        <div class="stats">
 
-        <br>
+            <div class="stat-card">
 
-        <table>
+                <h3>Users</h3>
 
-            <tr>
-                <th>Form</th>
-                <th>Responses</th>
-                <th>Average Score</th>
-            </tr>
+                <h1 id="userCount">0</h1>
 
-            <tr>
-                <td>Safeguarding</td>
-                <td>245</td>
-                <td>89%</td>
-            </tr>
+            </div>
 
-            <tr>
-                <td>GDPR</td>
-                <td>145</td>
-                <td>92%</td>
-            </tr>
+            <div class="stat-card">
 
-            <tr>
-                <td>Fire Safety</td>
-                <td>98</td>
-                <td>87%</td>
-            </tr>
+                <h3>Forms</h3>
 
-        </table>
+                <h1 id="formCount">0</h1>
 
-    </div>
+            </div>
 
-</div>
+            <div class="stat-card">
 
-</body>
-</html>
+                <h3>Responses</h3>
+
+                <h1 id="responseCount">0</h1>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h3>Certificates</h3>
+
+                <h1 id="certificateCount">0</h1>
+
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    Recent Forms
+                </div>
+
+                <div class="panel-body">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Pass Mark</th>
+                                <th>CPD Hours</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="recentForms">
+
+                            <tr>
+                                <td colspan="3">
+                                    No forms found
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    Quick Actions
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="quick-actions">
+
+                        create-form.html
+                            Create Form
+                        </a>
+
+           
