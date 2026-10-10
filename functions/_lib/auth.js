@@ -1,215 +1,167 @@
-const COOKIE_NAME = "__Host-brampton_session";
-const SESSION_SECONDS = 8 * 60 * 60;
-const PASSWORD_ITERATIONS = 600000;
+const SESSION_COOKIE = "__Host-brampton_session";
+const SESSION_DURATION = 8 * 60 * 60;
+const MIN_ITERATIONS = 600000;
+const MAX_ITERATIONS = 1000000;
 
-function json(body, status = 200, extraHeaders = {}) {
-    return new Response(JSON.stringify(body), {
-        status,
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "Cache-Control": "no-store",
-            "X-Content-Type-Options": "nosniff",
-            ...extraHeaders
-        }
-    });
+export function json(data, status = 200, headers = {}) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...headers,
+    },
+  });
 }
 
-function cookieHeader(token, maxAge = SESSION_SECONDS) {
-    return `${COOKIE_NAME}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
-}
+export function getCookie(request, name) {
+  const cookieHeader = request.headers.get("Cookie") || "";
 
-function readCookie(request) {
-    const cookies = request.headers.get("Cookie") || "";
+  for (const item of cookieHeader.split(";")) {
+    const separator = item.indexOf("=");
+    if (separator < 0) continue;
 
-    for (const item of cookies.split(";")) {
-        const separator = item.indexOf("=");
-        if (separator < 0) continue;
+    const key = item.slice(0, separator).trim();
+    const value = item.slice(separator + 1).trim();
 
-        const name = item.slice(0, separator).trim();
-        const value = item.slice(separator + 1).trim();
-
-        if (name === COOKIE_NAME) return value;
+    if (key === name) {
+      try {
+        return decodeURIComponent(value);
+      } catch {
+        return null;
+      }
     }
+  }
 
-    return null;
+  return null;
 }
 
-function sameOrigin(request) {
-    const origin = request.headers.get("Origin");
-
-    return Boolean(origin) &&
-        origin === new URL(request.url).origin;
-}
-
-function toBase64(bytes) {
-    let binary = "";
-    for (const byte of bytes) binary += String.fromCharCode(byte);
-    return btoa(binary);
-}
-
-function fromBase64(value) {
-    return Uint8Array.from(atob(value), c => c.charCodeAt(0));
-}
-
-function toHex(bytes) {
-    return Array.from(bytes)
-        .map(byte => byte.toString(16).padStart(2, "0"))
-        .join("");
-}
-
-export function jsonResponse(body, status = 200, headers = {}) {
-    return json(body, status, headers);
-}
-
-export function rejectOrigin(request) {
-    if (!sameOrigin(request)) {
-        return json({ error: "Request rejected." }, 403);
-    }
-
-    return null;
-}
-
-export function setSessionCookie(token) {
-    return { "Set-Cookie": cookieHeader(token) };
+export function setSessionCookie(token, maxAge = SESSION_DURATION) {
+  return `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
 }
 
 export function clearSessionCookie() {
-    return {
-        "Set-Cookie": cookieHeader("", 0)
-    };
+  return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
 }
 
-export function getSessionToken(request) {
-    return readCookie(request);
+export function sameOrigin(request) {
+  const origin = request.headers.get("Origin");
+
+  if (!origin) return false;
+
+  try {
+    return new URL(origin).origin === new URL(request.url).origin;
+  } catch {
+    return false;
+  }
 }
 
-export async function hashPassword(password, saltBase64, iterations = PASSWORD_ITERATIONS) {
-    const key = await crypto.subtle.importKey(
-        "raw",
-        new TextEncoder().encode(password),
-        "PBKDF2",
-        false,
-        ["deriveBits"]
-    );
+function getConfig(env) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error("Server authentication configuration is missing.");
+  }
 
-    const result = await crypto.subtle.deriveBits(
-        {
-            name: "PBKDF2",
-            salt: fromBase64(saltBase64),
-            iterations,
-            hash: "SHA-256"
-        },
-        key,
-        256
-    );
-
-    return toBase64(new Uint8Array(result));
+  return {
+    url: env.SUPABASE_URL.replace(/\/+$/, ""),
+    key: env.SUPABASE_SERVICE_ROLE_KEY,
+  };
 }
 
-export async function verifyPassword(password, savedHash, salt, iterations) {
-    if (
-        !Number.isInteger(iterations) ||
-        iterations < PASSWORD_ITERATIONS ||
-        iterations > 1000000
-    ) {
-        return false;
-    }
+export async function databaseRequest(env, path, options = {}) {
+  const config = getConfig(env);
 
-    const actual = await hashPassword(password, salt, iterations);
-    const a = fromBase64(actual);
-    const b = fromBase64(savedHash);
+  const response = await fetch(`${config.url}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      apikey: config.key,
+      Authorization: `Bearer ${config.key}`,
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
 
-    if (a.length !== b.length) return false;
+  if (!response.ok) {
+    throw new Error(`Database request failed (${response.status}).`);
+  }
 
-    // Constant-work comparison for equal-length hashes.
-    let difference = 0;
-    for (let i = 0; i < a.length; i++) {
-        difference |= a[i] ^ b[i];
-    }
+  if (response.status === 204) return null;
 
-    return difference === 0;
+  return response.json();
 }
 
-export async function hashSessionToken(token) {
-    const digest = await crypto.subtle.digest(
-        "SHA-256",
-        new TextEncoder().encode(token)
-    );
+export async function hashPassword(password, salt, iterations = MIN_ITERATIONS) {
+  if (
+    !Number.isInteger(iterations) ||
+    iterations < MIN_ITERATIONS ||
+    iterations > MAX_ITERATIONS
+  ) {
+    throw new Error("Invalid password hashing configuration.");
+  }
 
-    return toHex(new Uint8Array(digest));
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      hash: "SHA-256",
+      salt: encoder.encode(salt),
+      iterations,
+    },
+    key,
+    256
+  );
+
+  return btoa(String.fromCharCode(...new Uint8Array(bits)));
 }
 
-export function createSessionToken() {
-    const bytes = crypto.getRandomValues(new Uint8Array(32));
-    return toBase64(bytes)
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/g, "");
+export async function createRandomToken() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  return btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
 }
 
-export async function dbRequest(env, path, options = {}) {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-        throw new Error("Server database configuration is missing.");
-    }
+export async function hashToken(token) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(token)
+  );
 
-    const base = env.SUPABASE_URL
-        .replace(/\/rest\/v1\/?$/, "")
-        .replace(/\/+$/, "");
-
-    const response = await fetch(`${base}/rest/v1/${path}`, {
-        ...options,
-        headers: {
-            "apikey": env.SUPABASE_SERVICE_ROLE_KEY,
-            "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-            "Content-Type": "application/json",
-            ...(options.headers || {})
-        }
-    });
-
-    const text = await response.text();
-    let data = null;
-
-    if (text) {
-        try {
-            data = JSON.parse(text);
-        } catch {
-            data = null;
-        }
-    }
-
-    if (!response.ok) {
-        // Do not return database errors or secrets to the browser.
-        throw new Error(`Database request failed (${response.status}).`);
-    }
-
-    return data;
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-export async function getProfile(env, profileId) {
-    const query = new URLSearchParams({
-        select: "id,email,full_name,role,is_active",
-        id: `eq.${profileId}`,
-        limit: "1"
-    });
+export async function getSession(request, env) {
+  const token = getCookie(request, SESSION_COOKIE);
+  if (!token) return null;
 
-    const rows = await dbRequest(
-        env,
-        `profiles?${query.toString()}`
-    );
+  const tokenHash = await hashToken(token);
+  const now = new Date().toISOString();
 
-    return Array.isArray(rows) ? rows[0] || null : null;
+  const sessions = await databaseRequest(
+    env,
+    `custom_login_sessions?token_hash=eq.${encodeURIComponent(tokenHash)}&expires_at=gt.${encodeURIComponent(now)}&select=profile_id,expires_at&limit=1`
+  );
+
+  if (!sessions?.length) return null;
+
+  const profiles = await databaseRequest(
+    env,
+    `profiles?id=eq.${encodeURIComponent(sessions[0].profile_id)}&select=id,email,full_name,role,is_active&limit=1`
+  );
+
+  const profile = profiles?.[0];
+
+  if (!profile || profile.is_active !== true) return null;
+
+  return { profile };
 }
-
-export async function removeSession(env, tokenHash) {
-    const query = new URLSearchParams({
-        token_hash: `eq.${tokenHash}`
-    });
-
-    await dbRequest(
-        env,
-        `custom_login_sessions?${query.toString()}`,
-        { method: "DELETE" }
-    );
-}
-
-export { COOKIE_NAME, SESSION_SECONDS, PASSWORD_ITERATIONS, json };
