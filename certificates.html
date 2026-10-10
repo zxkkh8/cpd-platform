@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#335882">
     <title>Certificates - Brampton Develop</title>
 
     <style>
@@ -30,7 +31,8 @@
             color: var(--text);
         }
 
-        button, input {
+        button,
+        input {
             font: inherit;
         }
 
@@ -39,11 +41,12 @@
         }
 
         .topbar {
-            height: 68px;
+            min-height: 68px;
             padding: 0 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 16px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
         }
@@ -62,7 +65,7 @@
             display: grid;
             place-items: center;
             background: var(--primary);
-            color: white;
+            color: #fff;
             border-radius: 10px;
             font-weight: 700;
         }
@@ -74,6 +77,10 @@
             font-weight: 600;
         }
 
+        .topbar a:hover {
+            text-decoration: underline;
+        }
+
         main {
             width: min(1180px, calc(100% - 40px));
             margin: 42px auto;
@@ -81,6 +88,17 @@
 
         .page-heading {
             margin-bottom: 26px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
         }
 
         .page-heading h1 {
@@ -94,13 +112,14 @@
             margin: 0;
             color: var(--muted);
             font-size: 14px;
+            line-height: 1.6;
         }
 
         .panel {
+            overflow: hidden;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            overflow: hidden;
             box-shadow: 0 3px 12px rgba(24, 39, 75, 0.035);
         }
 
@@ -109,7 +128,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
             border-bottom: 1px solid var(--border);
         }
 
@@ -122,16 +141,19 @@
             margin: 0;
             color: var(--muted);
             font-size: 13px;
+            line-height: 1.5;
         }
 
         .search {
-            width: 250px;
+            width: 260px;
             max-width: 100%;
             padding: 10px 12px;
+            color: var(--text);
+            background: #fff;
             border: 1px solid #d8dee8;
             border-radius: 8px;
             outline: none;
-            background: white;
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
 
         .search:focus,
@@ -193,7 +215,7 @@
             border-radius: 7px;
             font-size: 12px;
             font-weight: 650;
-            transition: 0.15s ease;
+            transition: background 0.15s ease;
         }
 
         .delete-btn:hover {
@@ -205,14 +227,17 @@
             color: var(--muted);
             text-align: center;
             font-size: 14px;
+            white-space: normal;
         }
 
         .notice {
             display: none;
-            margin: 0 24px 18px;
+            margin: 18px 24px;
             padding: 12px 14px;
             border-radius: 8px;
             font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .notice.error {
@@ -229,7 +254,7 @@
             border: 1px solid #ccebd9;
         }
 
-        /* Loading overlay */
+        /* Oval loading animation */
 
         .loading-overlay {
             position: fixed;
@@ -249,8 +274,8 @@
         }
 
         .oval-loader {
-            width: 54px;
-            height: 54px;
+            width: 52px;
+            height: 52px;
             border: 4px solid #e2e9f1;
             border-top-color: var(--primary);
             border-right-color: var(--primary);
@@ -291,7 +316,7 @@
         .modal {
             width: min(430px, 100%);
             padding: 28px;
-            background: white;
+            background: #fff;
             border: 1px solid var(--border);
             border-radius: 16px;
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
@@ -303,6 +328,7 @@
                 opacity: 0;
                 transform: translateY(8px) scale(0.98);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -319,6 +345,7 @@
             background: var(--danger-bg);
             border-radius: 12px;
             font-size: 22px;
+            font-weight: 700;
         }
 
         .modal h2 {
@@ -345,21 +372,22 @@
         .modal-actions {
             display: flex;
             justify-content: flex-end;
+            flex-wrap: wrap;
             gap: 10px;
         }
 
         .btn {
             padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: white;
             color: var(--text);
-            font-weight: 600;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 13px;
+            font-weight: 600;
         }
 
         .btn-primary {
-            color: white;
+            color: #fff;
             background: var(--primary);
             border-color: var(--primary);
         }
@@ -369,9 +397,13 @@
         }
 
         .btn-danger {
-            color: white;
+            color: #fff;
             background: var(--danger);
             border-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #a52d22;
         }
 
         .btn:disabled {
@@ -379,9 +411,20 @@
             cursor: not-allowed;
         }
 
+        footer {
+            padding: 26px 20px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
         @media (max-width: 650px) {
             .topbar {
-                padding: 0 18px;
+                padding: 14px 18px;
+            }
+
+            .brand {
+                font-size: 16px;
             }
 
             main {
@@ -403,12 +446,28 @@
                 width: 100%;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 14px 16px;
+            }
+
+            .notice {
+                margin: 16px;
             }
 
             .modal {
                 padding: 23px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -420,21 +479,30 @@
             <div class="brand-icon">B</div>
             <span>Brampton Develop</span>
         </div>
+
         <a href="dashboard.html">← Back to dashboard</a>
     </header>
 
     <main>
         <div class="page-heading">
+            <div class="breadcrumb">
+                <a href="dashboard.html">Dashboard</a>
+                <span> / Certificates</span>
+            </div>
+
             <h1>Certificates</h1>
-            <p>View and manage certificates issued through Brampton Develop.</p>
+            <p>
+                View and manage certificates issued through Brampton Develop.
+            </p>
         </div>
 
         <section class="panel">
             <div class="panel-header">
                 <div>
                     <h2>Issued certificates</h2>
-                    <p>Review certificate records and remove entries when required.</p>
+                    <p>Search records and manage certificate entries.</p>
                 </div>
+
                 <input
                     id="certificateSearch"
                     class="search"
@@ -444,7 +512,7 @@
                 >
             </div>
 
-            <div id="notice" class="notice" role="status"></div>
+            <div id="notice" class="notice" role="status" aria-live="polite"></div>
 
             <div class="table-wrap">
                 <table>
@@ -457,6 +525,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
+
                     <tbody id="certificateList">
                         <tr>
                             <td colspan="5" class="empty-state">
@@ -469,16 +538,34 @@
         </section>
     </main>
 
-    <div id="loadingOverlay" class="loading-overlay" aria-live="polite">
+    <footer>
+        Brampton Develop &copy; <span id="currentYear"></span>
+    </footer>
+
+    <!-- Loading overlay -->
+    <div
+        id="loadingOverlay"
+        class="loading-overlay"
+        aria-live="polite"
+        aria-label="Loading"
+    >
         <div class="oval-loader"></div>
         <div id="loadingText" class="loading-text">Loading...</div>
     </div>
 
-    <div id="deleteModal" class="modal-backdrop" role="dialog"
-         aria-modal="true" aria-labelledby="modalTitle">
+    <!-- Delete confirmation modal -->
+    <div
+        id="deleteModal"
+        class="modal-backdrop"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
         <div class="modal">
             <div class="modal-icon">!</div>
+
             <h2 id="modalTitle">Delete certificate?</h2>
+
             <p>
                 This will permanently remove the selected certificate record.
                 Enter the administrator deletion code to continue.
@@ -490,12 +577,14 @@
                 type="password"
                 placeholder="Administrator deletion code"
                 autocomplete="off"
+                aria-label="Administrator deletion code"
             >
 
             <div class="modal-actions">
                 <button id="cancelDelete" class="btn" type="button">
                     Cancel
                 </button>
+
                 <button id="confirmDelete" class="btn btn-danger" type="button">
                     Delete certificate
                 </button>
@@ -503,11 +592,16 @@
         </div>
     </div>
 
+    <!-- Scripts must load in this order -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/loader.js"></script>
     <script src="js/certificates.js"></script>
+
+    <script>
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+    </script>
 </body>
 </html>
-```
