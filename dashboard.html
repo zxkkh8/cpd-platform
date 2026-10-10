@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -31,11 +30,8 @@ body {
     color: var(--text);
 }
 
-a {
-    color: inherit;
-}
+a { color: inherit; }
 
-/* Sidebar */
 .sidebar {
     position: fixed;
     inset: 0 auto 0 0;
@@ -103,9 +99,7 @@ a {
     color: var(--brand);
 }
 
-.nav a.active {
-    font-weight: 650;
-}
+.nav a.active { font-weight: 650; }
 
 .nav-icon {
     width: 22px;
@@ -123,7 +117,6 @@ a {
     line-height: 1.6;
 }
 
-/* Main content */
 .main {
     margin-left: 250px;
     min-height: 100vh;
@@ -152,7 +145,7 @@ a {
     font-size: 13px;
 }
 
-/* Account menu */
+/* Account dropdown */
 .account-menu {
     position: relative;
     flex-shrink: 0;
@@ -190,9 +183,7 @@ a {
     flex-shrink: 0;
 }
 
-.user-details {
-    min-width: 0;
-}
+.user-details { min-width: 0; }
 
 .user-details strong {
     display: block;
@@ -212,7 +203,6 @@ a {
     margin-left: 3px;
 }
 
-/* Dropdown */
 .account-dropdown {
     position: absolute;
     top: calc(100% + 10px);
@@ -226,8 +216,9 @@ a {
     z-index: 100;
 }
 
-.account-dropdown[hidden] {
-    display: none;
+.account-dropdown[hidden],
+[hidden] {
+    display: none !important;
 }
 
 .dropdown-heading {
@@ -235,10 +226,6 @@ a {
     align-items: center;
     gap: 11px;
     padding: 12px 10px;
-}
-
-.dropdown-heading .avatar {
-    flex-shrink: 0;
 }
 
 .dropdown-heading strong {
@@ -285,9 +272,7 @@ a {
     font-size: 17px;
 }
 
-.dropdown-item:hover {
-    background: var(--brand-light);
-}
+.dropdown-item:hover { background: var(--brand-light); }
 
 .logout-item,
 .logout-item > span:first-child {
@@ -345,18 +330,7 @@ a {
     white-space: nowrap;
 }
 
-.button-light:hover {
-    background: #edf3f9;
-}
-
-.button-primary {
-    background: var(--brand);
-    color: white;
-}
-
-.button-primary:hover {
-    background: var(--brand-dark);
-}
+.button-light:hover { background: #edf3f9; }
 
 /* Statistics */
 .stats {
@@ -408,7 +382,7 @@ a {
     font-size: 11px;
 }
 
-/* Panels */
+/* Dashboard panels */
 .grid {
     display: grid;
     grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
@@ -428,9 +402,7 @@ a {
     border-bottom: 1px solid var(--border);
 }
 
-.panel-header h3 {
-    font-size: 15px;
-}
+.panel-header h3 { font-size: 15px; }
 
 .panel-header p {
     margin-top: 5px;
@@ -438,14 +410,9 @@ a {
     color: var(--muted);
 }
 
-.panel-body {
-    padding: 22px;
-}
+.panel-body { padding: 22px; }
 
-/* Forms table */
-.table-wrap {
-    overflow-x: auto;
-}
+.table-wrap { overflow-x: auto; }
 
 table {
     width: 100%;
@@ -467,9 +434,7 @@ td {
     border-bottom: 1px solid var(--border);
 }
 
-tbody tr:last-child td {
-    border-bottom: 0;
-}
+tbody tr:last-child td { border-bottom: 0; }
 
 .empty-state {
     color: var(--muted);
@@ -500,7 +465,7 @@ tbody tr:last-child td {
     border-color: #bdccdc;
 }
 
-.action-link .action-icon {
+.action-icon {
     width: 38px;
     height: 38px;
     display: grid;
@@ -524,15 +489,9 @@ tbody tr:last-child td {
     font-size: 11px;
 }
 
-/* Responsive layout */
 @media (max-width: 1150px) {
-    .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -544,29 +503,12 @@ tbody tr:last-child td {
         border-bottom: 1px solid var(--border);
     }
 
-    .sidebar-footer {
-        display: none;
-    }
-
-    .nav {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .nav-label {
-        margin-top: 18px;
-    }
-
-    .main {
-        margin-left: 0;
-    }
-
-    .topbar {
-        padding: 20px;
-    }
-
-    .content {
-        padding: 18px;
-    }
+    .sidebar-footer { display: none; }
+    .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nav-label { margin-top: 18px; }
+    .main { margin-left: 0; }
+    .topbar { padding: 20px; }
+    .content { padding: 18px; }
 
     .welcome {
         align-items: flex-start;
@@ -575,30 +517,17 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 460px) {
-    .stats {
-        grid-template-columns: 1fr;
-    }
+    .stats { grid-template-columns: 1fr; }
 
     .account-button {
         gap: 7px;
         padding: 5px;
     }
 
-    .account-button .user-details {
-        display: none;
-    }
-
-    .account-chevron {
-        margin-left: 0;
-    }
-
-    .account-dropdown {
-        width: 240px;
-    }
-
-    .page-title h2 {
-        font-size: 21px;
-    }
+    .account-button .user-details { display: none; }
+    .account-chevron { margin-left: 0; }
+    .account-dropdown { width: 240px; }
+    .page-title h2 { font-size: 21px; }
 }
 </style>
 </head>
@@ -615,24 +544,12 @@ tbody tr:last-child td {
     <p class="nav-label">Workspace</p>
 
     <nav class="nav">
-        <a href="dashboard.html" class="active">
-            <span class="nav-icon">⌂</span> Dashboard
-        </a>
-        <a href="forms.html">
-            <span class="nav-icon">▤</span> Forms
-        </a>
-        <a href="responses.html">
-            <span class="nav-icon">☷</span> Responses
-        </a>
-        <a href="certificates.html">
-            <span class="nav-icon">♧</span> Certificates
-        </a>
-        <a href="users.html">
-            <span class="nav-icon">♙</span> Users
-        </a>
-        <a href="settings.html">
-            <span class="nav-icon">⚙</span> Settings
-        </a>
+        <a href="dashboard.html" class="active"><span class="nav-icon">⌂</span> Dashboard</a>
+        <a href="forms.html"><span class="nav-icon">▤</span> Forms</a>
+        <a href="responses.html"><span class="nav-icon">☷</span> Responses</a>
+        <a href="certificates.html"><span class="nav-icon">♧</span> Certificates</a>
+        <a href="users.html"><span class="nav-icon">♙</span> Users</a>
+        <a href="settings.html"><span class="nav-icon">⚙</span> Settings</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -642,7 +559,6 @@ tbody tr:last-child td {
 </aside>
 
 <main class="main">
-
     <header class="topbar">
         <div class="page-title">
             <h2>Dashboard</h2>
@@ -662,7 +578,7 @@ tbody tr:last-child td {
 
                 <div class="user-details">
                     <strong id="currentUser">Loading account...</strong>
-                    <span id="currentRole"></span>
+                    <span id="currentRole" hidden></span>
                 </div>
 
                 <span class="account-chevron" aria-hidden="true">⌄</span>
@@ -673,7 +589,7 @@ tbody tr:last-child td {
                     <div class="avatar" id="dropdownAvatar">U</div>
                     <div>
                         <strong id="dropdownName">Your account</strong>
-                        <span class="dropdown-role" id="dropdownRole"></span>
+                        <span class="dropdown-role" id="dropdownRole" hidden></span>
                     </div>
                 </div>
 
@@ -684,22 +600,14 @@ tbody tr:last-child td {
                     <span>Profile</span>
                 </a>
 
-                <button
-                    type="button"
-                    class="dropdown-item"
-                    id="switchUserButton"
-                >
+                <button type="button" class="dropdown-item" id="switchUserButton">
                     <span aria-hidden="true">⇄</span>
                     <span>Switch User</span>
                 </button>
 
                 <div class="dropdown-divider"></div>
 
-                <button
-                    type="button"
-                    class="dropdown-item logout-item"
-                    id="logoutButton"
-                >
+                <button type="button" class="dropdown-item logout-item" id="logoutButton">
                     <span aria-hidden="true">↪</span>
                     <span>Log out</span>
                 </button>
@@ -840,10 +748,7 @@ function getInitials(name) {
         .filter(Boolean);
 
     if (words.length === 0) return "U";
-
-    if (words.length === 1) {
-        return words[0].slice(0, 2).toUpperCase();
-    }
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
 
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
 }
@@ -885,14 +790,13 @@ function loadAccountDetails() {
 
     document.getElementById("currentUser").textContent = name;
     document.getElementById("currentRole").textContent = role;
+    document.getElementById("currentRole").hidden = !role;
     document.getElementById("userAvatar").textContent = initials;
 
     document.getElementById("dropdownName").textContent = name;
     document.getElementById("dropdownRole").textContent = role;
-    document.getElementById("dropdownAvatar").textContent = initials;
-
-    document.getElementById("currentRole").hidden = !role;
     document.getElementById("dropdownRole").hidden = !role;
+    document.getElementById("dropdownAvatar").textContent = initials;
 }
 
 function closeAccountDropdown() {
@@ -900,9 +804,12 @@ function closeAccountDropdown() {
     accountButton.setAttribute("aria-expanded", "false");
 }
 
+function leaveAccount() {
+    window.location.href = "logout.html";
+}
+
 accountButton.addEventListener("click", () => {
     const isOpening = accountDropdown.hidden;
-
     accountDropdown.hidden = !isOpening;
     accountButton.setAttribute("aria-expanded", String(isOpening));
 });
@@ -919,35 +826,6 @@ document.addEventListener("keydown", (event) => {
         accountButton.focus();
     }
 });
-
-async function leaveAccount() {
-    try {
-        const client = window.supabaseClient;
-
-        if (client?.auth) {
-            const { error } = await client.auth.signOut();
-
-            if (error) {
-                console.error("Supabase sign-out failed:", error.message);
-                alert("Unable to sign out. Please try again.");
-                return;
-            }
-        }
-    } catch (error) {
-        console.error("Error signing out:", error);
-        alert("Unable to sign out. Please try again.");
-        return;
-    }
-
-    try {
-        localStorage.removeItem("currentUser");
-        sessionStorage.removeItem("currentUser");
-    } catch (error) {
-        console.warn("Unable to clear saved account details.", error);
-    }
-
-    window.location.href = "login.html";
-}
 
 document.getElementById("switchUserButton")
     .addEventListener("click", leaveAccount);
