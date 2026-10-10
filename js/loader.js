@@ -3,7 +3,7 @@
 
     if (!loader) return;
 
-    window.showLoader = (message = "Loading Brampton Develop...") => {
+    window.showLoader = (message = "Loading...") => {
         const text = loader.querySelector(".loading-text");
         if (text) text.textContent = message;
 
