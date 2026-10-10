@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>My Profile - Brampton Develop</title>
+
+<style>
+:root {
+    --brand: #335882;
+    --brand-dark: #274666;
+    --brand-light: #edf3f9;
+    --background: #f5f7fa;
+    --surface: #fff;
+    --border: #e4e8ee;
+    --text: #202a36;
+    --muted: #687587;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text);
+}
+
+header {
+    height: 76px;
+    padding: 0 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand img {
+    max-width: 120px;
+    max-height: 42px;
+    object-fit: contain;
+}
+
+.brand h1 {
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.brand p {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.back-link {
+    color: var(--brand);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 38px 22px;
+}
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h2 {
+    font-size: 27px;
+    letter-spacing: -.5px;
+}
+
+.page-heading p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.identity {
+    padding: 27px 20px;
+    text-align: center;
+}
+
+.avatar {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 16px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--brand-light);
+    color: var(--brand);
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.identity h3 {
+    font-size: 17px;
+    overflow-wrap: anywhere;
+}
+
+.identity p {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.role-chip {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: var(--brand-light);
+    color: var(--brand);
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.section-heading {
+    padding: 21px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-heading h3 {
+    font-size: 15px;
+}
+
+.section-heading p {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.profile-form {
+    padding: 24px;
+}
+
+.field {
+    margin-bottom: 19px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+input {
+    width: 100%;
+    height: 43px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    outline: none;
+    color: var(--text);
+    background: white;
+    font-size: 13px;
+}
+
+input:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(51, 88, 130, .12);
+}
+
+input[readonly] {
+    background: #f8fafc;
+    color: var(--muted);
+}
+
+.help-text {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.button {
+    min-height: 42px;
+    padding: 0 17px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--brand);
+    color: white;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.button:hover { background: var(--brand-dark); }
+
+.button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+.message {
+    display: none;
+    margin-bottom: 18px;
+    padding: 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.message.success {
+    display: block;
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.message.error {
+    display: block;
+    background: #fef3f2;
+    color: #b42318;
+    border: 1px solid #fecdca;
+}
+
+footer {
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+@media (max-width: 650px) {
+    header {
+        padding: 0 18px;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding: 28px 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <img src="assets/logo.svg" alt="Brampton Develop logo"
+             onerror="this.style.display='none'">
+        <div>
+            <h1>Brampton Develop</h1>
+            <p>Development &amp; Training Portal</p>
+        </div>
+    </div>
+
+    <a class="back-link" href="dashboard.html">← Dashboard</a>
+</header>
+
+<main>
+    <div class="page-heading">
+        <h2>My profile</h2>
+        <p>View your account details and manage your profile information.</p>
+    </div>
+
+    <div class="profile-layout">
+        <section class="card identity">
+            <div class="avatar" id="profileAvatar">U</div>
+            <h3 id="profileName">Loading profile...</h3>
+            <p id="profileEmail"></p>
+            <span class="role-chip" id="profileRole" hidden></span>
+        </section>
+
+        <section class="card">
+            <div class="section-heading">
+                <h3>Personal information</h3>
+                <p>Update your display name. Your email is managed by your sign-in provider.</p>
+            </div>
+
+            <form class="profile-form" id="profileForm">
+                <div id="message" class="message" role="status"></div>
+
+                <div class="field">
+                    <label for="fullName">Full name</label>
+                    <input id="fullName" name="fullName"
+                           type="text" autocomplete="name" required
+                           maxlength="100">
+                </div>
+
+                <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" readonly>
+                    <p class="help-text">Your email address cannot be changed here.</p>
+                </div>
+
+                <div class="field">
+                    <label for="role">Account role</label>
+                    <input id="role" name="role" type="text" readonly>
+                    <p class="help-text">Contact your portal administrator if your role is incorrect.</p>
+                </div>
+
+                <button class="button" id="saveButton" type="submit">
+                    Save changes
+                </button>
+            </form>
+        </section>
+    </div>
+</main>
+
+<footer>
+    Brampton Develop &copy; <span id="year"></span>
+</footer>
+
+<script src="js/loader.js"></script>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const fullNameInput = document.getElementById("fullName");
+const emailInput = document.getElementById("email");
+const roleInput = document.getElementById("role");
+const saveButton = document.getElementById("saveButton");
+const message = document.getElementById("message");
+
+let currentUser = null;
+
+function initialsFor(name) {
+    const parts = String(name || "User").trim().split(/\s+/).filter(Boolean);
+
+    if (!parts.length) return "U";
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function displayProfile(user) {
+    const name = user.full_name || user.name || user.display_name || user.email || "Your account";
+    const email = user.email || "";
+    const role = user.role || "";
+
+    document.getElementById("profileName").textContent = name;
+    document.getElementById("profileEmail").textContent = email;
+    document.getElementById("profileAvatar").textContent = initialsFor(name);
+
+    const roleChip = document.getElementById("profileRole");
+    roleChip.textContent = role;
+    roleChip.hidden = !role;
+
+    fullNameInput.value = user.full_name || user.display_name || user.name || "";
+    emailInput.value = email;
+    roleInput.value = role || "Not assigned";
+}
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message " + type;
+}
+
+async function loadProfile() {
+    try {
+        const client = window.supabaseClient;
+
+        if (client?.auth) {
+            const { data, error } = await client.auth.getUser();
+
+            if (error) throw error;
+
+            if (!data.user) {
+                window.location.replace("index.html");
+                return;
+            }
+
+            const authUser = data.user;
+            let profile = {};
+
+            const { data: profileData, error: profileError } = await client
+                .from("profiles")
+                .select("*")
+                .eq("id", authUser.id)
+                .maybeSingle();
+
+            if (profileError) {
+                console.warn("Unable to load profile record:", profileError.message);
+            } else if (profileData) {
+                profile = profileData;
+            }
+
+            currentUser = {
+                id: authUser.id,
+                email: authUser.email || "",
+                full_name: profile.full_name ||
+                           profile.display_name ||
+                           authUser.user_metadata?.full_name ||
+                           authUser.user_metadata?.name ||
+                           "",
+                name: profile.full_name ||
+                      profile.display_name ||
+                      authUser.user_metadata?.full_name ||
+                      authUser.user_metadata?.name ||
+                      authUser.email,
+                role: profile.role || authUser.user_metadata?.role || ""
+            };
+
+        } else {
+            const saved = localStorage.getItem("currentUser");
+
+            if (!saved) {
+                window.location.replace("index.html");
+                return;
+            }
+
+            currentUser = JSON.parse(saved);
+
+            if (!currentUser || typeof currentUser !== "object") {
+                window.location.replace("index.html");
+                return;
+            }
+        }
+
+        displayProfile(currentUser);
+
+    } catch (error) {
+        console.error("Unable to load profile:", error);
+        showMessage("We couldn't load your profile. Please sign in again.", "error");
+    }
+}
+
+document.getElementById("profileForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!currentUser) {
+        showMessage("Your profile isn't loaded. Please sign in again.", "error");
+        return;
+    }
+
+    const newName = fullNameInput.value.trim();
+
+    if (!newName) {
+        showMessage("Please enter your full name.", "error");
+        return;
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    try {
+        const client = window.supabaseClient;
+
+        if (client?.auth) {
+            const { data: authData, error: authError } = await client.auth.getUser();
+
+            if (authError) throw authError;
+            if (!authData.user) throw new Error("Please sign in again.");
+
+            const { error: updateError } = await client
+                .from("profiles")
+                .upsert({
+                    id: authData.user.id,
+                    full_name: newName
+                }, { onConflict: "id" });
+
+            if (updateError) throw updateError;
+
+            currentUser.full_name = newName;
+            currentUser.name = newName;
+
+        } else {
+            currentUser.full_name = newName;
+            currentUser.name = newName;
+        }
+
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        displayProfile(currentUser);
+        showMessage("Your profile has been updated successfully.", "success");
+
+    } catch (error) {
+        console.error("Profile update failed:", error);
+        showMessage(
+            "Unable to save your profile. Check your connection and profile-table permissions, then try again.",
+            "error"
+        );
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save changes";
+    }
+});
+
+loadProfile();
+</script>
+
+</body>
+</html>
