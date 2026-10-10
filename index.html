@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -294,7 +295,11 @@ input:focus{
 
                 Show password
 
-            <a href="#">
+            </label>
+
+            <a
+                id="forgotPasswordLink"
+                href="#">
                 Forgot password?
             </a>
 
@@ -319,16 +324,20 @@ input:focus{
     <div class="footer">
 
         Need help?
-        
-            <a href="#">
-                Contact Us
-            </a>
 
-        </div>
+        <a
+            id="supportLink"
+            href="https://your-support-url.com">
+            Contact Us
+        </a>
+
+    </div>
 
 </div>
 
-js/config.jsscript>
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -344,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if(APP.logoPath){
 
-            document.getElementById("mainLogo").src =
+            document.getElementById("logo").src =
                 APP.logoPath;
 
         }
@@ -381,9 +390,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-
-https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
-js/supabase.jsscript>
 
 <script>
 
