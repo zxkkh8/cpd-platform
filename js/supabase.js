@@ -1,87 +1,122 @@
-/*
-=========================================
-BRAMPTON DEVELOP
-SUPABASE INITIALISATION
-=========================================
-Requires:
-- js/config.js
-- Supabase CDN
-=========================================
-*/
-
 if (typeof APP === "undefined") {
-    throw new Error(
-        "config.js must be loaded before supabase.js"
-    );
+    throw new Error("config.js must be loaded before supabase.js");
 }
 
-const supabaseClient = supabase.createClient(
+if (!window.supabase) {
+    throw new Error("Supabase JS library has not loaded.");
+}
+
+if (!APP.supabase?.url || !APP.supabase?.key) {
+    throw new Error("Supabase URL or public anon key is missing.");
+}
+
+window.supabaseClient = window.supabase.createClient(
     APP.supabase.url,
-    APP.supabase.key
+    APP.supabase.key,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
 );
 
-/*
-=========================================
-AUTHENTICATION
-=========================================
-*/
+const supabaseClient = window.supabaseClient;
 
 async function loginUser(username, password) {
+    try {
+        /*
+        This implementation expects username to be the
+        user's actual Supabase Auth email address.
 
-    const { data, error } =
-        await supabaseClient
-            .from("users")
-            .select("*")
-            .eq("username", username)
-            .eq("password", password)
-            .single();
+        For username-only login, use a secure server-side
+        username-to-email lookup instead.
+        */
 
-    if (error || !data) {
+        const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+                email: username,
+                password: password
+            });
+
+        if (error || !data?.user) {
+            return {
+                success: false,
+                message: "Invalid username or password."
+            };
+        }
+
+        const { data: profile, error: profileError } =
+            await supabaseClient
+                .from("profiles")
+                .select("id, username, display_name, role")
+                .eq("id", data.user.id)
+                .single();
+
+        if (profileError || !profile) {
+            await supabaseClient.auth.signOut();
+
+            return {
+                success: false,
+                message: "Your account profile could not be loaded."
+            };
+        }
+
+        localStorage.setItem(
+            "currentUser",
+            JSON.stringify(profile)
+        );
+
+        return {
+            success: true,
+            user: profile
+        };
+
+    } catch (error) {
+        console.error("Login error:", error);
+
         return {
             success: false,
-            message: "Invalid username or password"
+            message: "Unable to sign in. Please try again."
         };
     }
+}
 
-    localStorage.setItem(
-        "currentUser",
-        JSON.stringify(data)
-    );
+async function getCurrentSession() {
+    const { data, error } =
+        await supabaseClient.auth.getSession();
 
-    return {
-        success: true,
-        user: data
-    };
+    if (error) {
+        throw error;
+    }
+
+    return data.session;
 }
 
 function getCurrentUser() {
-
-    const user =
-        localStorage.getItem("currentUser");
-
-    return user
-        ? JSON.parse(user)
-        : null;
+    try {
+        const user = localStorage.getItem("currentUser");
+        return user ? JSON.parse(user) : null;
+    } catch {
+        return null;
+    }
 }
 
-function logoutUser() {
+async function logoutUser() {
+    localStorage.removeItem("currentUser");
 
-    localStorage.removeItem(
-        "currentUser"
-    );
+    const { error } =
+        await supabaseClient.auth.signOut();
 
-    window.location.href =
-        APP.logoutPage;
+    if (error) {
+        console.error("Logout error:", error);
+    }
+
+    window.location.href = APP.logoutPage || "login.html";
 }
-
-/*
-=========================================
-USERS
-=========================================
-*/
 
 async function getUsers() {
-
     const { data, error } =
         await supabaseClient
             .from("users")
@@ -89,30 +124,26 @@ async function getUsers() {
             .order("username");
 
     if (error) {
-        console.error(error);
+        console.error("Get users error:", error);
         return [];
     }
 
-    return data;
+    return data || [];
 }
 
 async function createUser(user) {
-
     const { data, error } =
         await supabaseClient
             .from("users")
             .insert([user])
             .select();
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     return data;
 }
 
 async function updateUser(id, updates) {
-
     const { data, error } =
         await supabaseClient
             .from("users")
@@ -120,21 +151,12 @@ async function updateUser(id, updates) {
             .eq("id", id)
             .select();
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     return data;
 }
 
-/*
-=========================================
-FORMS
-=========================================
-*/
-
 async function getForms() {
-
     const { data, error } =
         await supabaseClient
             .from("forms")
@@ -144,36 +166,26 @@ async function getForms() {
             });
 
     if (error) {
-        console.error(error);
+        console.error("Get forms error:", error);
         return [];
     }
 
-    return data;
+    return data || [];
 }
 
 async function createForm(formData) {
-
     const { data, error } =
         await supabaseClient
             .from("forms")
             .insert([formData])
             .select();
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     return data;
 }
 
-/*
-=========================================
-RESPONSES
-=========================================
-*/
-
 async function getResponses() {
-
     const { data, error } =
         await supabaseClient
             .from("responses")
@@ -183,36 +195,26 @@ async function getResponses() {
             });
 
     if (error) {
-        console.error(error);
+        console.error("Get responses error:", error);
         return [];
     }
 
-    return data;
+    return data || [];
 }
 
 async function saveResponse(response) {
-
     const { data, error } =
         await supabaseClient
             .from("responses")
             .insert([response])
             .select();
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     return data;
 }
 
-/*
-=========================================
-CERTIFICATES
-=========================================
-*/
-
 async function getCertificates() {
-
     const { data, error } =
         await supabaseClient
             .from("certificates")
@@ -222,11 +224,11 @@ async function getCertificates() {
             });
 
     if (error) {
-        console.error(error);
+        console.error("Get certificates error:", error);
         return [];
     }
 
-    return data;
+    return data || [];
 }
 
 async function createCertificate(
@@ -234,79 +236,43 @@ async function createCertificate(
     course,
     score
 ) {
-
     const certificateId =
-        APP.certificatePrefix +
-        "-" +
-        Date.now();
+        APP.certificatePrefix + "-" + Date.now();
 
     const { data, error } =
         await supabaseClient
             .from("certificates")
-            .insert([
-                {
-                    certificate_id:
-                        certificateId,
-
-                    username:
-                        username,
-
-                    course:
-                        course,
-
-                    score:
-                        score,
-
-                    issue_date:
-                        new Date()
-                        .toISOString()
-                }
-            ])
+            .insert([{
+                certificate_id: certificateId,
+                username: username,
+                course: course,
+                score: score,
+                issue_date: new Date().toISOString()
+            }])
             .select();
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     return data;
 }
 
-/*
-=========================================
-DASHBOARD STATS
-=========================================
-*/
-
 async function getDashboardStats() {
-
     const [
         users,
         forms,
         responses,
         certificates
     ] = await Promise.all([
-
         getUsers(),
         getForms(),
         getResponses(),
         getCertificates()
-
     ]);
 
     return {
-
-        users:
-            users.length,
-
-        forms:
-            forms.length,
-
-        responses:
-            responses.length,
-
-        certificates:
-            certificates.length
-
+        users: users.length,
+        forms: forms.length,
+        responses: responses.length,
+        certificates: certificates.length
     };
-
 }
