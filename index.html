@@ -1,136 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sign in | Brampton Develop</title>
-<script src="js/loader.js"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:#f3f3f3;display:grid;place-items:center;padding:20px;font-family:"Segoe UI",Arial,sans-serif;color:#1b1b1b}
-.card{width:100%;max-width:440px;background:white;padding:42px;box-shadow:0 2px 8px #00000012}
-.logo{width:42px;height:42px;object-fit:contain}
-h1{font-size:25px;font-weight:600;margin:24px 0 8px}
-p{font-size:14px;line-height:1.5;color:#444}
-label{display:block;font-size:14px;margin:22px 0 7px}
-input{width:100%;padding:10px 0;border:0;border-bottom:1px solid #777;border-radius:0;font:inherit;outline:none}
-input:focus{border-bottom:2px solid #335882}
-a{color:#335882;text-decoration:none;font-size:13px}
-a:hover{text-decoration:underline}
-.links{margin-top:18px}
-button{display:block;margin:28px 0 0 auto;width:120px;padding:10px;background:#335882;color:white;border:0;font:inherit;cursor:pointer}
-button:disabled{opacity:.6}
-#message{color:#a4262c;font-size:13px;white-space:pre-wrap}
-.footer{position:fixed;bottom:12px;right:20px;font-size:12px;color:#555}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#335882">
+
+    <title>Sign in - Brampton Develop</title>
+
+    <link rel="icon" href="assets/favicon.ico">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: #f3f3f3 url("assets/background.svg") center center / cover no-repeat fixed;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1b1b1b;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 440px;
+            background: #fff;
+            padding: 42px;
+            box-shadow: 0 8px 32px #00000018;
+            border: 1px solid #ffffff80;
+        }
+
+        .logo {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin: 24px 0 8px;
+        }
+
+        .intro {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin: 22px 0 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 0;
+            border: 0;
+            border-bottom: 1px solid #777;
+            border-radius: 0;
+            font: inherit;
+            background: transparent;
+            outline: none;
+        }
+
+        input:focus {
+            border-bottom: 2px solid #335882;
+        }
+
+        a {
+            color: #335882;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .links {
+            margin-top: 18px;
+        }
+
+        #message {
+            color: #a4262c;
+            font-size: 13px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            margin-top: 16px;
+        }
+
+        button {
+            display: block;
+            margin: 24px 0 0 auto;
+            min-width: 120px;
+            padding: 11px 18px;
+            background: #335882;
+            color: white;
+            border: 0;
+            font: inherit;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: #274565;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 14px;
+            right: 20px;
+            font-size: 12px;
+            color: #333;
+            text-shadow: 0 1px 3px #ffffff80;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 30px 24px;
+            }
+        }
+    </style>
 </head>
-<script>
-const ADMIN_USER = {
-    username: "z.moores@brampton.sch.uk",
-    password: "Fieldway23",
-    name: "Zak Moores",
-    role: "admin"
-};
 
-function login(username, password) {
-    if (
-        username === ADMIN_USER.username &&
-        password === ADMIN_USER.password
-    ) {
-        sessionStorage.setItem("bramptonUser", JSON.stringify({
-            username: ADMIN_USER.username,
-            name: ADMIN_USER.name,
-            role: ADMIN_USER.role
-        }));
-
-        window.location.href = "dashboard.html";
-        return;
-    }
-
-    alert("Incorrect username or password.");
-}
-</script>
 <body>
-<main class="card">
-<img class="logo" src="assets/logo.svg" alt="Brampton Develop">
-<h1>Sign in</h1>
-<p>Use your Brampton Develop work account.</p>
+    <main class="card">
+        <img
+            class="logo"
+            src="assets/logo.svg"
+            alt="Brampton Develop"
+        >
 
-<form id="loginForm">
-<label for="email">Email address</label>
-<input id="email" type="email" autocomplete="username" required autofocus>
+        <h1>Sign in</h1>
+        <p class="intro">Use your Brampton Develop work account.</p>
 
-<label for="password">Password</label>
-<input id="password" type="password" autocomplete="current-password" required>
+        <form id="loginForm">
+            <label for="email">Email address or username</label>
+            <input
+                id="email"
+                name="email"
+                type="text"
+                autocomplete="username"
+                required
+                autofocus
+            >
 
-<div class="links"><a href="forgot-password.html">Forgot my password</a></div>
-<p id="message" role="alert" aria-live="polite"></p>
-<button id="submitButton" type="submit">Sign in</button>
-</form>
-</main>
-<div class="footer">Brampton Develop</div>
+            <label for="password">Password</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+            >
 
-<script>
-(async()=>{
-const client=window.supabaseClient;
-const form=document.getElementById("loginForm");
-const message=document.getElementById("message");
-const button=document.getElementById("submitButton");
+            <div class="links">
+                <a href="forgot-password.html">Forgot my password</a>
+            </div>
 
-if(!client){message.textContent="Unable to load sign-in services. Please contact support.";return;}
+            <p id="message" role="alert" aria-live="polite"></p>
 
-const params=new URLSearchParams(location.search);
-if(params.get("status")==="deactivated"){
-message.textContent="Your account has been deactivated. Contact your administrator.";
-}
+            <button id="submitButton" type="submit">
+                Sign in
+            </button>
+        </form>
+    </main>
 
-const {data:sessionData}=await client.auth.getSession();
-if(sessionData.session){
-const {data:userData}=await client.auth.getUser();
-if(userData.user){
-const {data:profile}=await client.from("profiles")
-.select("is_active").eq("id",userData.user.id).maybeSingle();
-if(profile?.is_active===true)location.replace("dashboard.html");
-else await client.auth.signOut();
-}
-}
+    <div class="footer">Brampton Develop</div>
 
-form.addEventListener("submit",async event=>{
-event.preventDefault();
-button.disabled=true;
-message.style.color="#a4262c";
-message.textContent="Signing in…";
-const email=document.getElementById("email").value.trim();
-const password=document.getElementById("password").value;
+    <!-- Load configuration, Supabase, then initialise the client. -->
+    <script src="js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/loader.js"></script>
 
-const {error}=await client.auth.signInWithPassword({email,password});
-if(error){
-message.textContent="We couldn't sign you in with those details.";
-button.disabled=false;
-return;
-}
+    <script>
+        (async () => {
+            const form = document.getElementById("loginForm");
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+            const message = document.getElementById("message");
+            const button = document.getElementById("submitButton");
 
-const {data:userData}=await client.auth.getUser();
-if(!userData.user){
-await client.auth.signOut();
-message.textContent="Unable to verify your account.";
-button.disabled=false;
-return;
-}
+            function showMessage(text, success = false) {
+                message.textContent = text;
+                message.style.color = success ? "#107c10" : "#a4262c";
+            }
 
-const {data:profile,error:profileError}=await client.from("profiles")
-.select("is_active").eq("id",userData.user.id).maybeSingle();
+            function setBusy(busy, text = "Sign in") {
+                button.disabled = busy;
+                button.textContent = busy ? "Signing in…" : text;
+            }
 
-if(profileError||!profile||profile.is_active!==true){
-await client.auth.signOut();
-message.textContent="Your account is inactive or has not been configured. Contact your administrator.";
-button.disabled=false;
-return;
-}
+            function getClient() {
+                return window.supabaseClient || null;
+            }
 
-location.replace("dashboard.html");
-});
-})();
-</script>
+            const params = new URLSearchParams(location.search);
+
+            if (params.get("status") === "deactivated") {
+                showMessage(
+                    "Your account has been deactivated. Contact your administrator."
+                );
+            }
+
+            if (!window.APP?.supabase) {
+                showMessage(
+                    "The website configuration could not be loaded. Please contact support."
+                );
+                console.error(
+                    "[Brampton Develop] window.APP is missing. Check js/config.js."
+                );
+                return;
+            }
+
+            if (!window.supabase?.createClient) {
+                showMessage(
+                    "Sign-in services could not be loaded. Please refresh the page or contact support."
+                );
+                console.error(
+                    "[Brampton Develop] Supabase library is unavailable."
+                );
+                return;
+            }
+
+            if (!getClient()) {
+                showMessage(
+                    "Sign-in services could not be initialised. Please contact support."
+                );
+                console.error(
+                    "[Brampton Develop] Supabase client is missing. Check js/loader.js."
+                );
+                return;
+            }
+
+            const client = getClient();
+
+            async function checkExistingSession() {
+                try {
+                    const { data, error } = await client.auth.getSession();
+
+                    if (error || !data.session) return;
+
+                    const { data: userData, error: userError } =
+                        await client.auth.getUser();
+
+                    if (userError || !userData.user) {
+                        await client.auth.signOut();
+                        return;
+                    }
+
+                    const { data: profile, error: profileError } =
+                        await client
+                            .from("profiles")
+                            .select("is_active")
+                            .eq("id", userData.user.id)
+                            .maybeSingle();
+
+                    if (
+                        !profileError &&
+                        profile &&
+                        profile.is_active === true
+                    ) {
+                        location.replace("dashboard.html");
+                        return;
+                    }
+
+                    await client.auth.signOut();
+
+                    if (!profileError && profile?.is_active === false) {
+                        showMessage(
+                            "Your account has been deactivated. Contact your administrator."
+                        );
+                    }
+                } catch (error) {
+                    console.error(
+                        "[Brampton Develop] Session check failed:",
+                        error
+                    );
+                }
+            }
+
+            await checkExistingSession();
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+
+                if (!email || !password) {
+                    showMessage("Enter your username and password.");
+                    return;
+                }
+
+                setBusy(true);
+                showMessage("Signing in…", true);
+
+                try {
+                    const { error: signInError } =
+                        await client.auth.signInWithPassword({
+                            email,
+                            password
+                        });
+
+                    if (signInError) {
+                        showMessage(
+                            "We couldn't sign you in with those details."
+                        );
+                        setBusy(false);
+                        return;
+                    }
+
+                    const { data: userData, error: userError } =
+                        await client.auth.getUser();
+
+                    if (userError || !userData.user) {
+                        await client.auth.signOut();
+                        showMessage("Unable to verify your account.");
+                        setBusy(false);
+                        return;
+                    }
+
+                    const { data: profile, error: profileError } =
+                        await client
+                            .from("profiles")
+                            .select("is_active")
+                            .eq("id", userData.user.id)
+                            .maybeSingle();
+
+                    if (
+                        profileError ||
+                        !profile ||
+                        profile.is_active !== true
+                    ) {
+                        await client.auth.signOut();
+
+                        showMessage(
+                            profile?.is_active === false
+                                ? "Your account has been deactivated. Contact your administrator."
+                                : "Your account has not been configured. Contact your administrator."
+                        );
+
+                        setBusy(false);
+                        return;
+                    }
+
+                    location.replace("dashboard.html");
+                } catch (error) {
+                    console.error(
+                        "[Brampton Develop] Sign-in failed:",
+                        error
+                    );
+
+                    showMessage(
+                        "An unexpected error occurred. Please try again."
+                    );
+
+                    setBusy(false);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
