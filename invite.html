@@ -1,93 +1,124 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Set Your Password | Brampton Develop</title>
-  <script src="js/loader.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 20px; background: #f5f7fa; font-family: "Segoe UI", Arial, sans-serif; color: #202938; }
-    .card { width: 100%; max-width: 430px; padding: 32px; background: white; border: 1px solid #e3e8ef; border-radius: 12px; }
-    .logo { width: 52px; height: 52px; object-fit: contain; }
-    h1 { font-size: 25px; margin-bottom: 8px; }
-    p { color: #687588; line-height: 1.5; }
-    label { display: block; margin: 18px 0 7px; font-size: 14px; font-weight: 600; }
-    input { width: 100%; padding: 12px; border: 1px solid #cbd3df; border-radius: 6px; font: inherit; }
-    button { width: 100%; margin-top: 22px; padding: 12px; border: 0; border-radius: 6px; background: #335882; color: white; font: inherit; font-weight: 600; cursor: pointer; }
-    button:disabled { opacity: .6; cursor: wait; }
-    #message { white-space: pre-wrap; font-size: 14px; }
-    a { color: #335882; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set your password - Brampton Develop</title>
+<script src="js/loader.js"></script>
+<style>
+:root{--brand:#335882;--bg:#f5f7fa;--text:#242424;--muted:#666}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--bg);font-family:"Segoe UI",Arial,sans-serif;color:var(--text)}
+.card{width:100%;max-width:460px;background:#fff;padding:34px;border:1px solid #e1e5eb;border-radius:12px;box-shadow:0 8px 30px #00000008}
+.logo{width:48px;height:48px;object-fit:contain}
+h1{font-size:26px;margin:22px 0 8px}
+p{color:var(--muted);line-height:1.5}
+label{display:block;font-size:14px;font-weight:600;margin:18px 0 7px}
+input{width:100%;padding:12px;border:1px solid #b8bec8;border-radius:5px;font:inherit}
+input:focus{outline:2px solid var(--brand);outline-offset:1px}
+.requirements{background:#f7f8fa;border:1px solid #e5e8ed;border-radius:8px;padding:15px;margin-top:17px}
+.requirements h2{font-size:14px;margin:0 0 12px}
+.rule{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:13px;color:#626b76}
+.rule input{width:17px;height:17px;margin:0;accent-color:#18794e;pointer-events:none}
+.rule.met{color:#18794e}
+button{width:100%;padding:12px;border:0;border-radius:5px;background:var(--brand);color:white;font:inherit;font-weight:600;margin-top:22px;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+#message{font-size:14px;white-space:pre-wrap}
+a{color:var(--brand)}
+</style>
 </head>
 <body>
-  <main class="card">
-    <img class="logo" src="assets/logo.svg" alt="Brampton Develop">
-    <h1>Set your password</h1>
-    <p>Complete your staff account setup by choosing a secure password.</p>
+<main class="card">
+<img class="logo" src="assets/logo.svg" alt="Brampton Develop">
+<h1>Set your password</h1>
+<p>Create a secure password for your Brampton Develop account.</p>
 
-    <form id="passwordForm">
-      <label for="password">New password</label>
-      <input id="password" type="password" minlength="12" autocomplete="new-password" required>
-      <label for="confirmPassword">Confirm password</label>
-      <input id="confirmPassword" type="password" minlength="12" autocomplete="new-password" required>
-      <button id="submitButton" type="submit">Set password</button>
-    </form>
+<form id="passwordForm">
+<label for="password">New password</label>
+<input id="password" type="password" autocomplete="new-password" required>
 
-    <p id="message" role="status" aria-live="polite"></p>
-  </main>
+<section class="requirements">
+<h2>Password requirements</h2>
+<div class="rule" data-rule="length"><input type="checkbox" disabled><span>At least 12 characters</span></div>
+<div class="rule" data-rule="upper"><input type="checkbox" disabled><span>At least one uppercase letter (A–Z)</span></div>
+<div class="rule" data-rule="lower"><input type="checkbox" disabled><span>At least one lowercase letter (a–z)</span></div>
+<div class="rule" data-rule="number"><input type="checkbox" disabled><span>At least one number (0–9)</span></div>
+<div class="rule" data-rule="special"><input type="checkbox" disabled><span>At least one special character</span></div>
+</section>
 
-  <script>
-  (async () => {
-    const client = window.supabaseClient;
-    const message = document.getElementById("message");
-    const button = document.getElementById("submitButton");
+<label for="confirmPassword">Confirm password</label>
+<input id="confirmPassword" type="password" autocomplete="new-password" required>
+<div id="matchMessage" class="rule">Enter your password twice to confirm it.</div>
 
-    if (!client) {
-      message.textContent = "Unable to load authentication. Please contact your administrator.";
-      return;
-    }
+<button id="submitButton" type="submit" disabled>Set password</button>
+<p id="message" role="status" aria-live="polite"></p>
+</form>
+</main>
 
-    // Supabase must be configured to detect the invitation link's session.
-    const { data, error } = await client.auth.getSession();
+<script>
+(async()=>{
+const client=window.supabaseClient;
+const password=document.getElementById("password");
+const confirmPassword=document.getElementById("confirmPassword");
+const button=document.getElementById("submitButton");
+const message=document.getElementById("message");
+const matchMessage=document.getElementById("matchMessage");
+const form=document.getElementById("passwordForm");
 
-    if (error || !data.session) {
-      message.textContent = "This invitation is invalid or has expired. Ask your administrator to send a new invitation.";
-      return;
-    }
+if(!client){message.textContent="Authentication could not load. Please contact your administrator.";return;}
 
-    document.getElementById("passwordForm").addEventListener("submit", async event => {
-      event.preventDefault();
+const {data,error}=await client.auth.getSession();
+if(error||!data.session){
+message.textContent="Your invitation is invalid or has expired. Ask your administrator to send another invitation.";
+form.hidden=true;
+return;
+}
 
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
+function getRules(value){
+return{
+length:value.length>=12,
+upper:/[A-Z]/.test(value),
+lower:/[a-z]/.test(value),
+number:/[0-9]/.test(value),
+special:/[^A-Za-z0-9]/.test(value)
+};
+}
 
-      if (password.length < 12) {
-        message.textContent = "Your password must be at least 12 characters long.";
-        return;
-      }
+function validate(){
+const rules=getRules(password.value);
+let all=true;
+document.querySelectorAll("[data-rule]").forEach(row=>{
+const met=rules[row.dataset.rule];
+row.querySelector("input").checked=met;
+row.classList.toggle("met",met);
+if(!met)all=false;
+});
+const matches=password.value.length>0&&password.value===confirmPassword.value;
+matchMessage.textContent=matches?"Passwords match.":"Passwords must match.";
+matchMessage.classList.toggle("met",matches);
+button.disabled=!(all&&matches);
+}
+password.addEventListener("input",validate);
+confirmPassword.addEventListener("input",validate);
 
-      if (password !== confirmPassword) {
-        message.textContent = "The passwords do not match.";
-        return;
-      }
-
-      button.disabled = true;
-      message.textContent = "Setting your password…";
-
-      const { error: updateError } = await client.auth.updateUser({ password });
-
-      if (updateError) {
-        message.textContent = updateError.message;
-        button.disabled = false;
-        return;
-      }
-
-      message.textContent = "Your password has been set. You can now sign in.";
-      await client.auth.signOut();
-      setTimeout(() => location.replace("index.html"), 1200);
-    });
-  })();
-  </script>
+form.addEventListener("submit",async event=>{
+event.preventDefault();
+validate();
+if(button.disabled)return;
+button.disabled=true;
+message.textContent="Setting your password…";
+const {error:updateError}=await client.auth.updateUser({password:password.value});
+if(updateError){
+message.textContent=updateError.message;
+button.disabled=false;
+return;
+}
+await client.auth.signOut();
+message.textContent="Password created successfully. Redirecting to sign in…";
+setTimeout(()=>location.replace("index.html"),1200);
+});
+})();
+</script>
 </body>
 </html>
