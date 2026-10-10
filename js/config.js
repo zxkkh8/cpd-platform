@@ -3,7 +3,7 @@ const APP = {
     companyName: "Brampton Develop",
 
     portalName:
-        "Development & Training Portal",
+        "Training and Development Portal",
 
     logoPath:
         "assets/logo.svg",
