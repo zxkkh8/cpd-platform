@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Complete Form</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:"Segoe UI",sans-serif;
+    background:#f3f5f9;
+    display:flex;
+}
+
+.main{
+    flex:1;
+    padding:40px;
+}
+
+.sidebar{
+    width:300px;
+    background:white;
+    height:100vh;
+    padding:20px;
+    box-shadow:-2px 0 10px rgba(0,0,0,.05);
+    position:sticky;
+    top:0;
+}
+
+.box{
+    background:#f8fafc;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:15px;
+}
+
+.question{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+}
+
+label{
+    display:block;
+    margin:15px 0;
+}
+
+.submit-btn{
+    background:#124191;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="main">
+
+<div class="question">
+
+<h1>Safeguarding Awareness</h1>
+
+<h3>Question 1 of 20</h3>
+
+<p>What is safeguarding?</p>
+
+<label><input type="radio"> Protecting welfare</label>
+<label><input type="radio"> School maintenance</label>
+<label><input type="radio"> Attendance only</label>
+
+<br>
+
+<button class="submit-btn">
+Next Question
+</button>
+
+</div>
+
+</div>
+
+<div class="sidebar">
+
+<div class="box">
+<h3>Time Taken</h3>
+<div id="timer">00:00:00</div>
+</div>
+
+<div class="box">
+<h3>Progress</h3>
+<div>1 / 20</div>
+</div>
+
+<div class="box">
+<h3>Status</h3>
+Autosaved ✓
+</div>
+
+</div>
+
+<script>
+
+let seconds = 0;
+
+setInterval(() => {
+
+seconds++;
+
+let hrs = String(Math.floor(seconds/3600)).padStart(2,'0');
+let mins = String(Math.floor((seconds%3600)/60)).padStart(2,'0');
+let secs = String(seconds%60).padStart(2,'0');
+
+document.getElementById("timer").innerHTML =
+hrs + ":" + mins + ":" + secs;
+
+},1000);
+
+</script>
+
+</body>
+</html>
