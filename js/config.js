@@ -9,7 +9,7 @@ const APP = {
         "assets/logo.svg",
 
     backgroundImage:
-        "assets/background.png",
+        "assets/background.svg",
 
     favicon:
         "assets/favicon.ico",
