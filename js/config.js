@@ -9,7 +9,7 @@ const APP = {
         "assets/logo.svg",
 
     backgroundImage:
-        "assets/background.jpg",
+        "assets/background.png",
 
     favicon:
         "assets/favicon.ico",
@@ -29,10 +29,10 @@ const APP = {
     supabase: {
 
         url:
-            "YOUR_SUPABASE_URL",
+            "https://vllatlqfhnnjqoglzwpo.supabase.co/rest/v1/",
 
         key:
-            "YOUR_SUPABASE_PUBLISHABLE_KEY"
+            "sb_publishable_CQjRAmwDaw8AQzfTz1azuw_1HdcGxwp"
 
     },
 
