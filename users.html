@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Users</title>
+
+<style>
+
+body{
+margin:0;
+font-family:"Segoe UI",sans-serif;
+background:#f3f5f9;
+padding:30px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.btn{
+background:#124191;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+background:white;
+border-collapse:collapse;
+border-radius:12px;
+overflow:hidden;
+}
+
+th,td{
+padding:16px;
+border-bottom:1px solid #e5e7eb;
+text-align:left;
+}
+
+.role{
+background:#dbeafe;
+padding:6px 10px;
+border-radius:20px;
+display:inline-block;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>Users</h1>
+
+<button class="btn">
++ Create User
+</button>
+
+</div>
+
+<table>
+
+<tr>
+<th>Username</th>
+<th>Name</th>
+<th>Role</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+<tr>
+<td>admin</td>
+<td>System Administrator</td>
+<td><span class="role">Super Admin</span></td>
+<td>Active</td>
+<td>Edit</td>
+</tr>
+
+<tr>
+<td>trainer01</td>
+<td>Training Manager</td>
+<td><span class="role">Trainer</span></td>
+<td>Active</td>
+<td>Edit</td>
+</tr>
+
+<tr>
+<td>johnsmith</td>
+<td>John Smith</td>
+<td><span class="role">Learner</span></td>
+<td>Active</td>
+<td>Edit</td>
+</tr>
+
+</table>
+
+</body>
+</html>
