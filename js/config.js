@@ -27,12 +27,9 @@ const APP = {
         "#",
 
     supabase: {
-
-        url:
-            "https://vllatlqfhnnjqoglzwpo.supabase.co/rest/v1/",
-
-        key:
-            "sb_publishable_CQjRAmwDaw8AQzfTz1azuw_1HdcGxwp"
+    url:"https://vllatlqfhnnjqoglzwpo.supabase.co",
+    key: "sb_publishable_CQjRAmwDaw8AQzfTz1azuw_1HdcGxwp"
+},
 
     },
 
