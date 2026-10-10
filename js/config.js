@@ -1,5 +1,17 @@
+/*
+=========================================
+BRAMPTON DEVELOP CONFIGURATION
+=========================================
+EDIT THIS FILE ONLY
+=========================================
+*/
+
 const APP = {
+
+    /* Branding */
+
     companyName: "Brampton Develop",
+
     portalName:
         "Development & Training Portal",
 
@@ -11,6 +23,10 @@ const APP = {
 
     favicon:
         "assets/favicon.ico",
+
+
+
+    /* Links */
 
     forgotPasswordUrl:
         "#",
@@ -26,6 +42,20 @@ const APP = {
 
 
 
+    /* Supabase */
+
+    supabase: {
+
+        url:
+            "YOUR_SUPABASE_URL",
+
+        key:
+            "YOUR_SUPABASE_PUBLISHABLE_KEY"
+
+    },
+
+
+
     /* Pages */
 
     loginPage:
@@ -37,11 +67,9 @@ const APP = {
     logoutPage:
         "index.html",
 
-    certificatePrefix:
-        "BD",
 
-    certificateTemplate:
-        "default",
+
+    /* Forms */
 
     defaultPassMark:
         80,
@@ -51,26 +79,32 @@ const APP = {
 
 
 
-    /* Appearance */
+    /* Certificates */
+
+    certificatePrefix:
+        "BD",
+
+
+
+    /* Theme */
 
     theme: {
 
-        primaryColor:
+        primary:
             "#0078D4",
 
-        secondaryColor:
+        secondary:
             "#24315B",
 
-        successColor:
+        success:
             "#107C10",
 
-        warningColor:
+        warning:
             "#FFB900",
 
-        dangerColor:
+        danger:
             "#D83B01"
 
     }
 
 };
-``
