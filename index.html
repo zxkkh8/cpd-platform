@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SecurTrack CPD</title>
+<title>Brampton Develop</title>
 
 <style>
 
@@ -22,97 +22,97 @@ body{
     background:
     linear-gradient(
         180deg,
-        #cfd4ef 0%,
-        #aab4dd 55%,
-        #24315b 100%
+        #d8dcf2 0%,
+        #b7bee5 55%,
+        #28355f 100%
     );
     overflow:hidden;
 }
 
-.background{
+body::before{
+    content:"";
     position:fixed;
     inset:0;
-    opacity:.18;
+    opacity:.12;
     background:
-    linear-gradient(150deg,
-    transparent 35%,
-    rgba(255,255,255,.3) 35%,
-    rgba(255,255,255,.3) 50%,
-    transparent 50%),
-    linear-gradient(30deg,
-    transparent 35%,
-    rgba(255,255,255,.2) 35%,
-    rgba(255,255,255,.2) 50%,
-    transparent 50%);
+    linear-gradient(
+        140deg,
+        transparent 35%,
+        rgba(255,255,255,.4) 35%,
+        rgba(255,255,255,.4) 50%,
+        transparent 50%
+    ),
+    linear-gradient(
+        40deg,
+        transparent 35%,
+        rgba(255,255,255,.2) 35%,
+        rgba(255,255,255,.2) 50%,
+        transparent 50%
+    );
 }
 
-.login-container{
-    position:relative;
-    z-index:2;
-
-    width:500px;
-    background:#ffffff;
-
-    border-radius:12px;
-
+.login-card{
+    width:520px;
+    max-width:95%;
+    background:#fff;
+    border-radius:20px;
     padding:40px;
-
     box-shadow:
-    0 25px 50px rgba(0,0,0,.15);
+        0 25px 60px rgba(0,0,0,.15);
+    position:relative;
+    z-index:1;
 }
 
 .logo{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:15px;
-
-    margin-bottom:35px;
+    text-align:center;
+    margin-bottom:15px;
 }
 
 .logo img{
-    height:55px;
+    height:90px;
+    width:auto;
 }
 
 .logo h1{
-    font-size:22px;
-    color:#1e243d;
+    margin-top:15px;
+    color:#1f2945;
+    font-size:34px;
+    font-weight:700;
 }
 
-.heading{
+.subtitle{
     text-align:center;
+    color:#667085;
     margin-bottom:30px;
-}
-
-.heading h2{
-    font-size:20px;
-    color:#29324d;
-    font-weight:400;
+    font-size:15px;
 }
 
 .form-group{
-    margin-bottom:22px;
+    margin-bottom:20px;
 }
 
 label{
     display:block;
     margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
     color:#4b5563;
-    font-size:15px;
 }
 
 input[type=text],
 input[type=password]{
     width:100%;
-    padding:14px;
-    border:1px solid #d6dae3;
-    border-radius:5px;
+    padding:15px;
+    border:1px solid #d9dce6;
+    border-radius:10px;
     font-size:15px;
+    transition:.2s;
 }
 
 input:focus{
     outline:none;
-    border-color:#6474b9;
+    border-color:#7080c4;
+    box-shadow:0 0 0 4px rgba(112,128,196,.15);
 }
 
 .options{
@@ -126,45 +126,46 @@ input:focus{
     display:flex;
     align-items:center;
     gap:10px;
+    font-size:14px;
     color:#4b5563;
-    font-size:15px;
 }
 
-.checkbox input{
-    width:18px;
-    height:18px;
-}
-
-.options a{
-    color:#4f6be6;
+.link{
+    color:#5c6ee3;
     text-decoration:none;
+    font-size:14px;
+}
+
+.link:hover{
+    text-decoration:underline;
 }
 
 .login-btn{
     width:100%;
     border:none;
-    border-radius:8px;
-    padding:15px;
-    background:#9198c4;
-    color:white;
-    font-size:18px;
+    padding:16px;
+    border-radius:10px;
+    background:#7d87c4;
+    color:#fff;
+    font-size:17px;
     font-weight:600;
     cursor:pointer;
+    transition:.2s;
 }
 
 .login-btn:hover{
-    background:#7f87bc;
+    background:#707bba;
 }
 
 .error{
     text-align:center;
     color:#dc2626;
-    margin-top:15px;
     min-height:20px;
+    margin-top:15px;
 }
 
 .footer{
-    margin-top:35px;
+    margin-top:25px;
     padding-top:20px;
     border-top:1px solid #e5e7eb;
     text-align:center;
@@ -172,80 +173,63 @@ input:focus{
     font-size:14px;
 }
 
-.footer a{
-    color:#4f6be6;
-    text-decoration:none;
-}
-
 </style>
 </head>
 <body>
 
-<div class="background"></div>
-
-<div class="login-container">
+<div class="login-card">
 
     <div class="logo">
-
-        assets/logo.svg
-
-        <h1>SecurTrack CPD</h1>
-
+        <img id="mainLogo" alt="Brampton Develop Logo">
+        <h1>Brampton Develop</h1>
     </div>
 
-    <div class="heading">
-
-        <h2>Sign in to SecurTrack CPD</h2>
-
+    <div class="subtitle">
+        Professional Development & Training Portal
     </div>
 
-    <div class="form-group">
+    <form id="loginForm">
 
-        <label>Username</label>
-
-        <input
-            id="username"
-            type="text"
-            placeholder="Enter your username">
-
-    </div>
-
-    <div class="form-group">
-
-        <label>Password</label>
-
-        <input
-            id="password"
-            type="password"
-            placeholder="Enter your password">
-
-    </div>
-
-    <div class="options">
-
-        <label class="checkbox">
-
+        <div class="form-group">
+            <label>Username</label>
             <input
-                type="checkbox"
-                onclick="togglePassword()">
+                id="username"
+                type="text"
+                placeholder="Enter your username"
+                autocomplete="username">
+        </div>
 
-            Show Password
+        <div class="form-group">
+            <label>Password</label>
+            <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                autocomplete="current-password">
+        </div>
 
-        </label>
+        <div class="options">
 
-        #
-            Forgot Password?
-        </a>
+            <label class="checkbox">
+                <input
+                    type="checkbox"
+                    onclick="togglePassword()">
+                Show Password
+            </label>
 
-    </div>
+            #
+                Forgot Password?
+            </a>
 
-    <button
-        class="login-btn"
-        onclick="login()">
+        </div>
 
-        Sign In
+        <button
+            type="submit"
+            class="login-btn">
+            Sign In
+        </button>
 
-    </button>
+    </form>
 
     <div
         id="error"
@@ -264,65 +248,114 @@ input:focus{
 
 </div>
 
+js/config.jsscript>
 https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
 js/supabase.jsscript>
 
 <script>
 
-function togglePassword(){
+document.addEventListener("DOMContentLoaded", () => {
 
-    const password =
-    document.getElementById("password");
+    if(typeof APP !== "undefined"){
 
-    if(password.type === "password"){
+        if(APP.logoPath){
+            document.getElementById("mainLogo").src =
+                APP.logoPath;
+        }
 
-        password.type = "text";
+        if(APP.forgotPasswordUrl){
+            document.getElementById("forgotPasswordLink").href =
+                APP.forgotPasswordUrl;
+        }
 
-    }else{
-
-        password.type = "password";
+        if(APP.supportUrl){
+            document.getElementById("supportLink").href =
+                APP.supportUrl;
+        }
 
     }
 
+});
+
+function togglePassword(){
+
+    const password =
+        document.getElementById("password");
+
+    password.type =
+        password.type === "password"
+        ? "text"
+        : "password";
+
 }
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    await login();
+
+});
 
 async function login(){
 
     const username =
-    document.getElementById("username").value;
+        document.getElementById("username").value.trim();
 
     const password =
-    document.getElementById("password").value;
+        document.getElementById("password").value;
 
     const errorBox =
-    document.getElementById("error");
+        document.getElementById("error");
 
-    errorBox.innerHTML = "";
+    errorBox.textContent = "";
 
-    const { data, error } =
-    await supabaseClient
-        .from("users")
-        .select("*")
-        .eq("username", username)
-        .eq("password", password)
-        .single();
+    if(!username || !password){
 
-    if(error || !data){
-
-        errorBox.innerHTML =
-        "Invalid username or password";
+        errorBox.textContent =
+            "Please enter your username and password";
 
         return;
 
     }
 
-    localStorage.setItem(
-        "currentUser",
-        JSON.stringify(data)
-    );
+    try{
 
-    window.location.href =
-    "dashboard.html";
+        const { data, error } =
+            await supabaseClient
+            .from("users")
+            .select("*")
+            .eq("username", username)
+            .eq("password", password)
+            .single();
+
+        if(error || !data){
+
+            errorBox.textContent =
+                "Invalid username or password";
+
+            return;
+
+        }
+
+        localStorage.setItem(
+            "currentUser",
+            JSON.stringify(data)
+        );
+
+        window.location.href =
+            "dashboard.html";
+
+    }
+
+    catch{
+
+        errorBox.textContent =
+            "Unable to connect to the server";
+
+    }
 
 }
 
