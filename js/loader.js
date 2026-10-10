@@ -1,48 +1,75 @@
+
 (() => {
     const loader = document.getElementById("loading");
 
-    if (!loader) return;
+    if (loader) {
+        window.showLoader = (message = "Loading...") => {
+            const text = loader.querySelector(".loading-text");
+            if (text) text.textContent = message;
+            loader.classList.remove("hidden");
+        };
 
-    window.showLoader = (message = "Loading...") => {
-        const text = loader.querySelector(".loading-text");
-        if (text) text.textContent = message;
+        window.hideLoader = () => {
+            loader.classList.add("hidden");
+        };
 
-        loader.classList.remove("hidden");
-    };
+        window.addEventListener("load", () => {
+            window.hideLoader();
+        });
 
-    window.hideLoader = () => {
-        loader.classList.add("hidden");
-    };
+        document.addEventListener("click", (event) => {
+            const link = event.target.closest("a");
 
-    // Hide when the page has finished loading.
-    window.addEventListener("load", () => {
-        window.hideLoader();
-    });
+            if (
+                !link ||
+                event.defaultPrevented ||
+                event.button !== 0 ||
+                event.ctrlKey ||
+                event.metaKey ||
+                event.shiftKey ||
+                event.altKey ||
+                link.target === "_blank" ||
+                link.hasAttribute("download")
+            ) return;
 
-    // Show the loader when navigating to another local HTML page.
-    document.addEventListener("click", (event) => {
-        const link = event.target.closest("a");
+            const url = new URL(link.href, location.href);
 
-        if (
-            !link ||
-            event.defaultPrevented ||
-            event.button !== 0 ||
-            event.ctrlKey ||
-            event.metaKey ||
-            event.shiftKey ||
-            event.altKey ||
-            link.target === "_blank" ||
-            link.hasAttribute("download")
-        ) return;
+            if (
+                url.origin === location.origin &&
+                url.pathname.endsWith(".html") &&
+                url.href !== location.href
+            ) {
+                window.showLoader();
+            }
+        });
+    }
 
-        const url = new URL(link.href, location.href);
+    // Initialise Supabase using config.js
+    if (!window.APP?.supabase) {
+        console.error("[Brampton Develop] config.js has not loaded.");
+        return;
+    }
 
-        if (
-            url.origin === location.origin &&
-            url.pathname.endsWith(".html") &&
-            url.href !== location.href
-        ) {
-            window.showLoader();
-        }
-    });
+    if (!window.supabase?.createClient) {
+        console.error("[Brampton Develop] Supabase library has not loaded.");
+        return;
+    }
+
+    const { url, key } = window.APP.supabase;
+
+    if (!url || !key) {
+        console.error("[Brampton Develop] Supabase URL or key is missing.");
+        return;
+    }
+
+    try {
+        window.supabaseClient = window.supabase.createClient(
+            url.replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, ""),
+            key
+        );
+
+        console.info("[Brampton Develop] Supabase initialised.");
+    } catch (error) {
+        console.error("[Brampton Develop] Supabase initialisation failed:", error);
+    }
 })();
