@@ -1,4 +1,3 @@
-```javascript
 (() => {
     "use strict";
 
@@ -294,4 +293,3 @@
 
     loadCertificates();
 })();
-```
