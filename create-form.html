@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Form</title>
+
+<style>
+body{
+    margin:0;
+    font-family:"Segoe UI",sans-serif;
+    background:#f3f5f9;
+}
+
+.container{
+    padding:30px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:15px;
+    border:1px solid #dbe2ea;
+    border-radius:8px;
+}
+
+.question{
+    background:#f8fafc;
+    padding:20px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+.btn{
+    background:#124191;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>Create Form</h1>
+
+<label>Form Name</label>
+<input type="text">
+
+<label>Description</label>
+<textarea rows="4"></textarea>
+
+<label>Pass Mark (%)</label>
+<input type="number">
+
+<label>CPD Hours</label>
+<input type="number">
+
+</div>
+
+<div class="card">
+
+<h2>Certificate Settings</h2>
+
+<label>
+<input type="checkbox">
+ Generate Certificate
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox">
+ Enable Stopwatch
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox">
+ Enable Autosave
+</label>
+
+</div>
+
+<div class="card">
+
+<h2>Questions</h2>
+
+<div class="question">
+
+<input type="text" placeholder="Question text">
+
+<select>
+<option>Multiple Choice</option>
+<option>True / False</option>
+<option>Text Response</option>
+<option>Dropdown</option>
+</select>
+
+</div>
+
+<br>
+
+<button class="btn">
++ Add Question
+</button>
+
+</div>
+
+</div>
+
+</body>
+</html>
