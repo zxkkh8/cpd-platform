@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -34,6 +35,7 @@ a {
     color: inherit;
 }
 
+/* Sidebar */
 .sidebar {
     position: fixed;
     inset: 0 auto 0 0;
@@ -121,6 +123,7 @@ a {
     line-height: 1.6;
 }
 
+/* Main content */
 .main {
     margin-left: 250px;
     min-height: 100vh;
@@ -149,10 +152,29 @@ a {
     font-size: 13px;
 }
 
-.user-info {
+/* Account menu */
+.account-menu {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.account-button {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 7px 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+
+.account-button:hover,
+.account-button[aria-expanded="true"] {
+    background: var(--brand-light);
+    border-color: var(--border);
 }
 
 .avatar {
@@ -164,20 +186,115 @@ a {
     color: var(--brand);
     border-radius: 50%;
     font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
 }
 
-.user-info strong {
+.user-details {
+    min-width: 0;
+}
+
+.user-details strong {
     display: block;
     font-size: 13px;
 }
 
-.user-info span {
+.user-details span {
     display: block;
     margin-top: 4px;
     color: var(--muted);
     font-size: 11px;
 }
 
+.account-chevron {
+    color: var(--muted);
+    font-size: 18px;
+    margin-left: 3px;
+}
+
+/* Dropdown */
+.account-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 260px;
+    padding: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, .14);
+    z-index: 100;
+}
+
+.account-dropdown[hidden] {
+    display: none;
+}
+
+.dropdown-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 10px;
+}
+
+.dropdown-heading .avatar {
+    flex-shrink: 0;
+}
+
+.dropdown-heading strong {
+    display: block;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.dropdown-heading .dropdown-role {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 6px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    text-align: left;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.dropdown-item > span:first-child {
+    width: 20px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 17px;
+}
+
+.dropdown-item:hover {
+    background: var(--brand-light);
+}
+
+.logout-item,
+.logout-item > span:first-child {
+    color: #b42318;
+}
+
+/* Welcome banner */
 .content {
     padding: 32px;
     max-width: 1600px;
@@ -241,6 +358,7 @@ a {
     background: var(--brand-dark);
 }
 
+/* Statistics */
 .stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -290,6 +408,7 @@ a {
     font-size: 11px;
 }
 
+/* Panels */
 .grid {
     display: grid;
     grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
@@ -323,6 +442,7 @@ a {
     padding: 22px;
 }
 
+/* Forms table */
 .table-wrap {
     overflow-x: auto;
 }
@@ -357,6 +477,7 @@ tbody tr:last-child td {
     padding: 24px;
 }
 
+/* Quick actions */
 .quick-actions {
     display: grid;
     gap: 11px;
@@ -388,6 +509,7 @@ tbody tr:last-child td {
     color: var(--brand);
     border-radius: 9px;
     font-size: 17px;
+    flex-shrink: 0;
 }
 
 .action-link strong {
@@ -402,6 +524,7 @@ tbody tr:last-child td {
     font-size: 11px;
 }
 
+/* Responsive layout */
 @media (max-width: 1150px) {
     .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -456,8 +579,21 @@ tbody tr:last-child td {
         grid-template-columns: 1fr;
     }
 
-    .user-info .user-details {
+    .account-button {
+        gap: 7px;
+        padding: 5px;
+    }
+
+    .account-button .user-details {
         display: none;
+    }
+
+    .account-chevron {
+        margin-left: 0;
+    }
+
+    .account-dropdown {
+        width: 240px;
     }
 
     .page-title h2 {
@@ -466,7 +602,7 @@ tbody tr:last-child td {
 }
 </style>
 </head>
-<script src="js/loader.js"></script>
+
 <body>
 
 <aside class="sidebar">
@@ -506,17 +642,67 @@ tbody tr:last-child td {
 </aside>
 
 <main class="main">
+
     <header class="topbar">
         <div class="page-title">
             <h2>Dashboard</h2>
             <p>Overview of your training portal</p>
         </div>
 
-        <div class="user-info">
-            <div class="avatar" id="userAvatar">U</div>
-            <div class="user-details">
-                <strong id="currentUser">Loading account...</strong>
-                <span id="currentRole">Signed-in account</span>
+        <div class="account-menu">
+            <button
+                class="account-button"
+                id="accountButton"
+                type="button"
+                aria-expanded="false"
+                aria-controls="accountDropdown"
+                aria-label="Open account menu"
+            >
+                <div class="avatar" id="userAvatar">U</div>
+
+                <div class="user-details">
+                    <strong id="currentUser">Loading account...</strong>
+                    <span id="currentRole"></span>
+                </div>
+
+                <span class="account-chevron" aria-hidden="true">⌄</span>
+            </button>
+
+            <div class="account-dropdown" id="accountDropdown" hidden>
+                <div class="dropdown-heading">
+                    <div class="avatar" id="dropdownAvatar">U</div>
+                    <div>
+                        <strong id="dropdownName">Your account</strong>
+                        <span class="dropdown-role" id="dropdownRole"></span>
+                    </div>
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <a href="profile.html" class="dropdown-item">
+                    <span aria-hidden="true">♙</span>
+                    <span>Profile</span>
+                </a>
+
+                <button
+                    type="button"
+                    class="dropdown-item"
+                    id="switchUserButton"
+                >
+                    <span aria-hidden="true">⇄</span>
+                    <span>Switch User</span>
+                </button>
+
+                <div class="dropdown-divider"></div>
+
+                <button
+                    type="button"
+                    class="dropdown-item logout-item"
+                    id="logoutButton"
+                >
+                    <span aria-hidden="true">↪</span>
+                    <span>Log out</span>
+                </button>
             </div>
         </div>
     </header>
@@ -641,10 +827,135 @@ tbody tr:last-child td {
     </section>
 </main>
 
-<script>
+<script src="js/loader.js"></script>
 
-document.getElementById("currentUser").textContent = "Your account";
-document.getElementById("userAvatar").textContent = "U";
+<script>
+const accountButton = document.getElementById("accountButton");
+const accountDropdown = document.getElementById("accountDropdown");
+
+function getInitials(name) {
+    const words = String(name || "User")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if (words.length === 0) return "U";
+
+    if (words.length === 1) {
+        return words[0].slice(0, 2).toUpperCase();
+    }
+
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+}
+
+function loadAccountDetails() {
+    let account = null;
+
+    try {
+        const storedAccount = localStorage.getItem("currentUser");
+
+        if (storedAccount) {
+            try {
+                account = JSON.parse(storedAccount);
+            } catch {
+                account = storedAccount;
+            }
+        }
+    } catch (error) {
+        console.warn("Unable to read account details.", error);
+    }
+
+    const name =
+        typeof account === "string"
+            ? account
+            : account?.display_name ||
+              account?.full_name ||
+              account?.fullName ||
+              account?.name ||
+              account?.username ||
+              account?.email ||
+              "Your account";
+
+    const role =
+        typeof account === "object" && account
+            ? account.role || ""
+            : "";
+
+    const initials = getInitials(name);
+
+    document.getElementById("currentUser").textContent = name;
+    document.getElementById("currentRole").textContent = role;
+    document.getElementById("userAvatar").textContent = initials;
+
+    document.getElementById("dropdownName").textContent = name;
+    document.getElementById("dropdownRole").textContent = role;
+    document.getElementById("dropdownAvatar").textContent = initials;
+
+    document.getElementById("currentRole").hidden = !role;
+    document.getElementById("dropdownRole").hidden = !role;
+}
+
+function closeAccountDropdown() {
+    accountDropdown.hidden = true;
+    accountButton.setAttribute("aria-expanded", "false");
+}
+
+accountButton.addEventListener("click", () => {
+    const isOpening = accountDropdown.hidden;
+
+    accountDropdown.hidden = !isOpening;
+    accountButton.setAttribute("aria-expanded", String(isOpening));
+});
+
+document.addEventListener("click", (event) => {
+    if (!event.target.closest(".account-menu")) {
+        closeAccountDropdown();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeAccountDropdown();
+        accountButton.focus();
+    }
+});
+
+async function leaveAccount() {
+    try {
+        const client = window.supabaseClient;
+
+        if (client?.auth) {
+            const { error } = await client.auth.signOut();
+
+            if (error) {
+                console.error("Supabase sign-out failed:", error.message);
+                alert("Unable to sign out. Please try again.");
+                return;
+            }
+        }
+    } catch (error) {
+        console.error("Error signing out:", error);
+        alert("Unable to sign out. Please try again.");
+        return;
+    }
+
+    try {
+        localStorage.removeItem("currentUser");
+        sessionStorage.removeItem("currentUser");
+    } catch (error) {
+        console.warn("Unable to clear saved account details.", error);
+    }
+
+    window.location.href = "login.html";
+}
+
+document.getElementById("switchUserButton")
+    .addEventListener("click", leaveAccount);
+
+document.getElementById("logoutButton")
+    .addEventListener("click", leaveAccount);
+
+loadAccountDetails();
 </script>
 
 </body>
