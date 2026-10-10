@@ -52,3 +52,4 @@ const APP = {
         "BD"
 
 };
+window.APP = APP;
