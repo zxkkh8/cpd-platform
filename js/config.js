@@ -1,32 +1,76 @@
-/*
-=================================
-BRAMPTON DEVELOP CONFIGURATION
-=================================
-*/
-
-const APP_CONFIG = {
-
+const APP = {
     companyName: "Brampton Develop",
+    portalName:
+        "Development & Training Portal",
 
-    supportUrl:
-        "https://support.bramptondevelop.co.uk",
+    logoPath:
+        "assets/logo.svg",
+
+    backgroundImage:
+        "assets/background.jpg",
+
+    favicon:
+        "assets/favicon.ico",
 
     forgotPasswordUrl:
-        "https://passwords.bramptondevelop.co.uk",
+        "#",
+
+    supportUrl:
+        "#",
 
     privacyPolicyUrl:
-        "https://bramptondevelop.co.uk/privacy",
+        "#",
 
     termsUrl:
-        "https://bramptondevelop.co.uk/terms",
+        "#",
 
-    dashboardPage:
-        "dashboard.html",
+
+
+    /* Pages */
 
     loginPage:
         "index.html",
 
-    logoPath:
-        "assets/logo.svg"
+    dashboardPage:
+        "dashboard.html",
+
+    logoutPage:
+        "index.html",
+
+    certificatePrefix:
+        "BD",
+
+    certificateTemplate:
+        "default",
+
+    defaultPassMark:
+        80,
+
+    defaultCPDHours:
+        1,
+
+
+
+    /* Appearance */
+
+    theme: {
+
+        primaryColor:
+            "#0078D4",
+
+        secondaryColor:
+            "#24315B",
+
+        successColor:
+            "#107C10",
+
+        warningColor:
+            "#FFB900",
+
+        dangerColor:
+            "#D83B01"
+
+    }
 
 };
+``
