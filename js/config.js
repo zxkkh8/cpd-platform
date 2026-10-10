@@ -1,55 +1,29 @@
+
 const APP = {
-
     companyName: "Brampton Develop",
+    portalName: "Training and Development Portal",
 
-    portalName:
-        "Training and Development Portal",
+    logoPath: "assets/logo.svg",
+    backgroundImage: "assets/background.svg",
+    favicon: "assets/favicon.ico",
 
-    logoPath:
-        "assets/logo.svg",
-
-    backgroundImage:
-        "assets/background.svg",
-
-    favicon:
-        "assets/favicon.ico",
-
-    forgotPasswordUrl:
-        "#",
-
-    supportUrl:
-        "#",
-
-    privacyPolicyUrl:
-        "#",
-
-    termsUrl:
-        "#",
+    forgotPasswordUrl: "#",
+    supportUrl: "#",
+    privacyPolicyUrl: "#",
+    termsUrl: "#",
 
     supabase: {
-    url:"https://vllatlqfhnnjqoglzwpo.supabase.co",
-    key: "sb_publishable_CQjRAmwDaw8AQzfTz1azuw_1HdcGxwp"
-},
-
+        url: "https://vllatlqfhnnjqoglzwpo.supabase.co",
+        key: "sb_publishable_CQjRAmwDaw8AQzfTz1azuw_1HdcGxwp"
     },
 
-    loginPage:
-        "index.html",
+    loginPage: "index.html",
+    dashboardPage: "dashboard.html",
+    logoutPage: "index.html",
 
-    dashboardPage:
-        "dashboard.html",
-
-    logoutPage:
-        "index.html",
-
-    defaultPassMark:
-        80,
-
-    defaultCPDHours:
-        1,
-
-    certificatePrefix:
-        "BD"
-
+    defaultPassMark: 80,
+    defaultCPDHours: 1,
+    certificatePrefix: "BD"
 };
+
 window.APP = APP;
