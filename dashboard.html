@@ -5,835 +5,1742 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard - Brampton Develop</title>
 
+assets/favicon.ico
+
 <style>
-:root {
-    --brand: #335882;
-    --brand-dark: #274666;
-    --brand-light: #edf3f9;
-    --background: #f5f7fa;
-    --surface: #ffffff;
-    --border: #e4e8ee;
-    --text: #202a36;
-    --muted: #687587;
-    --radius: 12px;
+
+:root{
+    --brand:#335882;
+    --brand-dark:#274666;
+    --brand-light:#edf3f9;
+    --background:#f5f7fa;
+    --surface:#ffffff;
+    --border:#e4e8ee;
+    --text:#202a36;
+    --muted:#687587;
+    --radius:12px;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI","Segoe UI Variable",Arial,sans-serif;
 }
 
-body {
-    background: var(--background);
-    color: var(--text);
+body{
+    background:var(--background);
+    color:var(--text);
 }
 
-a { color: inherit; }
-
-.sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    width: 250px;
-    padding: 22px 16px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    z-index: 10;
+a{
+    color:inherit;
+    text-decoration:none;
 }
 
-.brand {
-    padding: 8px 10px 25px;
-    border-bottom: 1px solid var(--border);
+.mobile-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.35);
+    opacity:0;
+    visibility:hidden;
+    transition:.2s;
+    z-index:99;
 }
 
-.brand img {
-    display: block;
-    max-width: 155px;
-    max-height: 62px;
-    object-fit: contain;
-    margin-bottom: 15px;
+.mobile-overlay.open{
+    opacity:1;
+    visibility:visible;
 }
 
-.brand h1 {
-    font-size: 20px;
-    letter-spacing: -.4px;
+.mobile-menu{
+    display:none;
+    position:fixed;
+    left:16px;
+    top:16px;
+    z-index:150;
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:10px;
+    background:white;
+    box-shadow:0 4px 18px rgba(0,0,0,.12);
+    cursor:pointer;
+    font-size:20px;
 }
 
-.brand p {
-    margin-top: 6px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.5;
+.sidebar{
+    position:fixed;
+    inset:0 auto 0 0;
+    width:270px;
+    background:white;
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    z-index:100;
 }
 
-.nav-label {
-    margin: 25px 10px 10px;
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+.brand{
+    padding:24px;
+    border-bottom:1px solid var(--border);
 }
 
-.nav {
-    display: grid;
-    gap: 5px;
+.brand img{
+    width:160px;
+    max-width:100%;
+    display:block;
+    margin-bottom:15px;
 }
 
-.nav a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    color: #526174;
-    transition: background .2s, color .2s;
+.brand h1{
+    font-size:20px;
+    font-weight:650;
 }
 
-.nav a:hover,
-.nav a.active {
-    background: var(--brand-light);
-    color: var(--brand);
+.brand p{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:12px;
 }
 
-.nav a.active { font-weight: 650; }
-
-.nav-icon {
-    width: 22px;
-    text-align: center;
-    font-size: 17px;
+.nav-label{
+    padding:20px 24px 8px;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
 }
 
-.sidebar-footer {
-    position: absolute;
-    bottom: 20px;
-    left: 22px;
-    right: 22px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.6;
+.nav{
+    display:flex;
+    flex-direction:column;
+    padding:0 12px;
+    gap:4px;
 }
 
-.main {
-    margin-left: 250px;
-    min-height: 100vh;
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:10px;
+    color:#536172;
+    transition:.2s;
 }
 
-.topbar {
-    min-height: 82px;
-    padding: 18px 34px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+.nav a:hover{
+    background:#f6f8fb;
 }
 
-.page-title h2 {
-    font-size: 24px;
-    font-weight: 650;
-    letter-spacing: -.5px;
+.nav a.active{
+    background:var(--brand-light);
+    color:var(--brand);
+    font-weight:600;
 }
 
-.page-title p {
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 13px;
+.nav-svg{
+    width:18px;
+    height:18px;
+    object-fit:contain;
 }
 
-/* Account dropdown */
-.account-menu {
-    position: relative;
-    flex-shrink: 0;
+.sidebar-footer{
+    margin-top:auto;
+    padding:24px;
+    color:var(--muted);
+    font-size:12px;
+    border-top:1px solid var(--border);
 }
 
-.account-button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 7px 10px;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    text-align: left;
-    cursor: pointer;
-    transition: background .2s, border-color .2s;
+.main{
+    margin-left:270px;
+    min-height:100vh;
 }
 
-.account-button:hover,
-.account-button[aria-expanded="true"] {
-    background: var(--brand-light);
-    border-color: var(--border);
-}
+@media(max-width:768px){
 
-.avatar {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    background: var(--brand-light);
-    color: var(--brand);
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 13px;
-    flex-shrink: 0;
-}
-
-.user-details { min-width: 0; }
-
-.user-details strong {
-    display: block;
-    font-size: 13px;
-}
-
-.user-details span {
-    display: block;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.account-chevron {
-    color: var(--muted);
-    font-size: 18px;
-    margin-left: 3px;
-}
-
-.account-dropdown {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 260px;
-    padding: 8px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 12px 35px rgba(15, 23, 42, .14);
-    z-index: 100;
-}
-
-.account-dropdown[hidden],
-[hidden] {
-    display: none !important;
-}
-
-.dropdown-heading {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 12px 10px;
-}
-
-.dropdown-heading strong {
-    display: block;
-    font-size: 13px;
-    overflow-wrap: anywhere;
-}
-
-.dropdown-heading .dropdown-role {
-    display: block;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.dropdown-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 6px 0;
-}
-
-.dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 11px 10px;
-    border: 0;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text);
-    text-decoration: none;
-    text-align: left;
-    font: inherit;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background .2s;
-}
-
-.dropdown-item > span:first-child {
-    width: 20px;
-    color: var(--muted);
-    text-align: center;
-    font-size: 17px;
-}
-
-.dropdown-item:hover { background: var(--brand-light); }
-
-.logout-item,
-.logout-item > span:first-child {
-    color: #b42318;
-}
-
-/* Welcome banner */
-.content {
-    padding: 32px;
-    max-width: 1600px;
-    margin: auto;
-}
-
-.welcome {
-    padding: 28px;
-    margin-bottom: 25px;
-    border-radius: var(--radius);
-    background: var(--brand);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
-
-.welcome h3 {
-    font-size: 23px;
-    margin-bottom: 8px;
-}
-
-.welcome p {
-    font-size: 13px;
-    line-height: 1.6;
-    color: #e2eaf3;
-}
-
-.button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    border: 0;
-    border-radius: 8px;
-    padding: 12px 16px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 650;
-    cursor: pointer;
-    transition: background .2s;
-}
-
-.button-light {
-    background: white;
-    color: var(--brand);
-    white-space: nowrap;
-}
-
-.button-light:hover { background: #edf3f9; }
-
-/* Statistics */
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.stat-card {
-    padding: 22px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-}
-
-.stat-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
-}
-
-.stat-card h3 {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.stat-icon {
-    width: 36px;
-    height: 36px;
-    display: grid;
-    place-items: center;
-    background: var(--brand-light);
-    color: var(--brand);
-    border-radius: 9px;
-}
-
-.stat-card h1 {
-    font-size: 30px;
-    letter-spacing: -.8px;
-}
-
-.stat-card p {
-    margin-top: 7px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-/* Dashboard panels */
-.grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
-    gap: 20px;
-}
-
-.panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    min-width: 0;
-}
-
-.panel-header {
-    padding: 20px 22px;
-    border-bottom: 1px solid var(--border);
-}
-
-.panel-header h3 { font-size: 15px; }
-
-.panel-header p {
-    margin-top: 5px;
-    font-size: 12px;
-    color: var(--muted);
-}
-
-.panel-body { padding: 22px; }
-
-.table-wrap { overflow-x: auto; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    white-space: nowrap;
-    font-size: 12px;
-}
-
-th {
-    padding: 13px 12px;
-    background: #f8fafc;
-    text-align: left;
-    color: var(--muted);
-    font-weight: 600;
-}
-
-td {
-    padding: 15px 12px;
-    border-bottom: 1px solid var(--border);
-}
-
-tbody tr:last-child td { border-bottom: 0; }
-
-.empty-state {
-    color: var(--muted);
-    text-align: center;
-    padding: 24px;
-}
-
-/* Quick actions */
-.quick-actions {
-    display: grid;
-    gap: 11px;
-}
-
-.action-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    text-decoration: none;
-    transition: border-color .2s, background .2s;
-}
-
-.action-link:hover {
-    background: #f8fafc;
-    border-color: #bdccdc;
-}
-
-.action-icon {
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
-    background: var(--brand-light);
-    color: var(--brand);
-    border-radius: 9px;
-    font-size: 17px;
-    flex-shrink: 0;
-}
-
-.action-link strong {
-    display: block;
-    font-size: 13px;
-}
-
-.action-link small {
-    display: block;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-@media (max-width: 1150px) {
-    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
+    .mobile-menu{
+        display:block;
     }
 
-    .sidebar-footer { display: none; }
-    .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .nav-label { margin-top: 18px; }
-    .main { margin-left: 0; }
-    .topbar { padding: 20px; }
-    .content { padding: 18px; }
-
-    .welcome {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 460px) {
-    .stats { grid-template-columns: 1fr; }
-
-    .account-button {
-        gap: 7px;
-        padding: 5px;
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
     }
 
-    .account-button .user-details { display: none; }
-    .account-chevron { margin-left: 0; }
-    .account-dropdown { width: 240px; }
-    .page-title h2 { font-size: 21px; }
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<aside class="sidebar">
+<div
+    id="mobileOverlay"
+    class="mobile-overlay">
+</div>
+
+<button
+    id="mobileMenu"
+    class="mobile-menu"
+    type="button">
+
+    ☰
+
+</button>
+
+<aside class="sidebar" id="sidebar">
+
     <div class="brand">
-        <img id="sidebarLogo" src="assets/logo.svg" alt="Brampton Develop logo">
-        <h1 id="companyName">Brampton Develop</h1>
-        <p id="portalName">Development &amp; Training Portal</p>
+
+        assets/logo.svg
+
+        <h1 id="companyName">
+            Brampton Develop
+        </h1>
+
+        <p id="portalName">
+            Training and Development Portal
+        </p>
+
     </div>
 
-    <p class="nav-label">Workspace</p>
+    <p class="nav-label">
+        Workspace
+    </p>
 
     <nav class="nav">
-        <a href="dashboard.html" class="active"><span class="nav-icon">⌂</span> Dashboard</a>
-        <a href="forms.html"><span class="nav-icon">▤</span> Forms</a>
-        <a href="responses.html"><span class="nav-icon">☷</span> Responses</a>
-        <a href="certificates.html"><span class="nav-icon">♧</span> Certificates</a>
-        <a href="users.html"><span class="nav-icon">♙</span> Users</a>
-        <a href="settings.html"><span class="nav-icon">⚙</span> Settings</a>
+
+        <a
+            href="dashboard.html"
+            class="active">
+
+            assets/dashboard.svg
+
+            Dashboard
+
+        </a>
+
+        <a href="forms.html">
+
+            assets/forms.svg
+
+            Forms
+
+        </a>
+
+        <a href="responses.html">
+
+            assets/responses.svg
+
+            Responses
+
+        </a>
+
+        <a href="certificates.html">
+
+            assets/certificate.svg
+
+            Certificates
+
+        </a>
+
+    </nav>
+
+    <p class="nav-label">
+        Administration
+    </p>
+
+    <nav class="nav">
+
+        <a href="users.html">
+
+            assets/users.svg
+
+            Users
+
+        </a>
+
+        <a href="settings.html">
+
+            assets/settings.svg
+
+            Settings
+
+        </a>
+
     </nav>
 
     <div class="sidebar-footer">
+
         Brampton Develop<br>
         Professional Development Portal
+
     </div>
+
 </aside>
 
 <main class="main">
-    <header class="topbar">
-        <div class="page-title">
-            <h2>Dashboard</h2>
-            <p>Overview of your training portal</p>
-        </div>
+<style>
 
-        <div class="account-menu">
-            <button
-                class="account-button"
-                id="accountButton"
-                type="button"
-                aria-expanded="false"
-                aria-controls="accountDropdown"
-                aria-label="Open account menu"
-            >
-                <div class="avatar" id="userAvatar">U</div>
+.topbar{
+    min-height:82px;
+    padding:18px 34px;
+    background:white;
+    border-bottom:1px solid var(--border);
 
-                <div class="user-details">
-                    <strong id="currentUser">Loading account...</strong>
-                    <span id="currentRole" hidden></span>
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.page-title h2{
+    font-size:24px;
+    font-weight:650;
+    letter-spacing:-.5px;
+}
+
+.page-title p{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.account-menu{
+    position:relative;
+    flex-shrink:0;
+}
+
+.account-button{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 10px;
+
+    background:transparent;
+    border:1px solid transparent;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.account-button:hover{
+    background:var(--brand-light);
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:var(--brand-light);
+
+    color:var(--brand);
+
+    font-weight:700;
+}
+
+.user-details strong{
+    display:block;
+    font-size:13px;
+}
+
+.user-details span{
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.account-dropdown{
+
+    position:absolute;
+
+    right:0;
+
+    top:calc(100% + 10px);
+
+    width:260px;
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.12);
+
+    padding:8px;
+
+    z-index:300;
+}
+
+.account-dropdown[hidden]{
+    display:none;
+}
+
+.dropdown-heading{
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+
+    padding:10px;
+}
+
+.dropdown-role{
+    margin-top:4px;
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.dropdown-divider{
+
+    height:1px;
+
+    background:var(--border);
+
+    margin:8px 0;
+}
+
+.dropdown-item{
+
+    width:100%;
+
+    border:none;
+
+    background:none;
+
+    text-align:left;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:11px 10px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:13px;
+}
+
+.dropdown-item:hover{
+
+    background:var(--brand-light);
+
+}
+
+.logout-item{
+    color:#b42318;
+}
+
+.content{
+
+    padding:32px;
+
+    max-width:1600px;
+
+    margin:auto;
+
+}
+
+.welcome{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:28px;
+
+    margin-bottom:24px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+}
+
+.welcome h3{
+
+    font-size:28px;
+
+    font-weight:650;
+
+    margin-bottom:8px;
+}
+
+.welcome p{
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+.button{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 18px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:650;
+}
+
+.button-light{
+
+    background:var(--brand);
+
+    color:white;
+}
+
+.button-light:hover{
+
+    background:var(--brand-dark);
+
+}
+
+@media(max-width:768px){
+
+    .topbar{
+
+        padding:20px 20px 20px 70px;
+
+    }
+
+    .content{
+
+        padding:18px;
+
+    }
+
+    .welcome{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+}
+
+</style>
+
+<header class="topbar">
+
+    <div class="page-title">
+
+        <h2>
+            Dashboard
+        </h2>
+
+        <p>
+            Overview of your training portal
+        </p>
+
+    </div>
+
+    <div class="account-menu">
+
+        <button
+            id="accountButton"
+            class="account-button"
+            type="button"
+            aria-expanded="false">
+
+            <div
+                id="userAvatar"
+                class="avatar">
+
+                U
+
+            </div>
+
+            <div class="user-details">
+
+                <strong id="currentUser">
+                    Loading...
+                </strong>
+
+                <span
+                    id="currentRole"
+                    hidden>
+                </span>
+
+            </div>
+
+        </button>
+
+        <div
+            id="accountDropdown"
+            class="account-dropdown"
+            hidden>
+
+            <div class="dropdown-heading">
+
+                <div
+                    id="dropdownAvatar"
+                    class="avatar">
+
+                    U
+
                 </div>
 
-                <span class="account-chevron" aria-hidden="true">⌄</span>
+                <div>
+
+                    <strong id="dropdownName">
+                        Loading...
+                    </strong>
+
+                    <span
+                        id="dropdownRole"
+                        class="dropdown-role"
+                        hidden>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <a
+                href="profile.html"
+                class="dropdown-item">
+
+                Profile
+
+            </a>
+
+            <button
+                id="switchUserButton"
+                type="button"
+                class="dropdown-item">
+
+                Switch Account
+
             </button>
 
-            <div class="account-dropdown" id="accountDropdown" hidden>
-                <div class="dropdown-heading">
-                    <div class="avatar" id="dropdownAvatar">U</div>
-                    <div>
-                        <strong id="dropdownName">Your account</strong>
-                        <span class="dropdown-role" id="dropdownRole" hidden></span>
-                    </div>
+            <div class="dropdown-divider"></div>
+
+            <button
+                id="logoutButton"
+                type="button"
+                class="dropdown-item logout-item">
+
+                Log Out
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<section class="content">
+
+    <div class="welcome">
+
+        <div>
+
+            <h3 id="welcomeGreeting">
+                Welcome
+            </h3>
+
+            <p id="todayDate">
+                Loading...
+            </p>
+
+        </div>
+
+        <div
+            style="
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+        ">
+
+            <a
+                href="create-user.html"
+                class="button button-light">
+
+                Create User
+
+            </a>
+
+            <a
+                href="create-form.html"
+                class="button button-light">
+
+                Create Form
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <style>
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0,1fr)
+        );
+
+    gap:18px;
+
+    margin-bottom:24px;
+
+}
+
+.stat-link{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+.stat-card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:22px;
+
+    transition:.2s;
+
+}
+
+.stat-card:hover{
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.08);
+
+}
+
+.stat-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:18px;
+
+}
+
+.stat-card h3{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.stat-icon{
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:10px;
+
+    background:var(--brand-light);
+
+    display:grid;
+
+    place-items:center;
+}
+
+.stat-icon img{
+
+    width:18px;
+    height:18px;
+}
+
+.stat-card h1{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    letter-spacing:-1px;
+
+}
+
+.stat-card p{
+
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(0,1.8fr)
+        minmax(280px,1fr);
+
+    gap:20px;
+
+}
+
+.panel{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.panel-header{
+
+    padding:22px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.panel-header h3{
+
+    font-size:16px;
+
+    margin-bottom:5px;
+
+}
+
+.panel-header p{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+.panel-body{
+
+    padding:22px;
+
+}
+
+.table-wrap{
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th{
+
+    padding:14px 18px;
+
+    text-align:left;
+
+    background:#f8fafc;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+td{
+
+    padding:15px 18px;
+
+    border-top:1px solid var(--border);
+
+    font-size:13px;
+}
+
+.quick-actions{
+
+    display:grid;
+
+    gap:12px;
+
+}
+
+.action-link{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:15px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    transition:.2s;
+}
+
+.action-link:hover{
+
+    background:#fafcff;
+
+    border-color:#c9d5e2;
+
+}
+
+.action-icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:10px;
+
+    background:var(--brand-light);
+
+    display:grid;
+
+    place-items:center;
+
+    flex-shrink:0;
+}
+
+.action-icon img{
+
+    width:20px;
+    height:20px;
+}
+
+.action-link strong{
+
+    display:block;
+
+    font-size:13px;
+
+}
+
+.action-link small{
+
+    display:block;
+
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+@media(max-width:1150px){
+
+    .stats{
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+
+    }
+
+    .grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .stats{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
+
+<div class="stats">
+
+    <a
+        href="users.html"
+        class="stat-link">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <h3>
+                    Total Users
+                </h3>
+
+                <div class="stat-icon">
+
+                    assets/users.svg
+
                 </div>
 
-                <div class="dropdown-divider"></div>
+            </div>
 
-                <a href="profile.html" class="dropdown-item">
-                    <span aria-hidden="true">♙</span>
-                    <span>Profile</span>
+            <h1 id="userCount">
+                —
+            </h1>
+
+            <p>
+                Registered portal accounts
+            </p>
+
+        </div>
+
+    </a>
+
+    <a
+        href="forms.html"
+        class="stat-link">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <h3>
+                    Training Forms
+                </h3>
+
+                <div class="stat-icon">
+
+                    assets/forms.svg
+
+                </div>
+
+            </div>
+
+            <h1 id="formCount">
+                —
+            </h1>
+
+            <p>
+                Available learning forms
+            </p>
+
+        </div>
+
+    </a>
+
+    <a
+        href="responses.html"
+        class="stat-link">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <h3>
+                    Responses
+                </h3>
+
+                <div class="stat-icon">
+
+                    assets/responses.svg
+
+                </div>
+
+            </div>
+
+            <h1 id="responseCount">
+                —
+            </h1>
+
+            <p>
+                Submitted assessments
+            </p>
+
+        </div>
+
+    </a>
+
+    <a
+        href="certificates.html"
+        class="stat-link">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <h3>
+                    Certificates
+                </h3>
+
+                <div class="stat-icon">
+
+                    assets/certificate.svg
+
+                </div>
+
+            </div>
+
+            <h1 id="certificateCount">
+                —
+            </h1>
+
+            <p>
+                Issued certificates
+            </p>
+
+        </div>
+
+    </a>
+
+</div>
+
+<div class="grid">
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                Recent Forms
+            </h3>
+
+            <p>
+                Recently created learning and assessment forms
+            </p>
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Form Name
+                        </th>
+
+                        <th>
+                            Pass Mark
+                        </th>
+
+                        <th>
+                            CPD Hours
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="recentForms">
+
+                    <tr>
+
+                        <td
+                            colspan="3">
+
+                            Loading forms...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                Quick Actions
+            </h3>
+
+            <p>
+                Frequently used tools
+            </p>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="quick-actions">
+
+                <a
+                    href="create-user.html"
+                    class="action-link">
+
+                    <div class="action-icon">
+
+                        assets/users.svg
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Create User
+                        </strong>
+
+                        <small>
+                            Add a new portal account
+                        </small>
+
+                    </div>
+
                 </a>
 
-                <button type="button" class="dropdown-item" id="switchUserButton">
-                    <span aria-hidden="true">⇄</span>
-                    <span>Switch User</span>
-                </button>
+                <a
+                    href="create-form.html"
+                    class="action-link">
 
-                <div class="dropdown-divider"></div>
+                    <div class="action-icon">
 
-                <button type="button" class="dropdown-item logout-item" id="logoutButton">
-                    <span aria-hidden="true">↪</span>
-                    <span>Log out</span>
-                </button>
-            </div>
-        </div>
-    </header>
+                        assets/forms.svg
 
-    <section class="content">
-        <div class="welcome">
-            <div>
-                <h3>Welcome to Brampton Develop</h3>
-                <p>Manage training, forms, certificates and staff accounts from one place.</p>
-            </div>
-            <a class="button button-light" href="create-user.html">＋ Create user</a>
-        </div>
-
-        <div class="stats">
-            <article class="stat-card">
-                <div class="stat-top">
-                    <h3>Total users</h3>
-                    <span class="stat-icon">♙</span>
-                </div>
-                <h1 id="userCount">—</h1>
-                <p>Registered portal accounts</p>
-            </article>
-
-            <article class="stat-card">
-                <div class="stat-top">
-                    <h3>Training forms</h3>
-                    <span class="stat-icon">▤</span>
-                </div>
-                <h1 id="formCount">—</h1>
-                <p>Available forms</p>
-            </article>
-
-            <article class="stat-card">
-                <div class="stat-top">
-                    <h3>Responses</h3>
-                    <span class="stat-icon">☷</span>
-                </div>
-                <h1 id="responseCount">—</h1>
-                <p>Submitted responses</p>
-            </article>
-
-            <article class="stat-card">
-                <div class="stat-top">
-                    <h3>Certificates</h3>
-                    <span class="stat-icon">♧</span>
-                </div>
-                <h1 id="certificateCount">—</h1>
-                <p>Certificates recorded</p>
-            </article>
-        </div>
-
-        <div class="grid">
-            <section class="panel">
-                <div class="panel-header">
-                    <h3>Recent forms</h3>
-                    <p>Your latest training and development forms</p>
-                </div>
-
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Form name</th>
-                                <th>Pass mark</th>
-                                <th>CPD hours</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentForms">
-                            <tr>
-                                <td colspan="3" class="empty-state">
-                                    No forms have been loaded yet.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section class="panel">
-                <div class="panel-header">
-                    <h3>Quick actions</h3>
-                    <p>Frequently used tools</p>
-                </div>
-
-                <div class="panel-body">
-                    <div class="quick-actions">
-                        <a class="action-link" href="create-user.html">
-                            <span class="action-icon">＋</span>
-                            <span>
-                                <strong>Create user</strong>
-                                <small>Add a portal account</small>
-                            </span>
-                        </a>
-
-                        <a class="action-link" href="create-form.html">
-                            <span class="action-icon">▤</span>
-                            <span>
-                                <strong>Create form</strong>
-                                <small>Set up training or assessment</small>
-                            </span>
-                        </a>
-
-                        <a class="action-link" href="responses.html">
-                            <span class="action-icon">☷</span>
-                            <span>
-                                <strong>View responses</strong>
-                                <small>Review submitted forms</small>
-                            </span>
-                        </a>
-
-                        <a class="action-link" href="certificates.html">
-                            <span class="action-icon">♧</span>
-                            <span>
-                                <strong>Certificates</strong>
-                                <small>Manage training records</small>
-                            </span>
-                        </a>
                     </div>
-                </div>
-            </section>
-        </div>
-    </section>
-</main>
 
-<script src="js/loader.js"></script>
+                    <div>
+
+                        <strong>
+                            Create Form
+                        </strong>
+
+                        <small>
+                            Publish a new course
+                        </small>
+
+                    </div>
+
+                </a>
+
+                <a
+                    href="responses.html"
+                    class="action-link">
+
+                    <div class="action-icon">
+
+                        assets/responses.svg
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Review Responses
+                        </strong>
+
+                        <small>
+                            View assessment results
+                        </small>
+
+                    </div>
+
+                </a>
+
+                <a
+                    href="certificates.html"
+                    class="action-link">
+
+                    <div class="action-icon">
+
+                        assets/certificate.svg
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Certificates
+                        </strong>
+
+                        <small>
+                            Manage issued awards
+                        </small>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</section>
+
+    </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+js/config.jsscript>
+js/supabase.jsscript>
+<script srcsscript>
 
 <script>
-const accountButton = document.getElementById("accountButton");
-const accountDropdown = document.getElementById("accountDropdown");
 
-function getInitials(name) {
-    const words = String(name || "User")
+const sidebar =
+    document.getElementById(
+        "sidebar"
+    );
+
+const mobileMenu =
+    document.getElementById(
+        "mobileMenu"
+    );
+
+const mobileOverlay =
+    document.getElementById(
+        "mobileOverlay"
+    );
+
+mobileMenu?.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.add(
+            "open"
+        );
+
+        mobileOverlay.classList.add(
+            "open"
+        );
+
+    }
+);
+
+mobileOverlay?.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+        mobileOverlay.classList.remove(
+            "open"
+        );
+
+    }
+);
+
+function getInitials(name){
+
+    const words =
+        String(name || "User")
         .trim()
         .split(/\s+/)
         .filter(Boolean);
 
-    if (words.length === 0) return "U";
-    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    if(words.length === 0){
 
-    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+        return "U";
+
+    }
+
+    if(words.length === 1){
+
+        return words[0]
+            .substring(0,2)
+            .toUpperCase();
+
+    }
+
+    return (
+        words[0][0] +
+        words[
+            words.length - 1
+        ][0]
+    ).toUpperCase();
+
 }
 
-function loadAccountDetails() {
-    let account = null;
+function loadAccountDetails(){
 
-    try {
-        const storedAccount = localStorage.getItem("currentUser");
-
-        if (storedAccount) {
-            try {
-                account = JSON.parse(storedAccount);
-            } catch {
-                account = storedAccount;
-            }
-        }
-    } catch (error) {
-        console.warn("Unable to read account details.", error);
-    }
+    const account =
+        getCurrentUser();
 
     const name =
-        typeof account === "string"
-            ? account
-            : account?.display_name ||
-              account?.full_name ||
-              account?.fullName ||
-              account?.name ||
-              account?.username ||
-              account?.email ||
-              "Your account";
+        account?.display_name ||
+        account?.full_name ||
+        account?.username ||
+        account?.email ||
+        "User";
 
     const role =
-        typeof account === "object" && account
-            ? account.role || ""
-            : "";
+        account?.role || "";
 
-    const initials = getInitials(name);
+    const initials =
+        getInitials(name);
 
-    document.getElementById("currentUser").textContent = name;
-    document.getElementById("currentRole").textContent = role;
-    document.getElementById("currentRole").hidden = !role;
-    document.getElementById("userAvatar").textContent = initials;
+    document.getElementById(
+        "currentUser"
+    ).textContent =
+        name;
 
-    document.getElementById("dropdownName").textContent = name;
-    document.getElementById("dropdownRole").textContent = role;
-    document.getElementById("dropdownRole").hidden = !role;
-    document.getElementById("dropdownAvatar").textContent = initials;
-}
+    document.getElementById(
+        "dropdownName"
+    ).textContent =
+        name;
 
-function closeAccountDropdown() {
-    accountDropdown.hidden = true;
-    accountButton.setAttribute("aria-expanded", "false");
-}
+    document.getElementById(
+        "userAvatar"
+    ).textContent =
+        initials;
 
-function leaveAccount() {
-    window.location.href = "logout.html";
-}
+    document.getElementById(
+        "dropdownAvatar"
+    ).textContent =
+        initials;
 
-accountButton.addEventListener("click", () => {
-    const isOpening = accountDropdown.hidden;
-    accountDropdown.hidden = !isOpening;
-    accountButton.setAttribute("aria-expanded", String(isOpening));
-});
+    const currentRole =
+        document.getElementById(
+            "currentRole"
+        );
 
-document.addEventListener("click", (event) => {
-    if (!event.target.closest(".account-menu")) {
-        closeAccountDropdown();
+    if(currentRole){
+
+        currentRole.textContent =
+            role;
+
+        currentRole.hidden =
+            !role;
+
     }
-});
 
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-        closeAccountDropdown();
-        accountButton.focus();
+    const dropdownRole =
+        document.getElementById(
+            "dropdownRole"
+        );
+
+    if(dropdownRole){
+
+        dropdownRole.textContent =
+            role;
+
+        dropdownRole.hidden =
+            !role;
+
     }
-});
 
-document.getElementById("switchUserButton")
-    .addEventListener("click", leaveAccount);
+    const hour =
+        new Date().getHours();
 
-document.getElementById("logoutButton")
-    .addEventListener("click", leaveAccount);
+    let greeting =
+        "Good afternoon";
 
-loadAccountDetails();
+    if(hour < 12){
+
+        greeting =
+            "Good morning";
+
+    }
+    else if(hour >= 18){
+
+        greeting =
+            "Good evening";
+
+    }
+
+    document.getElementById(
+        "welcomeGreeting"
+    ).textContent =
+        `${greeting}, ${name}`;
+
+    document.getElementById(
+        "todayDate"
+    ).textContent =
+        new Date()
+        .toLocaleDateString(
+            "en-GB",
+            {
+                weekday:"long",
+                day:"numeric",
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+}
+
+async function loadStats(){
+
+    try{
+
+        const stats =
+            await getDashboardStats();
+
+        document.getElementById(
+            "userCount"
+        ).textContent =
+            stats.users;
+
+        document.getElementById(
+            "formCount"
+        ).textContent =
+            stats.forms;
+
+        document.getElementById(
+            "responseCount"
+        ).textContent =
+            stats.responses;
+
+        document.getElementById(
+            "certificateCount"
+        ).textContent =
+            stats.certificates;
+
+    }
+    catch(error){
+
+        console.error(
+            "Unable to load stats",
+            error
+        );
+
+    }
+
+}
+
+async function loadRecentForms(){
+
+    const table =
+        document.getElementById(
+            "recentForms"
+        );
+
+    if(!table){
+        return;
+    }
+
+    try{
+
+        const forms =
+            await getForms();
+
+        if(
+            !forms ||
+            !forms.length
+        ){
+
+            table.innerHTML = `
+            <tr>
+                <td colspan="3">
+                    No forms found
+                </td>
+            </tr>
+            `;
+
+            return;
+
+        }
+
+        table.innerHTML = "";
+
+        forms
+            .slice(0,5)
+            .forEach(form => {
+
+                table.innerHTML += `
+                <tr>
+
+                    <td>
+                        ${form.name || "Unnamed Form"}
+                    </td>
+
+                    <td>
+                        ${form.passmark || APP.defaultPassMark}%
+                    </td>
+
+                    <td>
+                        ${form.cpdhours || APP.defaultCPDHours}
+                    </td>
+
+                </tr>
+                `;
+
+            });
+
+    }
+    catch(error){
+
+        console.error(
+            "Unable to load forms",
+            error
+        );
+
+    }
+
+}
+
+const accountButton =
+    document.getElementById(
+        "accountButton"
+    );
+
+const accountDropdown =
+    document.getElementById(
+        "accountDropdown"
+    );
+
+accountButton?.addEventListener(
+    "click",
+    () => {
+
+        const open =
+            accountDropdown.hidden;
+
+        accountDropdown.hidden =
+            !open;
+
+        accountButton.setAttribute(
+            "aria-expanded",
+            open
+        );
+
+    }
+);
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if(
+            !event.target.closest(
+                ".account-menu"
+            )
+        ){
+
+            accountDropdown.hidden =
+                true;
+
+        }
+
+    }
+);
+
+document
+.getElementById(
+    "logoutButton"
+)
+?.addEventListener(
+    "click",
+    async () => {
+
+        await logoutUser();
+
+    }
+);
+
+document
+.getElementById(
+    "switchUserButton"
+)
+?.addEventListener(
+    "click",
+    async () => {
+
+        await logoutUser();
+
+    }
+);
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        loadAccountDetails();
+
+        await Promise.all([
+
+            loadStats(),
+            loadRecentForms()
+
+        ]);
+
+    }
+);
+
 </script>
 
 </body>
