@@ -1,0 +1,128 @@
+name: Deploy Protected CPD Portal
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Inject authentication guard
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import os
+          import re
+          import shutil
+
+          root = Path(".")
+          output = Path("_site")
+
+          shutil.copytree(
+              root,
+              output,
+              ignore=shutil.ignore_patterns(
+                  ".git",
+                  ".github",
+                  ".gitignore",
+                  "_site",
+                  "__pycache__"
+              ),
+              dirs_exist_ok=True
+          )
+
+          public_pages = {
+              "index.html",
+              "forgot-password.html",
+              "forgotten-password.html",
+              "status.html",
+              "404.html"
+          }
+
+          guard_file = output / "js" / "auth-guard.js"
+
+          if not guard_file.exists():
+              raise SystemExit(
+                  "Missing js/auth-guard.js. Create it before deploying."
+              )
+
+          changed = 0
+
+          for page in output.rglob("*.html"):
+              relative = page.relative_to(output)
+
+              if relative.name.lower() in public_pages:
+                  print(f"PUBLIC: {relative}")
+                  continue
+
+              content = page.read_text(encoding="utf-8")
+
+              # Do not inject twice.
+              if "data-master-auth-guard" in content:
+                  continue
+
+              depth = len(relative.parts) - 1
+              prefix = "../" * depth
+              guard_src = prefix + "js/auth-guard.js"
+
+              tag = (
+                  f'<script data-master-auth-guard '
+                  f'src="{guard_src}"></script>'
+              )
+
+              head = re.search(
+                  r"</head\s*>",
+                  content,
+                  flags=re.IGNORECASE
+              )
+
+              if not head:
+                  print(f"SKIPPED (no head): {relative}")
+                  continue
+
+              content = (
+                  content[:head.start()]
+                  + tag
+                  + "\n"
+                  + content[head.start():]
+              )
+
+              page.write_text(content, encoding="utf-8")
+              print(f"PROTECTED: {relative}")
+              changed += 1
+
+          print(f"Pages updated: {changed}")
+          PY
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
