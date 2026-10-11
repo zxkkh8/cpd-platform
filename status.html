@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service Status | Brampton Develop</title>
+<link rel="icon" href="assets/favicon.ico">
+
+<style>
+:root {
+    --blue: #335882;
+    --background: #f4f5f7;
+    --white: #ffffff;
+    --text: #303943;
+    --muted: #687585;
+    --border: #d9dee5;
+    --green: #218653;
+    --green-bg: #e8f4ec;
+    --red: #c73b3b;
+    --amber: #a76a00;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+a {
+    color: var(--blue);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+    max-width: 1120px;
+    min-height: 64px;
+    margin: auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue);
+}
+
+.brand img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.header-link {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+main {
+    max-width: 1000px;
+    margin: 35px auto 50px;
+    padding: 0 24px;
+}
+
+.page-heading {
+    margin-bottom: 22px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+.panel-heading {
+    padding: 15px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--white);
+}
+
+.panel-heading h2 {
+    font-size: 14px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.overall {
+    border-top: 3px solid var(--green);
+}
+
+.overall-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 21px 18px;
+}
+
+.overall-icon {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.overall-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.overall-description {
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.updated {
+    margin-left: auto;
+    text-align: right;
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.group-title {
+    padding: 12px 18px;
+    background: #f7f8fa;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    color: #4a5665;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.service-row {
+    min-height: 62px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #e9edf1;
+}
+
+.service-row:last-child {
+    border-bottom: 0;
+}
+
+.service-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.service-description {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.45;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+}
+
+.pill::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.pill.checking {
+    color: var(--muted);
+}
+
+.pill.failed {
+    color: var(--red);
+}
+
+.pill.warning {
+    color: var(--amber);
+}
+
+.incident-empty {
+    text-align: center;
+    padding: 26px 18px;
+}
+
+.incident-icon {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 10px;
+    border: 1px solid #cfe8d8;
+    background: #f0f9f3;
+    color: var(--green);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+.incident-empty strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.incident-empty p {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.incident-item {
+    padding: 15px 18px;
+    border-bottom: 1px solid #e9edf1;
+}
+
+.incident-item:last-child {
+    border-bottom: 0;
+}
+
+.incident-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.incident-meta {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+button {
+    border: 1px solid #cbd3dc;
+    background: var(--white);
+    color: var(--blue);
+    border-radius: 2px;
+    padding: 8px 11px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #f0f3f7;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 24px;
+    background: var(--white);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+    .header-inner {
+        padding: 0 16px;
+    }
+
+    main {
+        margin-top: 25px;
+        padding: 0 14px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .overall-content {
+        align-items: flex-start;
+        padding: 18px 14px;
+    }
+
+    .updated {
+        display: none;
+    }
+
+    .service-row {
+        padding: 14px;
+    }
+
+    .panel-heading,
+    .group-title {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .service-description {
+        max-width: 240px;
+    }
+}
+</style>
+</head>
+
+<body>
+<header class="header">
+    <div class="header-inner">
+        <a class="brand" href="index.html">
+            <img src="assets/logo.svg" alt=""
+                 onerror="this.style.display='none'">
+            <span>Brampton Develop</span>
+        </a>
+        <a class="header-link" href="index.html">Training Portal</a>
+    </div>
+</header>
+
+<main>
+    <div class="page-heading">
+        <div class="eyebrow">Brampton Develop · Service monitoring</div>
+        <h1>Service status</h1>
+        <p class="subtitle">
+            Current availability of Brampton Develop services and systems.
+        </p>
+    </div>
+
+    <section class="panel overall" id="overallPanel">
+        <div class="overall-content">
+            <div class="overall-icon" id="overallIcon">…</div>
+            <div>
+                <div class="overall-title" id="overallTitle">
+                    Checking service status
+                </div>
+                <div class="overall-description" id="overallDescription">
+                    Checking the availability of connected services.
+                </div>
+            </div>
+            <div class="updated">
+                <div>Last checked</div>
+                <div id="lastChecked" style="margin-top:5px">—</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Service availability</h2>
+            <button id="refreshButton" type="button">Refresh status</button>
+        </div>
+
+        <div class="group-title">Core services</div>
+
+        <div class="service-row">
+            <div>
+                <div class="service-name">Training and Development Portal</div>
+                <div class="service-description">
+                    Website availability in your current browser.
+                </div>
+            </div>
+            <span class="pill" id="websiteStatus">Operational</span>
+        </div>
+
+        <div class="service-row">
+            <div>
+                <div class="service-name">Authentication</div>
+                <div class="service-description">
+                    Supabase account and sign-in service.
+                </div>
+            </div>
+            <span class="pill checking" id="authStatus">Checking</span>
+        </div>
+
+        <div class="service-row">
+            <div>
+                <div class="service-name">Profile database</div>
+                <div class="service-description">
+                    Profile records and account information.
+                </div>
+            </div>
+            <span class="pill checking" id="databaseStatus">Not checked</span>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Active incidents</h2>
+        </div>
+        <div class="incident-empty" id="activeIncidents">
+            <div class="incident-icon">✓</div>
+            <strong>No incidents reported</strong>
+            <p>
+                There are no incidents recorded on this page.
+            </p>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Past incidents</h2>
+        </div>
+        <div class="incident-empty" id="pastIncidents">
+            <strong>No incident history available</strong>
+            <p>
+                Past incidents will appear here when an incident history
+                system is configured.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="index.html">Training Portal</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="forgot-password.html">Account Recovery</a>
+    </div>
+    Brampton Develop · Service Status
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+
+<script>
+(async function () {
+    const $ = id => document.getElementById(id);
+
+    function setStatus(id, text, state) {
+        const element = $(id);
+        element.textContent = text;
+        element.className = "pill " + (state || "");
+    }
+
+    function getClient() {
+        const config = window.APP;
+
+        if (!config?.supabase?.url || !config?.supabase?.key) {
+            throw new Error("Supabase configuration is missing.");
+        }
+
+        let client = window.supabaseClient || window.sb;
+
+        if (!client && window.supabase?.createClient) {
+            client = window.supabase.createClient(
+                config.supabase.url,
+                config.supabase.key
+            );
+        }
+
+        if (!client) {
+            throw new Error("Supabase client could not be initialised.");
+        }
+
+        return client;
+    }
+
+    async function checkServices() {
+        const button = $("refreshButton");
+        button.disabled = true;
+        button.textContent = "Checking…";
+
+        setStatus("authStatus", "Checking", "checking");
+        setStatus("databaseStatus", "Not checked", "checking");
+
+        $("overallTitle").textContent = "Checking service status";
+        $("overallDescription").textContent =
+            "Contacting the authentication service.";
+        $("overallIcon").textContent = "…";
+        $("lastChecked").textContent = new Date().toLocaleTimeString();
+
+        let authOk = false;
+
+        try {
+            const client = getClient();
+
+            const result = await Promise.race([
+                client.auth.getSession(),
+                new Promise((_, reject) =>
+                    setTimeout(
+                        () => reject(new Error("Connection timed out.")),
+                        10000
+                    )
+                )
+            ]);
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            authOk = true;
+            setStatus("authStatus", "Responding", "");
+        } catch (error) {
+            setStatus("authStatus", "Unavailable", "failed");
+        }
+
+        // No database query is made here, so database health remains unverified.
+        setStatus("databaseStatus", "Not checked", "checking");
+        $("lastChecked").textContent = new Date().toLocaleTimeString();
+
+        const panel = $("overallPanel");
+
+        if (authOk) {
+            $("overallTitle").textContent =
+                "Authentication service responding";
+            $("overallDescription").textContent =
+                "Supabase Auth responded successfully. Database health has not been verified.";
+            $("overallIcon").textContent = "✓";
+            $("overallIcon").style.color = "var(--green)";
+            $("overallIcon").style.background = "var(--green-bg)";
+            panel.style.borderTopColor = "var(--green)";
+        } else {
+            $("overallTitle").textContent =
+                "Some checks could not be completed";
+            $("overallDescription").textContent =
+                "Authentication could not be verified. Please try again later.";
+            $("overallIcon").textContent = "!";
+            $("overallIcon").style.color = "var(--red)";
+            $("overallIcon").style.background = "#fff0ee";
+            panel.style.borderTopColor = "var(--red)";
+        }
+
+        button.disabled = false;
+        button.textContent = "Refresh status";
+    }
+
+    $("refreshButton").addEventListener("click", checkServices);
+    checkServices();
+})();
+</script>
+</body>
+</html>
