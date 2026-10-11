@@ -1,8 +1,9 @@
-
-(function () {
+(async function () {
     "use strict";
 
-    const PUBLIC_PAGES = [
+    const path = window.location.pathname.toLowerCase();
+
+    const publicPages = [
         "/",
         "/index.html",
         "/forgot-password.html",
@@ -11,97 +12,72 @@
         "/404.html"
     ];
 
-    const path = window.location.pathname;
-    const pageName = path.split("/").pop().toLowerCase();
+    // Only allow public pages at the website root.
+    const script = document.querySelector(
+        "script[data-master-auth-guard]"
+    );
 
-    if (
-        path === "/" ||
-        PUBLIC_PAGES.some(page => path.toLowerCase().endsWith(page)) ||
-        pageName === ""
-    ) {
+    if (!script) {
+        document.documentElement.style.visibility = "visible";
+        console.error("Master authentication guard script not found.");
         return;
     }
 
-    // Hide protected content until Supabase verifies the session.
-    document.documentElement.style.visibility = "hidden";
+    const scriptUrl = new URL(script.src);
+    const siteRoot = new URL("../", scriptUrl);
+    const loginUrl = new URL("index.html", siteRoot).href;
 
-    let finished = false;
+    const pagePath = path.replace(/\/+$/, "") || "/";
 
-    function redirectToLogin() {
-        if (finished) return;
-        finished = true;
-
-        const loginUrl = new URL("index.html", window.location.href);
-        window.location.replace(loginUrl.href);
+    if (publicPages.includes(pagePath)) {
+        return;
     }
 
+    document.documentElement.style.visibility = "hidden";
+
     function showError() {
-        if (finished) return;
-        finished = true;
+        document.documentElement.style.visibility = "visible";
+
+        document.body.innerHTML = `
+            <main style="
+                font-family: Arial, sans-serif;
+                max-width: 500px;
+                margin: 100px auto;
+                padding: 24px;
+                text-align: center;
+            ">
+                <h2>Unable to verify your login</h2>
+                <p>Please check your connection and try again.</p>
+                <a href="${loginUrl}">Return to login</a>
+            </main>
+        `;
+    }
+
+    try {
+        const client = window.supabaseClient;
+
+        if (!client?.auth?.getUser) {
+            throw new Error(
+                "Supabase client is unavailable. Check config.js and supabase.js."
+            );
+        }
+
+        const { data, error } = await client.auth.getUser();
+
+        if (error || !data?.user) {
+            window.location.replace(loginUrl);
+            return;
+        }
 
         document.documentElement.style.visibility = "visible";
 
-        document.body.replaceChildren();
-
-        const main = document.createElement("main");
-        main.style.cssText =
-            "font-family:Arial,sans-serif;max-width:480px;" +
-            "margin:100px auto;padding:24px;text-align:center";
-
-        const heading = document.createElement("h2");
-        heading.textContent = "Unable to verify your session";
-
-        const message = document.createElement("p");
-        message.textContent =
-            "Please check your connection and try again.";
-
-        const retry = document.createElement("button");
-        retry.textContent = "Try again";
-        retry.style.cssText = "padding:10px 18px;cursor:pointer";
-        retry.onclick = () => window.location.reload();
-
-        const link = document.createElement("a");
-        link.href = new URL("index.html", window.location.href).href;
-        link.textContent = " Return to login";
-
-        main.append(heading, message, retry, document.createElement("br"), link);
-        document.body.appendChild(main);
-    }
-
-    async function protectPage() {
-        try {
-            const client = window.supabaseClient;
-
-            if (!client || !client.auth) {
-                throw new Error(
-                    "Supabase client is missing. Check script loading order."
-                );
+        client.auth.onAuthStateChange((event) => {
+            if (event === "SIGNED_OUT") {
+                window.location.replace(loginUrl);
             }
-
-            const { data, error } = await client.auth.getUser();
-
-            if (error || !data || !data.user) {
-                redirectToLogin();
-                return;
-            }
-
-            if (finished) return;
-            finished = true;
-
-            document.documentElement.style.visibility = "visible";
-
-            client.auth.onAuthStateChange((event) => {
-                if (event === "SIGNED_OUT") {
-                    window.location.replace(
-                        new URL("index.html", window.location.href).href
-                    );
-                }
-            });
-        } catch (error) {
-            console.error("Auth guard error:", error);
-            showError();
-        }
+        });
+    } catch (error) {
+        console.error("Authentication guard:", error);
+        showError();
     }
-
-    protectPage();
 })();
