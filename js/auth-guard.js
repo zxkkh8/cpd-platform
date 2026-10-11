@@ -1,138 +1,107 @@
-(() => {
+
+(function () {
     "use strict";
 
-    const LOGIN_PAGE = "index.html";
-    const CHECK_TIMEOUT_MS = 10000;
+    const PUBLIC_PAGES = [
+        "/",
+        "/index.html",
+        "/forgot-password.html",
+        "/forgotten-password.html",
+        "/status.html",
+        "/404.html"
+    ];
 
-    // Hide protected content while authentication is checked.
-    document.documentElement.style.visibility = "hidden";
+    const path = window.location.pathname;
+    const pageName = path.split("/").pop().toLowerCase();
 
-    function getSupabaseClient() {
-        return (
-            window.supabaseClient ||
-            window.sb ||
-            window.supabase ||
-            null
-        );
+    if (
+        path === "/" ||
+        PUBLIC_PAGES.some(page => path.toLowerCase().endsWith(page)) ||
+        pageName === ""
+    ) {
+        return;
     }
 
+    // Hide protected content until Supabase verifies the session.
+    document.documentElement.style.visibility = "hidden";
+
+    let finished = false;
+
     function redirectToLogin() {
-        const loginUrl = new URL(LOGIN_PAGE, window.location.href);
+        if (finished) return;
+        finished = true;
 
-        loginUrl.searchParams.set(
-            "next",
-            window.location.pathname +
-            window.location.search +
-            window.location.hash
-        );
-
+        const loginUrl = new URL("index.html", window.location.href);
         window.location.replace(loginUrl.href);
     }
 
-    function showSecurityError(message) {
+    function showError() {
+        if (finished) return;
+        finished = true;
+
         document.documentElement.style.visibility = "visible";
 
-        document.body.innerHTML = "";
+        document.body.replaceChildren();
 
         const main = document.createElement("main");
         main.style.cssText =
             "font-family:Arial,sans-serif;max-width:480px;" +
-            "margin:100px auto;padding:24px;text-align:center;";
+            "margin:100px auto;padding:24px;text-align:center";
 
         const heading = document.createElement("h2");
         heading.textContent = "Unable to verify your session";
 
-        const paragraph = document.createElement("p");
-        paragraph.textContent = message;
+        const message = document.createElement("p");
+        message.textContent =
+            "Please check your connection and try again.";
 
         const retry = document.createElement("button");
         retry.textContent = "Try again";
-        retry.style.cssText = "padding:10px 18px;cursor:pointer;";
-        retry.addEventListener("click", () => window.location.reload());
+        retry.style.cssText = "padding:10px 18px;cursor:pointer";
+        retry.onclick = () => window.location.reload();
 
-        const login = document.createElement("p");
         const link = document.createElement("a");
-        link.href = LOGIN_PAGE;
-        link.textContent = "Return to login";
-        login.appendChild(link);
+        link.href = new URL("index.html", window.location.href).href;
+        link.textContent = " Return to login";
 
-        main.append(heading, paragraph, retry, login);
+        main.append(heading, message, retry, document.createElement("br"), link);
         document.body.appendChild(main);
-    }
-
-    async function checkAuthentication() {
-        const client = getSupabaseClient();
-
-        if (!client || !client.auth ||
-            typeof client.auth.getUser !== "function") {
-            throw new Error(
-                "Supabase client was not found. Check js/supabase.js " +
-                "and ensure it loads before js/auth-guard.js."
-            );
-        }
-
-        // Validate the user with Supabase Auth rather than trusting
-        // a user object or session value stored in the browser.
-        const result = await Promise.race([
-            client.auth.getUser(),
-            new Promise((_, reject) => {
-                setTimeout(
-                    () => reject(new Error("Authentication check timed out.")),
-                    CHECK_TIMEOUT_MS
-                );
-            })
-        ]);
-
-        if (result.error) {
-            throw result.error;
-        }
-
-        if (!result.data || !result.data.user) {
-            redirectToLogin();
-            return false;
-        }
-
-        return true;
     }
 
     async function protectPage() {
         try {
-            const authenticated = await checkAuthentication();
+            const client = window.supabaseClient;
 
-            if (authenticated) {
-                document.documentElement.style.visibility = "visible";
+            if (!client || !client.auth) {
+                throw new Error(
+                    "Supabase client is missing. Check script loading order."
+                );
             }
-        } catch (error) {
-            console.error("Authentication guard:", error);
 
-            showSecurityError(
-                "Your login could not be verified. Check your connection " +
-                "and Supabase configuration, then try again."
-            );
-        }
-    }
+            const { data, error } = await client.auth.getUser();
 
-    // Re-check the session if another part of the application signs out.
-    async function monitorSession() {
-        const client = getSupabaseClient();
-
-        if (!client?.auth?.onAuthStateChange) return;
-
-        client.auth.onAuthStateChange((event, session) => {
-            if (event === "SIGNED_OUT" || !session) {
+            if (error || !data || !data.user) {
                 redirectToLogin();
+                return;
             }
-        });
-    }
 
-    // Wait until the shared client has been initialised.
-    async function start() {
-        await protectPage();
+            if (finished) return;
+            finished = true;
 
-        if (document.documentElement.style.visibility === "visible") {
-            await monitorSession();
+            document.documentElement.style.visibility = "visible";
+
+            client.auth.onAuthStateChange((event) => {
+                if (event === "SIGNED_OUT") {
+                    window.location.replace(
+                        new URL("index.html", window.location.href).href
+                    );
+                }
+            });
+        } catch (error) {
+            console.error("Auth guard error:", error);
+            showError();
         }
     }
 
-    start();
+    protectPage();
 })();
