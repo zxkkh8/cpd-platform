@@ -1,1285 +1,603 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>My Profile - Brampton Develop</title>
-
-<style>
-:root {
-    --brand: #335882;
-    --brand-dark: #274666;
-    --brand-light: #edf3f9;
-    --background: #f5f7fa;
-    --surface: #ffffff;
-    --border: #e4e8ee;
-    --text: #202a36;
-    --muted: #687587;
-    --success: #166534;
-    --success-bg: #f0fdf4;
-    --danger: #b42318;
-    --danger-bg: #fef3f2;
-    --sidebar-width: 248px;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    background: var(--background);
-    color: var(--text);
-    font-size: 14px;
-}
-
-button, input {
-    font: inherit;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Sidebar */
-
-.sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    z-index: 100;
-    width: var(--sidebar-width);
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border-right: 1px solid var(--border);
-    transition: transform .2s ease;
-}
-
-.sidebar-brand {
-    height: 82px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 22px;
-    border-bottom: 1px solid var(--border);
-}
-
-.sidebar-brand img,
-.brand-fallback {
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
-    object-fit: contain;
-}
-
-.brand-fallback {
-    display: none;
-    place-items: center;
-    border-radius: 9px;
-    background: var(--brand);
-    color: #fff;
-    font-weight: 750;
-}
-
-.brand-copy h1 {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.brand-copy p {
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.sidebar-label {
-    padding: 27px 24px 11px;
-    color: #8993a2;
-    font-size: 10px;
-    font-weight: 750;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.sidebar-nav {
-    padding: 0 12px;
-}
-
-.nav-link {
-    min-height: 43px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-    padding: 0 13px;
-    border-radius: 7px;
-    color: #586577;
-    font-size: 13px;
-    font-weight: 550;
-    transition: background .15s, color .15s;
-}
-
-.nav-link:hover {
-    background: #f5f7fa;
-    color: var(--brand);
-}
-
-.nav-link.active {
-    background: var(--brand-light);
-    color: var(--brand);
-    font-weight: 650;
-}
-
-.nav-icon {
-    width: 20px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.sidebar-bottom {
-    margin-top: auto;
-    padding: 16px 12px;
-    border-top: 1px solid var(--border);
-}
-
-.sidebar-account,
-.topbar-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-}
-
-.sidebar-account {
-    padding: 9px 10px;
-}
-
-.mini-avatar {
-    width: 36px;
-    height: 36px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: var(--brand-light);
-    color: var(--brand);
-    font-size: 12px;
-    font-weight: 750;
-}
-
-.account-copy {
-    min-width: 0;
-}
-
-.account-copy strong,
-.account-copy span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.account-copy strong {
-    font-size: 12px;
-}
-
-.account-copy span {
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-/* Main area */
-
-.app {
-    min-height: 100vh;
-    margin-left: var(--sidebar-width);
-}
-
-.topbar {
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 0 36px;
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-}
-
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.breadcrumb a:hover {
-    color: var(--brand);
-}
-
-.breadcrumb .separator {
-    color: #aeb6c2;
-}
-
-.breadcrumb strong {
-    color: var(--text);
-    font-weight: 650;
-}
-
-.topbar-user-info {
-    min-width: 0;
-    text-align: right;
-}
-
-.topbar-user-info strong,
-.topbar-user-info span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.topbar-user-info strong {
-    font-size: 12px;
-    font-weight: 650;
-}
-
-.topbar-user-info span {
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.mobile-menu {
-    display: none;
-    width: 37px;
-    height: 37px;
-    place-items: center;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: #fff;
-    color: var(--text);
-    font-size: 19px;
-    cursor: pointer;
-}
-
-main {
-    width: 100%;
-    max-width: 1220px;
-    margin: 0 auto;
-    padding: 34px 36px 22px;
-}
-
-.page-heading {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 28px;
-}
-
-.eyebrow {
-    margin-bottom: 9px;
-    color: var(--brand);
-    font-size: 10px;
-    font-weight: 750;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-}
-
-.page-heading h2 {
-    font-size: 27px;
-    font-weight: 700;
-    letter-spacing: -.7px;
-}
-
-.page-heading p {
-    margin-top: 9px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 13px;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: #fff;
-    color: #445164;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.back-link:hover {
-    border-color: #c7d4e3;
-    color: var(--brand);
-}
-
-.profile-layout {
-    display: grid;
-    grid-template-columns: minmax(225px, .78fr) minmax(0, 1.6fr);
-    align-items: start;
-    gap: 22px;
-}
-
-.card {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: var(--surface);
-    box-shadow: 0 2px 5px rgba(25, 42, 62, .025);
-}
-
-/* Identity card */
-
-.identity-top {
-    height: 82px;
-    background: linear-gradient(115deg, #335882, #496f9a);
-}
-
-.identity-content {
-    padding: 0 22px 24px;
-    text-align: center;
-}
-
-.avatar {
-    width: 78px;
-    height: 78px;
-    display: grid;
-    place-items: center;
-    margin: -39px auto 15px;
-    border: 4px solid #fff;
-    border-radius: 50%;
-    background: var(--brand-light);
-    color: var(--brand);
-    font-size: 23px;
-    font-weight: 750;
-    box-shadow: 0 2px 6px rgba(30, 50, 75, .08);
-}
-
-.identity-content h3 {
-    overflow-wrap: anywhere;
-    font-size: 17px;
-    font-weight: 700;
-}
-
-.identity-email {
-    margin-top: 7px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-}
-
-.role-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    max-width: 100%;
-    margin-top: 15px;
-    padding: 7px 11px;
-    border-radius: 6px;
-    background: var(--brand-light);
-    color: var(--brand);
-    font-size: 11px;
-    font-weight: 650;
-    overflow-wrap: anywhere;
-}
-
-.role-dot {
-    width: 6px;
-    height: 6px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: #668bb4;
-}
-
-.identity-divider {
-    height: 1px;
-    margin: 22px 0;
-    background: var(--border);
-}
-
-.identity-detail {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.identity-detail:last-child {
-    margin-bottom: 0;
-}
-
-.identity-detail span {
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.identity-detail strong {
-    color: #3c4858;
-    font-size: 11px;
-    font-weight: 650;
-    text-align: right;
-    overflow-wrap: anywhere;
-}
-
-/* Form */
-
-.card-heading {
-    padding: 21px 23px;
-    border-bottom: 1px solid var(--border);
-}
-
-.card-heading h3 {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.card-heading p {
-    margin-top: 6px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.6;
-}
-
-.profile-form {
-    padding: 25px 24px;
-}
-
-.form-intro {
-    margin-bottom: 24px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.7;
-}
-
-.field {
-    margin-bottom: 21px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #303c4b;
-    font-size: 12px;
-    font-weight: 650;
-}
-
-.input-wrap {
-    position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    top: 50%;
-    left: 13px;
-    color: #8a95a4;
-    font-size: 14px;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-input {
-    width: 100%;
-    height: 44px;
-    padding: 0 13px;
-    border: 1px solid #dfe5ed;
-    border-radius: 7px;
-    outline: none;
-    background: #fff;
-    color: var(--text);
-    font-size: 12px;
-    transition: border-color .15s, box-shadow .15s;
-}
-
-input.has-icon {
-    padding-left: 38px;
-}
-
-input:focus {
-    border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(51, 88, 130, .10);
-}
-
-input[readonly] {
-    border-color: #e8ecf1;
-    background: #f8fafc;
-    color: #657185;
-    cursor: default;
-}
-
-.help-text {
-    margin-top: 8px;
-    color: #8590a0;
-    font-size: 11px;
-    line-height: 1.6;
-}
-
-.form-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 26px;
-    padding-top: 22px;
-    border-top: 1px solid var(--border);
-}
-
-.form-note {
-    max-width: 230px;
-    color: #8791a0;
-    font-size: 10px;
-    line-height: 1.6;
-}
-
-.button {
-    min-height: 41px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 17px;
-    border: 1px solid var(--brand);
-    border-radius: 7px;
-    background: var(--brand);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 650;
-    cursor: pointer;
-}
-
-.button:hover {
-    border-color: var(--brand-dark);
-    background: var(--brand-dark);
-}
-
-.button:disabled {
-    opacity: .65;
-    cursor: wait;
-}
-
-.button:focus-visible,
-.back-link:focus-visible,
-.nav-link:focus-visible,
-.mobile-menu:focus-visible {
-    outline: 3px solid rgba(51, 88, 130, .25);
-    outline-offset: 3px;
-}
-
-/* Messages */
-
-.message {
-    display: none;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 21px;
-    padding: 13px 14px;
-    border: 1px solid transparent;
-    border-radius: 7px;
-    font-size: 12px;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-}
-
-.message.success {
-    display: flex;
-    border-color: #bbf7d0;
-    background: var(--success-bg);
-    color: var(--success);
-}
-
-.message.error {
-    display: flex;
-    border-color: #fecdca;
-    background: var(--danger-bg);
-    color: var(--danger);
-}
-
-.message-icon {
-    flex-shrink: 0;
-    font-weight: 800;
-}
-
-footer {
-    padding: 22px 36px 25px;
-    color: #929baa;
-    font-size: 10px;
-    text-align: center;
-}
-
-/* Responsive */
-
-@media (max-width: 1050px) {
-    :root {
-        --sidebar-width: 215px;
-    }
-
-    .topbar {
-        padding: 0 24px;
-    }
-
-    main {
-        padding: 30px 24px 20px;
-    }
-
-    .profile-layout {
-        gap: 16px;
-    }
-
-    .profile-form {
-        padding: 22px 20px;
-    }
-}
-
-@media (max-width: 760px) {
-    :root {
-        --sidebar-width: 0px;
-    }
-
-    .sidebar {
-        width: 248px;
-        transform: translateX(-100%);
-    }
-
-    body.menu-open .sidebar {
-        transform: translateX(0);
-        box-shadow: 8px 0 30px rgba(20, 35, 55, .12);
-    }
-
-    .app {
-        margin-left: 0;
-    }
-
-    .mobile-menu {
-        display: inline-grid;
-    }
-
-    .topbar {
-        height: 64px;
-        padding: 0 16px;
-    }
-
-    .topbar-user-info {
-        display: none;
-    }
-
-    main {
-        padding: 27px 17px 18px;
-    }
-
-    .page-heading {
-        margin-bottom: 22px;
-    }
-
-    .page-heading h2 {
-        font-size: 25px;
-    }
-
-    .profile-layout {
-        grid-template-columns: 1fr;
-        gap: 17px;
-    }
-
-    .profile-form {
-        padding: 22px 19px;
-    }
-
-    footer {
-        padding: 20px 16px;
-    }
-}
-
-@media (max-width: 420px) {
-    .breadcrumb {
-        gap: 6px;
-        font-size: 11px;
-    }
-
-    .page-heading {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .form-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .form-note {
-        max-width: none;
-    }
-
-    .button {
-        width: 100%;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        transition-duration: .01ms !important;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#335882">
+    <title>My Profile | Brampton Develop</title>
+
+    <style>
+        :root {
+            --primary: #335882;
+            --primary-dark: #274666;
+            --background: #f5f7fa;
+            --surface: #ffffff;
+            --text: #202938;
+            --muted: #718096;
+            --border: #e5eaf0;
+            --success: #18794e;
+            --danger: #c0392b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--background);
+            color: var(--text);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .topbar {
+            height: 72px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            color: white;
+            background: var(--primary);
+            font-weight: 800;
+        }
+
+        .back-link {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        main {
+            width: min(100% - 32px, 900px);
+            margin: 42px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 28px;
+        }
+
+        .page-heading h1 {
+            margin: 0 0 8px;
+            font-size: clamp(26px, 4vw, 34px);
+            letter-spacing: -1px;
+        }
+
+        .page-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .profile-card {
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 5px 24px rgb(30 50 80 / 4%);
+        }
+
+        .profile-header {
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .avatar {
+            width: 76px;
+            height: 76px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            background: #edf3f9;
+            color: var(--primary);
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .identity {
+            min-width: 0;
+        }
+
+        .identity h2 {
+            margin: 0 0 7px;
+            overflow-wrap: anywhere;
+            font-size: 22px;
+        }
+
+        .identity p {
+            margin: 0;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+            font-size: 14px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background: #edf3f9;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .section {
+            padding: 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: 0;
+        }
+
+        .section h3 {
+            margin: 0 0 7px;
+            font-size: 17px;
+        }
+
+        .section-description {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .field input {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 14px;
+            border: 1px solid #dce3eb;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .field input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgb(51 88 130 / 12%);
+        }
+
+        .field input:disabled {
+            background: #f5f7fa;
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .button {
+            min-height: 42px;
+            padding: 0 17px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 650;
+            transition: background .2s, opacity .2s;
+        }
+
+        .button-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .button-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .button-secondary {
+            background: #edf1f5;
+            color: #35465a;
+        }
+
+        .button:disabled {
+            cursor: not-allowed;
+            opacity: .6;
+        }
+
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            display: block;
+            background: #eaf7ef;
+            color: var(--success);
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0ee;
+            color: var(--danger);
+        }
+
+        .loading {
+            padding: 48px 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            padding: 22px 16px 30px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 560px) {
+            .topbar {
+                height: 64px;
+                padding: 0 18px;
+            }
+
+            .brand {
+                font-size: 14px;
+            }
+
+            main {
+                margin-top: 28px;
+            }
+
+            .profile-header,
+            .section {
+                padding: 22px;
+            }
+
+            .avatar {
+                width: 60px;
+                height: 60px;
+                border-radius: 15px;
+                font-size: 22px;
+            }
+
+            .identity h2 {
+                font-size: 18px;
+            }
+
+            .actions .button {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-<aside class="sidebar" id="sidebar">
-    <a class="sidebar-brand" href="dashboard.html">
-        <img src="assets/logo.svg" alt="Brampton Develop"
-             onerror="this.style.display='none';document.getElementById('brandFallback').style.display='grid'">
-        <span class="brand-fallback" id="brandFallback">B</span>
-        <div class="brand-copy">
-            <h1>Brampton Develop</h1>
-            <p>Development &amp; Training Portal</p>
-        </div>
-    </a>
-
-    <div class="sidebar-label">Workspace</div>
-
-    <nav class="sidebar-nav" aria-label="Main navigation">
-        <a class="nav-link" href="dashboard.html">
-            <span class="nav-icon" aria-hidden="true">⌂</span>
-            Dashboard
-        </a>
-        <a class="nav-link" href="forms.html">
-            <span class="nav-icon" aria-hidden="true">▤</span>
-            Forms
-        </a>
-        <a class="nav-link" href="training.html">
-            <span class="nav-icon" aria-hidden="true">▣</span>
-            Training
-        </a>
-    </nav>
-
-    <div class="sidebar-label">Account</div>
-
-    <nav class="sidebar-nav" aria-label="Account navigation">
-        <a class="nav-link active" href="profile.html" aria-current="page">
-            <span class="nav-icon" aria-hidden="true">◎</span>
-            My profile
-        </a>
-    </nav>
-
-    <div class="sidebar-bottom">
-        <div class="sidebar-account">
-            <div class="mini-avatar" id="sidebarAvatar">U</div>
-            <div class="account-copy">
-                <strong id="sidebarName">Loading profile...</strong>
-                <span id="sidebarRole">Account</span>
-            </div>
-        </div>
-    </div>
-</aside>
-
-<div class="app">
     <header class="topbar">
-        <div style="display:flex;align-items:center;gap:12px;min-width:0">
-            <button class="mobile-menu" id="menuButton" type="button"
-                    aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        <a class="brand" href="dashboard.html">
+            <span class="brand-mark">B</span>
+            <span>Brampton Develop</span>
+        </a>
 
-            <div class="breadcrumb">
-                <a href="dashboard.html">Dashboard</a>
-                <span class="separator">/</span>
-                <strong>My profile</strong>
-            </div>
-        </div>
-
-        <div class="topbar-user">
-            <div class="topbar-user-info">
-                <strong id="topbarName">Loading profile...</strong>
-                <span id="topbarRole">Account</span>
-            </div>
-            <div class="mini-avatar" id="topbarAvatar">U</div>
-        </div>
+        <a class="back-link" href="dashboard.html">
+            Back to dashboard
+        </a>
     </header>
 
     <main>
-        <section class="page-heading">
-            <div>
-                <div class="eyebrow">Account settings</div>
-                <h2>My profile</h2>
-                <p>Manage your personal information and view your account details.</p>
-            </div>
+        <div class="page-heading">
+            <h1>My Profile</h1>
+            <p>View your account details and manage your profile.</p>
+        </div>
 
-            <a class="back-link" href="dashboard.html">
-                <span aria-hidden="true">←</span>
-                Back to dashboard
-            </a>
-        </section>
+        <div id="loading" class="profile-card loading">
+            Loading your profile...
+        </div>
 
-        <div class="profile-layout">
-            <section class="card" aria-label="Profile overview">
-                <div class="identity-top"></div>
+        <div id="profileContent" class="profile-card hidden">
+            <section class="profile-header">
+                <div class="avatar" id="avatar">U</div>
 
-                <div class="identity-content">
-                    <div class="avatar" id="profileAvatar">U</div>
-                    <h3 id="profileName">Loading profile...</h3>
-                    <p class="identity-email" id="profileEmail">Loading account details...</p>
-
-                    <span class="role-chip" id="profileRole" hidden>
-                        <span class="role-dot" aria-hidden="true"></span>
-                        <span id="profileRoleText"></span>
-                    </span>
-
-                    <div class="identity-divider"></div>
-
-                    <div class="identity-detail">
-                        <span>Account status</span>
-                        <strong id="accountStatus">Checking...</strong>
-                    </div>
-
-                    <div class="identity-detail">
-                        <span>Account type</span>
-                        <strong>Portal user</strong>
-                    </div>
+                <div class="identity">
+                    <h2 id="displayName">User</h2>
+                    <p id="userEmail"></p>
+                    <span class="role-badge" id="userRole">Staff</span>
                 </div>
             </section>
 
-            <section class="card">
-                <div class="card-heading">
-                    <h3>Personal information</h3>
-                    <p>Update your display name and review your account information.</p>
-                </div>
+            <section class="section">
+                <h3>Personal information</h3>
+                <p class="section-description">
+                    Your account information and contact details.
+                </p>
 
-                <form class="profile-form" id="profileForm">
-                    <p class="form-intro">
-                        Your profile information helps identify you throughout the Brampton Develop portal.
-                        Changes to your display name will be saved to your profile.
-                    </p>
-
-                    <div id="message" class="message" role="status" aria-live="polite">
-                        <span class="message-icon" id="messageIcon" aria-hidden="true"></span>
-                        <span id="messageText"></span>
-                    </div>
-
+                <form id="profileForm">
                     <div class="field">
                         <label for="fullName">Display name</label>
-                        <div class="input-wrap">
-                            <span class="input-icon" aria-hidden="true">♙</span>
-                            <input class="has-icon" id="fullName" name="fullName"
-                                   type="text" autocomplete="name" maxlength="100"
-                                   placeholder="Enter your display name" required>
-                        </div>
-                        <p class="help-text">
-                            This name will appear in your dashboard and account menu.
-                        </p>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="full_name"
+                            maxlength="100"
+                            autocomplete="name"
+                            required
+                        >
                     </div>
 
                     <div class="field">
                         <label for="email">Email address</label>
-                        <div class="input-wrap">
-                            <span class="input-icon" aria-hidden="true">✉</span>
-                            <input class="has-icon" id="email" name="email"
-                                   type="email" autocomplete="email" readonly>
-                        </div>
-                        <p class="help-text">
-                            Your email is managed by your sign-in provider and cannot be changed here.
-                        </p>
+                        <input
+                            type="email"
+                            id="email"
+                            disabled
+                            readonly
+                        >
                     </div>
 
                     <div class="field">
                         <label for="role">Account role</label>
-                        <div class="input-wrap">
-                            <span class="input-icon" aria-hidden="true">▤</span>
-                            <input class="has-icon" id="role" name="role" type="text" readonly>
-                        </div>
-                        <p class="help-text">
-                            Contact your portal administrator if your assigned role is incorrect.
-                        </p>
+                        <input
+                            type="text"
+                            id="role"
+                            disabled
+                            readonly
+                        >
                     </div>
 
-                    <div class="form-actions">
-                        <p class="form-note">
-                            Only your display name can be changed on this page.
-                        </p>
-                        <button class="button" id="saveButton" type="submit">
-                            <span aria-hidden="true">✓</span>
-                            <span id="saveButtonText">Save changes</span>
+                    <div class="actions">
+                        <button
+                            type="submit"
+                            id="saveButton"
+                            class="button button-primary"
+                        >
+                            Save changes
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelButton"
+                            class="button button-secondary"
+                        >
+                            Cancel
                         </button>
                     </div>
+
+                    <div
+                        id="message"
+                        class="message"
+                        role="status"
+                        aria-live="polite"
+                    ></div>
                 </form>
             </section>
         </div>
     </main>
 
     <footer>
-        Brampton Develop &copy; <span id="year"></span>
-        <span aria-hidden="true"> · </span>
-        Development &amp; Training Portal
+        Brampton Develop · Secure account management
     </footer>
-</div>
 
-<script src="js/loader.js"></script>
+    <script>
+        const loading = document.getElementById("loading");
+        const profileContent = document.getElementById("profileContent");
+        const profileForm = document.getElementById("profileForm");
+        const fullNameInput = document.getElementById("fullName");
+        const saveButton = document.getElementById("saveButton");
+        const cancelButton = document.getElementById("cancelButton");
+        const message = document.getElementById("message");
 
-<script>
-"use strict";
+        let originalName = "";
 
-document.getElementById("year").textContent = new Date().getFullYear();
-
-const fullNameInput = document.getElementById("fullName");
-const emailInput = document.getElementById("email");
-const roleInput = document.getElementById("role");
-const saveButton = document.getElementById("saveButton");
-const saveButtonText = document.getElementById("saveButtonText");
-const message = document.getElementById("message");
-const messageIcon = document.getElementById("messageIcon");
-const messageText = document.getElementById("messageText");
-const menuButton = document.getElementById("menuButton");
-
-let currentUser = null;
-let originalName = "";
-
-function initialsFor(name) {
-    const parts = String(name || "User").trim().split(/\s+/).filter(Boolean);
-
-    if (!parts.length) return "U";
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-}
-
-function displayProfile(user) {
-    const name =
-        user.full_name ||
-        user.display_name ||
-        user.name ||
-        user.email ||
-        "Your account";
-
-    const email = user.email || "";
-    const role = user.role || "";
-
-    document.getElementById("profileName").textContent = name;
-    document.getElementById("profileEmail").textContent = email || "No email available";
-    document.getElementById("profileAvatar").textContent = initialsFor(name);
-
-    document.getElementById("sidebarName").textContent = name;
-    document.getElementById("sidebarRole").textContent = role || "Portal user";
-    document.getElementById("sidebarAvatar").textContent = initialsFor(name);
-
-    document.getElementById("topbarName").textContent = name;
-    document.getElementById("topbarRole").textContent = role || "Portal user";
-    document.getElementById("topbarAvatar").textContent = initialsFor(name);
-
-    const roleChip = document.getElementById("profileRole");
-    document.getElementById("profileRoleText").textContent = role;
-    roleChip.hidden = !role;
-
-    fullNameInput.value =
-        user.full_name ||
-        user.display_name ||
-        user.name ||
-        "";
-
-    emailInput.value = email;
-    roleInput.value = role || "Not assigned";
-    document.getElementById("accountStatus").textContent = "Available";
-}
-
-function showMessage(text, type) {
-    message.className = "message " + type;
-    messageIcon.textContent = type === "success" ? "✓" : "!";
-    messageText.textContent = text;
-}
-
-function hideMessage() {
-    message.className = "message";
-    messageIcon.textContent = "";
-    messageText.textContent = "";
-}
-
-function setSaving(saving) {
-    saveButton.disabled = saving;
-    saveButtonText.textContent = saving ? "Saving..." : "Save changes";
-}
-
-function getStoredUser() {
-    try {
-        const saved = localStorage.getItem("currentUser");
-        if (!saved) return null;
-
-        const user = JSON.parse(saved);
-
-        if (
-            user &&
-            typeof user === "object" &&
-            (user.email || user.id || user.name ||
-             user.full_name || user.display_name)
-        ) {
-            return user;
-        }
-    } catch (error) {
-        console.warn("Unable to read saved user:", error);
-    }
-
-    return null;
-}
-
-async function loadProfile() {
-    hideMessage();
-
-    // Use an already-saved user immediately if available.
-    // This prevents a premature redirect while authentication initializes.
-    const storedUser = getStoredUser();
-
-    if (storedUser) {
-        currentUser = storedUser;
-        displayProfile(currentUser);
-        originalName = fullNameInput.value.trim();
-    }
-
-    try {
-        const client = window.supabaseClient;
-
-        if (client?.auth) {
-            const { data, error } = await client.auth.getUser();
-
-            if (error) {
-                console.warn("Supabase session check:", error.message);
-
-                if (!currentUser) {
-                    showMessage(
-                        "We couldn't verify your Supabase session. Check that the login page and this page use the same Supabase configuration.",
-                        "error"
-                    );
-                }
-                return;
-            }
-
-            if (data?.user) {
-                const authUser = data.user;
-                let profile = {};
-
-                const { data: profileData, error: profileError } = await client
-                    .from("profiles")
-                    .select("*")
-                    .eq("id", authUser.id)
-                    .maybeSingle();
-
-                if (profileError) {
-                    console.warn("Profile lookup failed:", profileError.message);
-                } else if (profileData) {
-                    profile = profileData;
-                }
-
-                currentUser = {
-                    id: authUser.id,
-                    email: authUser.email || "",
-                    full_name:
-                        profile.full_name ||
-                        profile.display_name ||
-                        authUser.user_metadata?.full_name ||
-                        authUser.user_metadata?.name ||
-                        storedUser?.full_name ||
-                        storedUser?.display_name ||
-                        storedUser?.name ||
-                        "",
-                    display_name:
-                        profile.display_name ||
-                        profile.full_name ||
-                        authUser.user_metadata?.full_name ||
-                        authUser.user_metadata?.name ||
-                        storedUser?.display_name ||
-                        "",
-                    name:
-                        profile.full_name ||
-                        profile.display_name ||
-                        authUser.user_metadata?.full_name ||
-                        authUser.user_metadata?.name ||
-                        storedUser?.name ||
-                        authUser.email ||
-                        "",
-                    role:
-                        profile.role ||
-                        authUser.user_metadata?.role ||
-                        storedUser?.role ||
-                        ""
-                };
-
-                displayProfile(currentUser);
-                originalName = fullNameInput.value.trim();
-
-                try {
-                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                } catch (storageError) {
-                    console.warn("Unable to cache user:", storageError);
-                }
-
-                return;
-            }
-
-            // No Supabase user. Keep a valid saved user instead of redirecting.
-            if (storedUser) return;
-
-            showMessage(
-                "No signed-in user was found. Please sign in through the portal before updating your profile.",
-                "error"
-            );
-            document.getElementById("accountStatus").textContent = "Not signed in";
-            return;
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = "message " + type;
         }
 
-        // Non-Supabase fallback.
-        if (storedUser) {
-            currentUser = storedUser;
-            displayProfile(currentUser);
-            originalName = fullNameInput.value.trim();
-            return;
+        function clearMessage() {
+            message.textContent = "";
+            message.className = "message";
         }
 
-        showMessage(
-            "No saved account was found. Please sign in through the portal first.",
-            "error"
-        );
-        document.getElementById("accountStatus").textContent = "Not signed in";
+        function updateIdentity(name) {
+            const safeName = name.trim() || "User";
 
-    } catch (error) {
-        console.error("Unable to load profile:", error);
+            document.getElementById("displayName").textContent = safeName;
 
-        if (!currentUser) {
-            showMessage(
-                "Unable to load your profile. " +
-                (error.message || "Please check your connection."),
-                "error"
-            );
+            document.getElementById("avatar").textContent =
+                safeName.charAt(0).toUpperCase();
         }
-    }
-}
 
-document.getElementById("profileForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    hideMessage();
-
-    if (!currentUser) {
-        showMessage(
-            "Your account hasn't loaded. Return to the dashboard and check your sign-in.",
-            "error"
-        );
-        return;
-    }
-
-    const newName = fullNameInput.value.trim();
-
-    if (!newName) {
-        showMessage("Please enter your display name.", "error");
-        fullNameInput.focus();
-        return;
-    }
-
-    if (newName.length > 100) {
-        showMessage("Your display name must be 100 characters or fewer.", "error");
-        fullNameInput.focus();
-        return;
-    }
-
-    if (newName === originalName) {
-        showMessage("Your display name hasn't changed.", "success");
-        return;
-    }
-
-    setSaving(true);
-
-    try {
-        const client = window.supabaseClient;
-
-        if (client?.auth) {
-            const { data: authData, error: authError } = await client.auth.getUser();
-
-            if (authError) throw authError;
-
-            if (!authData?.user) {
-                throw new Error(
-                    "Your Supabase session has expired. Sign in again before saving."
-                );
-            }
-
-            const { error: updateError } = await client
-                .from("profiles")
-                .upsert({
-                    id: authData.user.id,
-                    full_name: newName
-                }, {
-                    onConflict: "id"
+        async function loadProfile() {
+            try {
+                const response = await fetch("/api/me", {
+                    method: "GET",
+                    credentials: "same-origin",
+                    cache: "no-store"
                 });
 
-            if (updateError) throw updateError;
+                const result = await response.json();
 
-            currentUser.id = authData.user.id;
-            currentUser.email = authData.user.email || currentUser.email || "";
+                if (response.status === 401 ||
+                    result.authenticated === false) {
+                    window.location.replace("/");
+                    return;
+                }
+
+                if (!response.ok || !result.authenticated ||
+                    !result.profile) {
+                    throw new Error(
+                        result.error || "Unable to load your profile."
+                    );
+                }
+
+                const profile = result.profile;
+
+                originalName = profile.full_name || "";
+
+                fullNameInput.value = originalName;
+                document.getElementById("email").value =
+                    profile.email || "";
+                document.getElementById("role").value =
+                    profile.role || "Staff";
+                document.getElementById("userEmail").textContent =
+                    profile.email || "";
+                document.getElementById("userRole").textContent =
+                    profile.role || "Staff";
+
+                updateIdentity(originalName);
+
+                loading.classList.add("hidden");
+                profileContent.classList.remove("hidden");
+
+            } catch (error) {
+                loading.textContent =
+                    "Unable to load your profile. Please refresh the page.";
+                console.error("Profile loading failed:", error);
+            }
         }
 
-        currentUser.full_name = newName;
-        currentUser.display_name = newName;
-        currentUser.name = newName;
+        profileForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            clearMessage();
 
-        try {
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        } catch (storageError) {
-            console.warn("Unable to update local cache:", storageError);
-        }
+            const fullName = fullNameInput.value.trim();
 
-        displayProfile(currentUser);
-        originalName = newName;
+            if (!fullName || fullName.length > 100) {
+                showMessage(
+                    "Enter a display name between 1 and 100 characters.",
+                    "error"
+                );
+                return;
+            }
 
-        showMessage("Your display name has been updated successfully.", "success");
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
 
-    } catch (error) {
-        console.error("Profile update failed:", error);
+            try {
+                const response = await fetch("/api/profile", {
+                    method: "PATCH",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        full_name: fullName
+                    })
+                });
 
-        showMessage(
-            error.message ||
-            "We couldn't save your changes. Check your connection and profile-table permissions.",
-            "error"
-        );
-    } finally {
-        setSaving(false);
-    }
-});
+                const result = await response.json();
 
-fullNameInput.addEventListener("input", hideMessage);
+                if (response.status === 401) {
+                    window.location.replace("/");
+                    return;
+                }
 
-menuButton.addEventListener("click", () => {
-    const isOpen = document.body.classList.toggle("menu-open");
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.error || "Unable to save your profile."
+                    );
+                }
 
-    menuButton.setAttribute("aria-expanded", String(isOpen));
-    menuButton.setAttribute(
-        "aria-label",
-        isOpen ? "Close navigation" : "Toggle navigation"
-    );
-});
+                const savedProfile = result.user || result.profile || {};
+                originalName = savedProfile.full_name || fullName;
+                fullNameInput.value = originalName;
 
-document.addEventListener("click", (event) => {
-    if (
-        document.body.classList.contains("menu-open") &&
-        !event.target.closest(".sidebar") &&
-        !event.target.closest("#menuButton")
-    ) {
-        document.body.classList.remove("menu-open");
-        menuButton.setAttribute("aria-expanded", "false");
-        menuButton.setAttribute("aria-label", "Toggle navigation");
-    }
-});
+                updateIdentity(originalName);
 
-loadProfile();
-</script>
+                if (savedProfile.email) {
+                    document.getElementById("userEmail").textContent =
+                        savedProfile.email;
+                    document.getElementById("email").value =
+                        savedProfile.email;
+                }
 
+                if (savedProfile.role) {
+                    document.getElementById("userRole").textContent =
+                        savedProfile.role;
+                    document.getElementById("role").value =
+                        savedProfile.role;
+                }
+
+                showMessage(
+                    result.message || "Your profile has been updated.",
+                    "success"
+                );
+
+            } catch (error) {
+                showMessage(
+                    error.message || "Something went wrong. Please try again.",
+                    "error"
+                );
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = "Save changes";
+            }
+        });
+
+        cancelButton.addEventListener("click", function() {
+            fullNameInput.value = originalName;
+            updateIdentity(originalName);
+            clearMessage();
+        });
+
+        loadProfile();
+    </script>
 </body>
 </html>
