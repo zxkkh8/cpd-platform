@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Monitor - Brampton Develop</title>
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #335882;
+            --bg: #f4f5f7;
+            --surface: #fff;
+            --text: #303943;
+            --muted: #687585;
+            --border: #d9dee5;
+            --green: #218653;
+            --green-bg: #e8f4ec;
+            --red: #c73b3b;
+            --red-bg: #fff0ee;
+            --amber: #a76a00;
+            --amber-bg: #fff5df;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1120px;
+            min-height: 64px;
+            padding: 0 24px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .brand img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .admin-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 34px auto 50px;
+            padding: 0 24px;
+        }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 26px;
+            letter-spacing: -.5px;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+
+        h2 {
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .heading-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+
+        .panel-heading {
+            min-height: 49px;
+            padding: 13px 17px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .panel-content { padding: 18px; }
+
+        .status-banner {
+            border-top: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 18px;
+        }
+
+        .status-symbol {
+            flex: 0 0 34px;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            background: #edf1f6;
+            color: var(--primary);
+        }
+
+        .status-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .status-description {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .status-time {
+            margin-left: auto;
+            text-align: right;
+            font-size: 11px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 33px;
+            padding: 8px 12px;
+            border: 1px solid #cbd3dc;
+            border-radius: 2px;
+            background: white;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #f0f3f7;
+            text-decoration: none;
+        }
+
+        .button.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .button.primary:hover { background: #28486b; }
+
+        .button:disabled {
+            opacity: .55;
+            cursor: wait;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .metric {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 17px;
+            min-width: 0;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 9px;
+        }
+
+        .metric-value {
+            font-size: 21px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .workflow-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .workflow-name {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .workflow-meta {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            background: #edf1f6;
+            color: var(--primary);
+        }
+
+        .badge.success { color: var(--green); background: var(--green-bg); }
+        .badge.failure { color: var(--red); background: var(--red-bg); }
+        .badge.warning { color: var(--amber); background: var(--amber-bg); }
+
+        .job-row {
+            padding: 14px 0;
+            border-top: 1px solid #e9edf1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .job-name {
+            font-size: 12px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .job-meta {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .empty {
+            padding: 28px 16px;
+            text-align: center;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .error {
+            display: none;
+            padding: 13px 15px;
+            margin-bottom: 18px;
+            color: var(--red);
+            background: var(--red-bg);
+            border: 1px solid #f0cfca;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .small-note {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            padding: 20px 24px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        [hidden] { display: none !important; }
+
+        @media (max-width: 650px) {
+            .header-inner { padding: 0 15px; }
+            .header-right { gap: 10px; }
+            .admin-label { display: none; }
+
+            main {
+                margin-top: 24px;
+                padding: 0 14px;
+            }
+
+            .heading-row {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .metrics { grid-template-columns: 1fr; gap: 9px; }
+            .metric { padding: 13px 15px; }
+            .metric-value { font-size: 18px; }
+
+            .status-banner { align-items: flex-start; padding: 16px 13px; }
+            .status-time { display: none; }
+            .panel-heading { padding: 12px 13px; }
+            .panel-content { padding: 14px; }
+            .workflow-top { flex-direction: column; }
+        }
+    </style>
+</head>
+
+<body>
+<header class="header">
+    <div class="header-inner">
+        <a class="brand" href="dashboard.html">
+            <img src="assets/logo.svg" alt=""
+                 onerror="this.style.display='none'">
+            <span>Brampton Develop</span>
+        </a>
+
+        <div class="header-right">
+            <span class="admin-label" id="adminName">Administrator</span>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section id="loadingView">
+        <div class="eyebrow">Administration / Developer tools</div>
+        <h1>Deployment monitor</h1>
+        <p class="subtitle">Verifying administrator access…</p>
+    </section>
+
+    <section id="deniedView" hidden>
+        <div class="panel">
+            <div class="panel-content">
+                <h1>Access denied</h1>
+                <p class="subtitle">
+                    This page is restricted to authorised administrators.
+                </p>
+                <p><a href="dashboard.html">Return to dashboard</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="appView" hidden>
+        <div class="heading-row">
+            <div>
+                <div class="eyebrow">Administration / Developer tools</div>
+                <h1>Deployment monitor</h1>
+                <p class="subtitle">
+                    GitHub Actions workflow activity for cpd-platform.
+                </p>
+            </div>
+
+            <button class="button" id="refreshButton" type="button">
+                Refresh workflow
+            </button>
+        </div>
+
+        <div class="error" id="errorBox" role="alert"></div>
+
+        <section class="panel">
+            <div class="status-banner" id="statusBanner">
+                <div class="status-symbol" id="statusSymbol">…</div>
+                <div>
+                    <div class="status-title" id="statusTitle">
+                        Connecting to GitHub
+                    </div>
+                    <div class="status-description" id="statusDescription">
+                        Retrieving the latest workflow run.
+                    </div>
+                </div>
+                <div class="status-time" id="lastChecked">Not checked</div>
+            </div>
+        </section>
+
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-label">Latest run</div>
+                <div class="metric-value" id="metricRun">—</div>
+            </div>
+            <div class="metric">
+                <div class="metric-label">Workflow status</div>
+                <div class="metric-value" id="metricStatus">—</div>
+            </div>
+            <div class="metric">
+                <div class="metric-label">Jobs completed</div>
+                <div class="metric-value" id="metricJobs">—</div>
+            </div>
+        </div>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Latest workflow run</h2>
+                <span class="badge" id="runBadge">Loading</span>
+            </div>
+
+            <div class="panel-content">
+                <div class="workflow-top">
+                    <div>
+                        <div class="workflow-name" id="workflowName">
+                            Retrieving workflow…
+                        </div>
+                        <div class="workflow-meta" id="workflowMeta"></div>
+                    </div>
+
+                    <a class="button primary" id="openRun"
+                       href="https://github.com/zxkkh8/cpd-platform/actions"
+                       target="_blank" rel="noopener noreferrer">
+                        Open on GitHub ↗
+                    </a>
+                </div>
+
+                <div id="jobsList">
+                    <div class="empty">Waiting for workflow information…</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Monitoring</h2>
+                <span class="badge" id="monitorBadge">Initialising</span>
+            </div>
+            <div class="panel-content">
+                <p class="small-note" id="monitorDescription">
+                    The latest workflow is checked periodically. Monitoring
+                    stops when its jobs have completed.
+                </p>
+                <p class="small-note">
+                    Repository:
+                    <a href="https://github.com/zxkkh8/cpd-platform"
+                       target="_blank" rel="noopener noreferrer">
+                        zxkkh8/cpd-platform
+                    </a>
+                </p>
+            </div>
+        </section>
+    </section>
+</main>
+
+<footer class="footer">
+    Brampton Develop · Deployment Monitor
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+
+<script>
+(() => {
+    "use strict";
+
+    const OWNER = "zxkkh8";
+    const REPO = "cpd-platform";
+    const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+
+    // Change these values if your profile schema uses different names.
+    const PROFILE_TABLE = "profiles";
+    const PROFILE_USER_ID_COLUMN = "user_id";
+    const PROFILE_ROLE_COLUMN = "role";
+
+    const POLL_INTERVAL = 30000;
+    const $ = id => document.getElementById(id);
+
+    let client;
+    let pollTimer = null;
+    let checking = false;
+    let activeRunId = null;
+    let finishedRunId = null;
+    let isAdmin = false;
+
+    function showView(viewId) {
+        ["loadingView", "deniedView", "appView"].forEach(id => {
+            $(id).hidden = id !== viewId;
+        });
+    }
+
+    function getClient() {
+        const existing =
+            window.supabaseClient ||
+            window.sb ||
+            window.supabaseClientInstance;
+
+        if (existing && existing.auth) return existing;
+
+        const config = window.APP?.supabase;
+
+        if (
+            config?.url &&
+            config?.key &&
+            window.supabase?.createClient
+        ) {
+            return window.supabase.createClient(config.url, config.key);
+        }
+
+        throw new Error(
+            "Supabase could not be initialised. Check js/config.js and js/supabase.js."
+        );
+    }
+
+    function normaliseRole(role) {
+        return String(role || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[_-]+/g, " ")
+            .replace(/\s+/g, " ");
+    }
+
+    function isAdministratorRole(role) {
+        return [
+            "admin",
+            "administrator",
+            "super admin",
+            "superadmin"
+        ].includes(normaliseRole(role));
+    }
+
+    async function checkAdmin(user) {
+        // app_metadata is server-managed; user_metadata must not grant access.
+        if (isAdministratorRole(user.app_metadata?.role)) {
+            return true;
+        }
+
+        // The profile lookup only works if the table/columns match your schema
+        // and Row Level Security permits the signed-in user to read their role.
+        try {
+            const { data, error } = await client
+                .from(PROFILE_TABLE)
+                .select(PROFILE_ROLE_COLUMN)
+                .eq(PROFILE_USER_ID_COLUMN, user.id)
+                .maybeSingle();
+
+            if (error) {
+                console.warn("Could not verify the profile role:", error.message);
+                return false;
+            }
+
+            return isAdministratorRole(data?.[PROFILE_ROLE_COLUMN]);
+        } catch (error) {
+            console.warn("Profile role verification failed:", error);
+            return false;
+        }
+    }
+
+    function showError(message) {
+        const box = $("errorBox");
+        box.textContent = message;
+        box.style.display = "block";
+    }
+
+    function clearError() {
+        $("errorBox").textContent = "";
+        $("errorBox").style.display = "none";
+    }
+
+    function setBadge(element, text, state = "") {
+        element.textContent = text;
+        element.className = "badge" + (state ? " " + state : "");
+    }
+
+    function statusState(run) {
+        if (!run) return "unknown";
+        if (run.status !== "completed") return "running";
+
+        switch (run.conclusion) {
+            case "success": return "success";
+            case "failure":
+            case "timed_out":
+            case "action_required": return "failure";
+            case "cancelled":
+            case "skipped":
+            case "neutral": return "warning";
+            default: return "unknown";
+        }
+    }
+
+    function friendlyStatus(run) {
+        if (!run) return "Unknown";
+
+        if (run.status !== "completed") {
+            return run.status === "queued" ? "Queued" : "In progress";
+        }
+
+        const labels = {
+            success: "Successful",
+            failure: "Failed",
+            cancelled: "Cancelled",
+            timed_out: "Timed out",
+            skipped: "Skipped",
+            neutral: "Neutral",
+            action_required: "Action required"
+        };
+
+        return labels[run.conclusion] || run.conclusion || "Completed";
+    }
+
+    function formatDate(value) {
+        if (!value) return "—";
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "—";
+
+        return date.toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
+    }
+
+    function duration(start, end) {
+        if (!start) return "Duration unavailable";
+
+        const seconds = Math.max(
+            0,
+            Math.round(((end ? new Date(end) : new Date()) - new Date(start)) / 1000)
+        );
+
+        const minutes = Math.floor(seconds / 60);
+        const remainder = seconds % 60;
+
+        if (minutes >= 60) {
+            const hours = Math.floor(minutes / 60);
+            return `${hours}h ${minutes % 60}m`;
+        }
+
+        if (minutes > 0) return `${minutes}m ${remainder}s`;
+        return `${remainder}s`;
+    }
+
+    async function githubFetch(path) {
+        const response = await fetch(`${API}${path}`, {
+            headers: {
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28"
+            },
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            if (response.status === 403 || response.status === 429) {
+                throw new Error(
+                    "GitHub API rate limit reached. Wait before refreshing."
+                );
+            }
+
+            if (response.status === 404) {
+                throw new Error(
+                    "GitHub could not find this repository or its workflow run."
+                );
+            }
+
+            throw new Error(`GitHub API returned HTTP ${response.status}.`);
+        }
+
+        return response.json();
+    }
+
+    function renderJobs(jobs) {
+        const container = $("jobsList");
+        container.replaceChildren();
+
+        if (!jobs.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty";
+            empty.textContent = "No jobs are listed for this workflow run yet.";
+            container.appendChild(empty);
+            return;
+        }
+
+        jobs.forEach(job => {
+            const row = document.createElement("div");
+            row.className = "job-row";
+
+            const details = document.createElement("div");
+
+            const name = document.createElement("div");
+            name.className = "job-name";
+            name.textContent = job.name || "Unnamed job";
+
+            const meta = document.createElement("div");
+            meta.className = "job-meta";
+            meta.textContent =
+                `${job.started_at ? "Started " + formatDate(job.started_at) : "Not started"}` +
+                ` · ${duration(job.started_at, job.completed_at)}`;
+
+            details.append(name, meta);
+
+            const badge = document.createElement("span");
+            const state = job.status !== "completed"
+                ? "warning"
+                : job.conclusion === "success"
+                    ? "success"
+                    : ["failure", "timed_out", "action_required"].includes(job.conclusion)
+                        ? "failure"
+                        : "warning";
+
+            badge.className = "badge " + state;
+            badge.textContent = job.status === "completed"
+                ? (job.conclusion || "Completed")
+                : (job.status === "queued" ? "Queued" : "In progress");
+
+            row.append(details, badge);
+            container.appendChild(row);
+        });
+    }
+
+    function renderRun(run, jobs) {
+        const state = statusState(run);
+        const status = friendlyStatus(run);
+        const completedJobs = jobs.filter(job => job.status === "completed").length;
+
+        $("workflowName").textContent =
+            run.name || run.display_title || "GitHub Actions workflow";
+
+        $("workflowMeta").textContent =
+            `Run #${run.run_number} · ${run.head_branch || "Branch unavailable"} · ` +
+            `Started ${formatDate(run.run_started_at || run.created_at)} · ` +
+            `Duration ${duration(run.run_started_at || run.created_at, run.updated_at && run.status === "completed" ? run.updated_at : null)}`;
+
+        $("metricRun").textContent = `#${run.run_number}`;
+        $("metricStatus").textContent = status;
+        $("metricJobs").textContent = `${completedJobs} / ${jobs.length}`;
+
+        setBadge($("runBadge"), status, state === "success" ? "success" :
+            state === "failure" ? "failure" :
+            state === "running" ? "warning" : "");
+
+        $("openRun").href = run.html_url ||
+            `https://github.com/${OWNER}/${REPO}/actions`;
+
+        $("statusSymbol").textContent =
+            state === "success" ? "✓" :
+            state === "failure" ? "!" :
+            state === "running" ? "…" : "i";
+
+        $("statusBanner").style.borderTopColor =
+            state === "success" ? "var(--green)" :
+            state === "failure" ? "var(--red)" :
+            state === "running" ? "var(--amber)" : "var(--primary)";
+
+        $("statusSymbol").style.color =
+            state === "success" ? "var(--green)" :
+            state === "failure" ? "var(--red)" :
+            state === "running" ? "var(--amber)" : "var(--primary)";
+
+        $("statusSymbol").style.background =
+            state === "success" ? "var(--green-bg)" :
+            state === "failure" ? "var(--red-bg)" :
+            state === "running" ? "var(--amber-bg)" : "#edf1f6";
+
+        $("statusTitle").textContent =
+            state === "success" ? "Deployment workflow successful" :
+            state === "failure" ? "Workflow failed" :
+            state === "running" ? "Workflow is running" :
+            `Workflow ${status.toLowerCase()}`;
+
+        $("statusDescription").textContent =
+            state === "running"
+                ? "Monitoring the latest run. Job statuses will refresh automatically."
+                : `The latest workflow run has ${status.toLowerCase()}.`;
+
+        $("lastChecked").textContent =
+            `Checked ${new Date().toLocaleTimeString()}`;
+
+        renderJobs(jobs);
+
+        if (state === "running") {
+            setBadge($("monitorBadge"), "Monitoring", "warning");
+            $("monitorDescription").textContent =
+                `Checking run #${run.run_number} periodically. Monitoring stops when the run completes.`;
+        } else {
+            setBadge($("monitorBadge"), "Complete", state === "success" ? "success" : "");
+            $("monitorDescription").textContent =
+                `Run #${run.run_number} is complete. Automatic polling has stopped. Open the run on GitHub to inspect its logs.`;
+        }
+    }
+
+    async function refreshWorkflow() {
+        if (checking || !isAdmin) return;
+        checking = true;
+        clearError();
+        $("refreshButton").disabled = true;
+
+        try {
+            const response = await githubFetch("/actions/runs?per_page=1");
+
+            if (!response.workflow_runs || response.workflow_runs.length === 0) {
+                $("workflowName").textContent = "No workflow runs found";
+                $("workflowMeta").textContent = "";
+                $("metricRun").textContent = "—";
+                $("metricStatus").textContent = "No runs";
+                $("metricJobs").textContent = "—";
+                $("jobsList").textContent = "No GitHub Actions runs were found.";
+                $("statusTitle").textContent = "No workflow runs found";
+                $("statusDescription").textContent =
+                    "Run a GitHub Actions workflow in this repository to begin monitoring.";
+                setBadge($("runBadge"), "No runs");
+                setBadge($("monitorBadge"), "Idle");
+                stopPolling();
+                return;
+            }
+
+            const run = response.workflow_runs[0];
+
+            if (activeRunId !== run.id) {
+                activeRunId = run.id;
+                finishedRunId = null;
+            }
+
+            const jobResponse = await githubFetch(
+                `/actions/runs/${run.id}/jobs?per_page=100`
+            );
+
+            const jobs = jobResponse.jobs || [];
+            renderRun(run, jobs);
+
+            if (run.status === "completed") {
+                finishedRunId = run.id;
+                stopPolling();
+            } else {
+                startPolling();
+            }
+        } catch (error) {
+            showError(error.message || "Unable to retrieve GitHub workflow status.");
+            $("statusTitle").textContent = "Unable to refresh workflow";
+            $("statusDescription").textContent =
+                "Check the connection and try refreshing again.";
+            setBadge($("monitorBadge"), "Connection issue", "failure");
+        } finally {
+            checking = false;
+            $("refreshButton").disabled = false;
+        }
+    }
+
+    function stopPolling() {
+        if (pollTimer !== null) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+        }
+    }
+
+    function startPolling() {
+        if (pollTimer !== null) return;
+
+        pollTimer = setInterval(() => {
+            refreshWorkflow();
+        }, POLL_INTERVAL);
+    }
+
+    async function initialise() {
+        try {
+            client = getClient();
+
+            const { data, error } = await client.auth.getUser();
+
+            if (error || !data?.user) {
+                window.location.replace("index.html");
+                return;
+            }
+
+            isAdmin = await checkAdmin(data.user);
+
+            if (!isAdmin) {
+                showView("deniedView");
+                return;
+            }
+
+            $("adminName").textContent =
+                data.user.user_metadata?.display_name ||
+                data.user.user_metadata?.full_name ||
+                data.user.email ||
+                "Administrator";
+
+            showView("appView");
+            await refreshWorkflow();
+        } catch (error) {
+            console.error(error);
+            showView("deniedView");
+        }
+    }
+
+    $("refreshButton").addEventListener("click", refreshWorkflow);
+
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && isAdmin && !finishedRunId) {
+            refreshWorkflow();
+        }
+    });
+
+    window.addEventListener("beforeunload", stopPolling);
+
+    initialise();
+})();
+</script>
+</body>
+</html>
