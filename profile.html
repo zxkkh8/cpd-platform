@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -41,13 +42,10 @@ button, input {
     font: inherit;
 }
 
-button, a {
-    -webkit-tap-highlight-color: transparent;
-}
-
 a {
     color: inherit;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Sidebar */
@@ -55,12 +53,13 @@ a {
 .sidebar {
     position: fixed;
     inset: 0 auto 0 0;
-    z-index: 20;
+    z-index: 100;
     width: var(--sidebar-width);
     display: flex;
     flex-direction: column;
     background: #fff;
     border-right: 1px solid var(--border);
+    transition: transform .2s ease;
 }
 
 .sidebar-brand {
@@ -68,33 +67,30 @@ a {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 25px;
+    padding: 0 22px;
     border-bottom: 1px solid var(--border);
 }
 
-.sidebar-brand img {
+.sidebar-brand img,
+.brand-fallback {
     width: 38px;
     height: 38px;
+    flex-shrink: 0;
     object-fit: contain;
 }
 
 .brand-fallback {
-    width: 38px;
-    height: 38px;
-    display: grid;
+    display: none;
     place-items: center;
-    flex-shrink: 0;
     border-radius: 9px;
     background: var(--brand);
-    color: white;
-    font-size: 15px;
+    color: #fff;
     font-weight: 750;
 }
 
 .brand-copy h1 {
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: -.2px;
 }
 
 .brand-copy p {
@@ -104,16 +100,16 @@ a {
 }
 
 .sidebar-label {
-    padding: 27px 25px 11px;
+    padding: 27px 24px 11px;
     color: #8993a2;
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 750;
     letter-spacing: 1px;
     text-transform: uppercase;
 }
 
 .sidebar-nav {
-    padding: 0 13px;
+    padding: 0 12px;
 }
 
 .nav-link {
@@ -121,8 +117,8 @@ a {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 13px;
     margin-bottom: 4px;
+    padding: 0 13px;
     border-radius: 7px;
     color: #586577;
     font-size: 13px;
@@ -149,21 +145,25 @@ a {
 
 .sidebar-bottom {
     margin-top: auto;
-    padding: 16px 13px;
+    padding: 16px 12px;
     border-top: 1px solid var(--border);
 }
 
-.sidebar-account {
+.sidebar-account,
+.topbar-user {
     display: flex;
     align-items: center;
-    gap: 11px;
-    padding: 9px 10px;
+    gap: 10px;
     min-width: 0;
 }
 
+.sidebar-account {
+    padding: 9px 10px;
+}
+
 .mini-avatar {
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     display: grid;
     place-items: center;
     flex-shrink: 0;
@@ -171,33 +171,32 @@ a {
     background: var(--brand-light);
     color: var(--brand);
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 750;
 }
 
 .account-copy {
     min-width: 0;
 }
 
-.account-copy strong {
+.account-copy strong,
+.account-copy span {
     display: block;
     overflow: hidden;
-    color: var(--text);
-    font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.account-copy strong {
+    font-size: 12px;
 }
 
 .account-copy span {
-    display: block;
     margin-top: 4px;
-    overflow: hidden;
     color: var(--muted);
     font-size: 11px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-/* Main layout */
+/* Main area */
 
 .app {
     min-height: 100vh;
@@ -210,7 +209,7 @@ a {
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-    padding: 0 38px;
+    padding: 0 36px;
     background: #fff;
     border-bottom: 1px solid var(--border);
 }
@@ -236,43 +235,49 @@ a {
     font-weight: 650;
 }
 
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.topbar-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 .topbar-user-info {
+    min-width: 0;
     text-align: right;
 }
 
-.topbar-user-info strong {
+.topbar-user-info strong,
+.topbar-user-info span {
     display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topbar-user-info strong {
     font-size: 12px;
     font-weight: 650;
 }
 
 .topbar-user-info span {
-    display: block;
-    margin-top: 3px;
+    margin-top: 4px;
     color: var(--muted);
     font-size: 11px;
+}
+
+.mobile-menu {
+    display: none;
+    width: 37px;
+    height: 37px;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: #fff;
+    color: var(--text);
+    font-size: 19px;
+    cursor: pointer;
 }
 
 main {
     width: 100%;
     max-width: 1220px;
     margin: 0 auto;
-    padding: 34px 38px 22px;
+    padding: 34px 36px 22px;
 }
-
-/* Page heading */
 
 .page-heading {
     display: flex;
@@ -294,7 +299,7 @@ main {
 .page-heading h2 {
     font-size: 27px;
     font-weight: 700;
-    letter-spacing: -.8px;
+    letter-spacing: -.7px;
 }
 
 .page-heading p {
@@ -316,22 +321,18 @@ main {
     font-size: 12px;
     font-weight: 600;
     white-space: nowrap;
-    transition: border-color .15s, background .15s;
 }
 
 .back-link:hover {
     border-color: #c7d4e3;
-    background: #fafcff;
     color: var(--brand);
 }
 
-/* Profile layout */
-
 .profile-layout {
     display: grid;
-    grid-template-columns: minmax(235px, .76fr) minmax(0, 1.6fr);
-    gap: 22px;
+    grid-template-columns: minmax(225px, .78fr) minmax(0, 1.6fr);
     align-items: start;
+    gap: 22px;
 }
 
 .card {
@@ -343,23 +344,6 @@ main {
     box-shadow: 0 2px 5px rgba(25, 42, 62, .025);
 }
 
-.card-heading {
-    padding: 21px 23px;
-    border-bottom: 1px solid var(--border);
-}
-
-.card-heading h3 {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.card-heading p {
-    margin-top: 6px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.6;
-}
-
 /* Identity card */
 
 .identity-top {
@@ -368,7 +352,7 @@ main {
 }
 
 .identity-content {
-    padding: 0 22px 23px;
+    padding: 0 22px 24px;
     text-align: center;
 }
 
@@ -391,7 +375,6 @@ main {
     overflow-wrap: anywhere;
     font-size: 17px;
     font-weight: 700;
-    letter-spacing: -.2px;
 }
 
 .identity-email {
@@ -405,7 +388,7 @@ main {
 .role-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     max-width: 100%;
     margin-top: 15px;
     padding: 7px 11px;
@@ -433,8 +416,8 @@ main {
 
 .identity-detail {
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 12px;
     margin-bottom: 15px;
     text-align: left;
@@ -458,6 +441,23 @@ main {
 }
 
 /* Form */
+
+.card-heading {
+    padding: 21px 23px;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-heading h3 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.card-heading p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
 
 .profile-form {
     padding: 25px 24px;
@@ -563,7 +563,6 @@ input[readonly] {
     font-size: 12px;
     font-weight: 650;
     cursor: pointer;
-    transition: background .15s, border-color .15s, opacity .15s;
 }
 
 .button:hover {
@@ -571,19 +570,20 @@ input[readonly] {
     background: var(--brand-dark);
 }
 
-.button:focus-visible,
-.back-link:focus-visible,
-.nav-link:focus-visible {
-    outline: 3px solid rgba(51, 88, 130, .25);
-    outline-offset: 3px;
-}
-
 .button:disabled {
     opacity: .65;
     cursor: wait;
 }
 
-/* Status messages */
+.button:focus-visible,
+.back-link:focus-visible,
+.nav-link:focus-visible,
+.mobile-menu:focus-visible {
+    outline: 3px solid rgba(51, 88, 130, .25);
+    outline-offset: 3px;
+}
+
+/* Messages */
 
 .message {
     display: none;
@@ -618,26 +618,13 @@ input[readonly] {
 }
 
 footer {
-    padding: 22px 38px 25px;
+    padding: 22px 36px 25px;
     color: #929baa;
     font-size: 10px;
     text-align: center;
 }
 
-/* Mobile navigation */
-
-.mobile-menu {
-    display: none;
-    width: 37px;
-    height: 37px;
-    flex-shrink: 0;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: white;
-    color: var(--text);
-    font-size: 19px;
-    cursor: pointer;
-}
+/* Responsive */
 
 @media (max-width: 1050px) {
     :root {
@@ -645,24 +632,19 @@ footer {
     }
 
     .topbar {
-        padding: 0 25px;
+        padding: 0 24px;
     }
 
     main {
-        padding: 30px 25px 20px;
+        padding: 30px 24px 20px;
     }
 
     .profile-layout {
-        grid-template-columns: minmax(210px, .8fr) minmax(0, 1.4fr);
         gap: 16px;
     }
 
     .profile-form {
         padding: 22px 20px;
-    }
-
-    .card-heading {
-        padding: 19px 20px;
     }
 }
 
@@ -674,8 +656,6 @@ footer {
     .sidebar {
         width: 248px;
         transform: translateX(-100%);
-        transition: transform .2s ease;
-        box-shadow: none;
     }
 
     body.menu-open .sidebar {
@@ -689,16 +669,11 @@ footer {
 
     .mobile-menu {
         display: inline-grid;
-        place-items: center;
     }
 
     .topbar {
         height: 64px;
-        padding: 0 17px;
-    }
-
-    .topbar-right {
-        margin-left: auto;
+        padding: 0 16px;
     }
 
     .topbar-user-info {
@@ -720,11 +695,6 @@ footer {
     .profile-layout {
         grid-template-columns: 1fr;
         gap: 17px;
-    }
-
-    .identity-content {
-        padding-left: 24px;
-        padding-right: 24px;
     }
 
     .profile-form {
@@ -764,7 +734,6 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
-        scroll-behavior: auto !important;
         transition-duration: .01ms !important;
     }
 }
@@ -774,10 +743,10 @@ footer {
 <body>
 
 <aside class="sidebar" id="sidebar">
-    <a class="sidebar-brand" href="dashboard.html" aria-label="Brampton Develop dashboard">
-        <img src="assets/logo.svg" alt=""
+    <a class="sidebar-brand" href="dashboard.html">
+        <img src="assets/logo.svg" alt="Brampton Develop"
              onerror="this.style.display='none';document.getElementById('brandFallback').style.display='grid'">
-        <span class="brand-fallback" id="brandFallback" style="display:none">B</span>
+        <span class="brand-fallback" id="brandFallback">B</span>
         <div class="brand-copy">
             <h1>Brampton Develop</h1>
             <p>Development &amp; Training Portal</p>
@@ -791,12 +760,10 @@ footer {
             <span class="nav-icon" aria-hidden="true">⌂</span>
             Dashboard
         </a>
-
         <a class="nav-link" href="forms.html">
             <span class="nav-icon" aria-hidden="true">▤</span>
             Forms
         </a>
-
         <a class="nav-link" href="training.html">
             <span class="nav-icon" aria-hidden="true">▣</span>
             Training
@@ -836,14 +803,12 @@ footer {
             </div>
         </div>
 
-        <div class="topbar-right">
-            <div class="topbar-user">
-                <div class="topbar-user-info">
-                    <strong id="topbarName">Loading profile...</strong>
-                    <span id="topbarRole">Account</span>
-                </div>
-                <div class="mini-avatar" id="topbarAvatar">U</div>
+        <div class="topbar-user">
+            <div class="topbar-user-info">
+                <strong id="topbarName">Loading profile...</strong>
+                <span id="topbarRole">Account</span>
             </div>
+            <div class="mini-avatar" id="topbarAvatar">U</div>
         </div>
     </header>
 
@@ -867,7 +832,6 @@ footer {
 
                 <div class="identity-content">
                     <div class="avatar" id="profileAvatar">U</div>
-
                     <h3 id="profileName">Loading profile...</h3>
                     <p class="identity-email" id="profileEmail">Loading account details...</p>
 
@@ -899,7 +863,7 @@ footer {
                 <form class="profile-form" id="profileForm">
                     <p class="form-intro">
                         Your profile information helps identify you throughout the Brampton Develop portal.
-                        Changes to your name will be saved to your profile.
+                        Changes to your display name will be saved to your profile.
                     </p>
 
                     <div id="message" class="message" role="status" aria-live="polite">
@@ -912,9 +876,8 @@ footer {
                         <div class="input-wrap">
                             <span class="input-icon" aria-hidden="true">♙</span>
                             <input class="has-icon" id="fullName" name="fullName"
-                                   type="text" autocomplete="name"
-                                   maxlength="100" placeholder="Enter your display name"
-                                   required>
+                                   type="text" autocomplete="name" maxlength="100"
+                                   placeholder="Enter your display name" required>
                         </div>
                         <p class="help-text">
                             This name will appear in your dashboard and account menu.
@@ -937,8 +900,7 @@ footer {
                         <label for="role">Account role</label>
                         <div class="input-wrap">
                             <span class="input-icon" aria-hidden="true">▤</span>
-                            <input class="has-icon" id="role" name="role"
-                                   type="text" readonly>
+                            <input class="has-icon" id="role" name="role" type="text" readonly>
                         </div>
                         <p class="help-text">
                             Contact your portal administrator if your assigned role is incorrect.
@@ -949,7 +911,6 @@ footer {
                         <p class="form-note">
                             Only your display name can be changed on this page.
                         </p>
-
                         <button class="button" id="saveButton" type="submit">
                             <span aria-hidden="true">✓</span>
                             <span id="saveButtonText">Save changes</span>
@@ -1020,9 +981,7 @@ function displayProfile(user) {
     document.getElementById("topbarAvatar").textContent = initialsFor(name);
 
     const roleChip = document.getElementById("profileRole");
-    const roleText = document.getElementById("profileRoleText");
-
-    roleText.textContent = role;
+    document.getElementById("profileRoleText").textContent = role;
     roleChip.hidden = !role;
 
     fullNameInput.value =
@@ -1033,8 +992,7 @@ function displayProfile(user) {
 
     emailInput.value = email;
     roleInput.value = role || "Not assigned";
-
-    document.getElementById("accountStatus").textContent = "Active";
+    document.getElementById("accountStatus").textContent = "Available";
 }
 
 function showMessage(text, type) {
@@ -1054,87 +1012,156 @@ function setSaving(saving) {
     saveButtonText.textContent = saving ? "Saving..." : "Save changes";
 }
 
+function getStoredUser() {
+    try {
+        const saved = localStorage.getItem("currentUser");
+        if (!saved) return null;
+
+        const user = JSON.parse(saved);
+
+        if (
+            user &&
+            typeof user === "object" &&
+            (user.email || user.id || user.name ||
+             user.full_name || user.display_name)
+        ) {
+            return user;
+        }
+    } catch (error) {
+        console.warn("Unable to read saved user:", error);
+    }
+
+    return null;
+}
+
 async function loadProfile() {
+    hideMessage();
+
+    // Use an already-saved user immediately if available.
+    // This prevents a premature redirect while authentication initializes.
+    const storedUser = getStoredUser();
+
+    if (storedUser) {
+        currentUser = storedUser;
+        displayProfile(currentUser);
+        originalName = fullNameInput.value.trim();
+    }
+
     try {
         const client = window.supabaseClient;
 
         if (client?.auth) {
             const { data, error } = await client.auth.getUser();
 
-            if (error) throw error;
+            if (error) {
+                console.warn("Supabase session check:", error.message);
 
-            if (!data.user) {
-                window.location.replace("index.html");
+                if (!currentUser) {
+                    showMessage(
+                        "We couldn't verify your Supabase session. Check that the login page and this page use the same Supabase configuration.",
+                        "error"
+                    );
+                }
                 return;
             }
 
-            const authUser = data.user;
-            let profile = {};
+            if (data?.user) {
+                const authUser = data.user;
+                let profile = {};
 
-            const { data: profileData, error: profileError } = await client
-                .from("profiles")
-                .select("*")
-                .eq("id", authUser.id)
-                .maybeSingle();
+                const { data: profileData, error: profileError } = await client
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", authUser.id)
+                    .maybeSingle();
 
-            if (profileError) {
-                console.warn(
-                    "Unable to load profile record:",
-                    profileError.message
-                );
-            } else if (profileData) {
-                profile = profileData;
-            }
+                if (profileError) {
+                    console.warn("Profile lookup failed:", profileError.message);
+                } else if (profileData) {
+                    profile = profileData;
+                }
 
-            currentUser = {
-                id: authUser.id,
-                email: authUser.email || "",
-                full_name:
-                    profile.full_name ||
-                    profile.display_name ||
-                    authUser.user_metadata?.full_name ||
-                    authUser.user_metadata?.name ||
-                    "",
-                name:
-                    profile.full_name ||
-                    profile.display_name ||
-                    authUser.user_metadata?.full_name ||
-                    authUser.user_metadata?.name ||
-                    authUser.email ||
-                    "",
-                role:
-                    profile.role ||
-                    authUser.user_metadata?.role ||
-                    ""
-            };
-        } else {
-            const saved = localStorage.getItem("currentUser");
+                currentUser = {
+                    id: authUser.id,
+                    email: authUser.email || "",
+                    full_name:
+                        profile.full_name ||
+                        profile.display_name ||
+                        authUser.user_metadata?.full_name ||
+                        authUser.user_metadata?.name ||
+                        storedUser?.full_name ||
+                        storedUser?.display_name ||
+                        storedUser?.name ||
+                        "",
+                    display_name:
+                        profile.display_name ||
+                        profile.full_name ||
+                        authUser.user_metadata?.full_name ||
+                        authUser.user_metadata?.name ||
+                        storedUser?.display_name ||
+                        "",
+                    name:
+                        profile.full_name ||
+                        profile.display_name ||
+                        authUser.user_metadata?.full_name ||
+                        authUser.user_metadata?.name ||
+                        storedUser?.name ||
+                        authUser.email ||
+                        "",
+                    role:
+                        profile.role ||
+                        authUser.user_metadata?.role ||
+                        storedUser?.role ||
+                        ""
+                };
 
-            if (!saved) {
-                window.location.replace("index.html");
+                displayProfile(currentUser);
+                originalName = fullNameInput.value.trim();
+
+                try {
+                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                } catch (storageError) {
+                    console.warn("Unable to cache user:", storageError);
+                }
+
                 return;
             }
 
-            currentUser = JSON.parse(saved);
+            // No Supabase user. Keep a valid saved user instead of redirecting.
+            if (storedUser) return;
 
-            if (!currentUser || typeof currentUser !== "object") {
-                window.location.replace("index.html");
-                return;
-            }
+            showMessage(
+                "No signed-in user was found. Please sign in through the portal before updating your profile.",
+                "error"
+            );
+            document.getElementById("accountStatus").textContent = "Not signed in";
+            return;
         }
 
-        displayProfile(currentUser);
-        originalName = fullNameInput.value.trim();
+        // Non-Supabase fallback.
+        if (storedUser) {
+            currentUser = storedUser;
+            displayProfile(currentUser);
+            originalName = fullNameInput.value.trim();
+            return;
+        }
+
+        showMessage(
+            "No saved account was found. Please sign in through the portal first.",
+            "error"
+        );
+        document.getElementById("accountStatus").textContent = "Not signed in";
 
     } catch (error) {
         console.error("Unable to load profile:", error);
 
-        document.getElementById("accountStatus").textContent = "Unavailable";
-
-        showMessage(
-            "We couldn't load your profile. Please sign in again and try once more.",
-            "error"
-        );
+        if (!currentUser) {
+            showMessage(
+                "Unable to load your profile. " +
+                (error.message || "Please check your connection."),
+                "error"
+            );
+        }
     }
 }
 
@@ -1144,7 +1171,7 @@ document.getElementById("profileForm").addEventListener("submit", async (event) 
 
     if (!currentUser) {
         showMessage(
-            "Your profile isn't loaded. Please sign in again.",
+            "Your account hasn't loaded. Return to the dashboard and check your sign-in.",
             "error"
         );
         return;
@@ -1178,7 +1205,12 @@ document.getElementById("profileForm").addEventListener("submit", async (event) 
             const { data: authData, error: authError } = await client.auth.getUser();
 
             if (authError) throw authError;
-            if (!authData.user) throw new Error("Please sign in again.");
+
+            if (!authData?.user) {
+                throw new Error(
+                    "Your Supabase session has expired. Sign in again before saving."
+                );
+            }
 
             const { error: updateError } = await client
                 .from("profiles")
@@ -1191,34 +1223,31 @@ document.getElementById("profileForm").addEventListener("submit", async (event) 
 
             if (updateError) throw updateError;
 
-            currentUser.full_name = newName;
-            currentUser.display_name = newName;
-            currentUser.name = newName;
-        } else {
-            currentUser.full_name = newName;
-            currentUser.display_name = newName;
-            currentUser.name = newName;
+            currentUser.id = authData.user.id;
+            currentUser.email = authData.user.email || currentUser.email || "";
         }
+
+        currentUser.full_name = newName;
+        currentUser.display_name = newName;
+        currentUser.name = newName;
 
         try {
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
         } catch (storageError) {
-            console.warn("Unable to update local profile cache:", storageError);
+            console.warn("Unable to update local cache:", storageError);
         }
 
         displayProfile(currentUser);
         originalName = newName;
 
-        showMessage(
-            "Your display name has been updated successfully.",
-            "success"
-        );
+        showMessage("Your display name has been updated successfully.", "success");
 
     } catch (error) {
         console.error("Profile update failed:", error);
 
         showMessage(
-            "We couldn't save your changes. Please check your connection and profile-table permissions, then try again.",
+            error.message ||
+            "We couldn't save your changes. Check your connection and profile-table permissions.",
             "error"
         );
     } finally {
@@ -1230,6 +1259,7 @@ fullNameInput.addEventListener("input", hideMessage);
 
 menuButton.addEventListener("click", () => {
     const isOpen = document.body.classList.toggle("menu-open");
+
     menuButton.setAttribute("aria-expanded", String(isOpen));
     menuButton.setAttribute(
         "aria-label",
@@ -1254,3 +1284,4 @@ loadProfile();
 
 </body>
 </html>
+```
