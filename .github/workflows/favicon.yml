@@ -1,0 +1,58 @@
+
+name: Add Favicon to All Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  add-favicon:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add favicon to HTML pages
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          favicon = '<link rel="icon" type="image/png" href="/assets/icon1.png">'
+
+          for path in Path('.').rglob('*.html'):
+              if '.git' in path.parts:
+                  continue
+
+              content = path.read_text(encoding='utf-8')
+
+              if favicon in content:
+                  continue
+
+              if re.search(r'<head\b[^>]*>', content, re.I):
+                  content = re.sub(
+                      r'(<head\b[^>]*>)',
+                      r'\1\n    ' + favicon,
+                      content,
+                      count=1,
+                      flags=re.I
+                  )
+                  path.write_text(content, encoding='utf-8')
+                  print(f'Updated {path}')
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html'
+          git diff --cached --quiet || git commit -m "Automatically add site favicon"
+          git push
