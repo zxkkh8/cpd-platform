@@ -1,1746 +1,1243 @@
+
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Brampton Develop</title>
-
-assets/favicon.ico
+<meta name="theme-color" content="#335882">
+<title>Home - Brampton Develop</title>
+<link rel="icon" href="assets/favicon.ico">
 
 <style>
-
-:root{
-    --brand:#335882;
-    --brand-dark:#274666;
-    --brand-light:#edf3f9;
-    --background:#f5f7fa;
-    --surface:#ffffff;
-    --border:#e4e8ee;
-    --text:#202a36;
-    --muted:#687587;
-    --radius:12px;
+:root {
+    --brand: #335882;
+    --brand-dark: #274666;
+    --brand-light: #edf3f9;
+    --background: #f5f6f8;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #242424;
+    --muted: #616161;
+    --sidebar-width: 248px;
+    --radius: 8px;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI","Segoe UI Variable",Arial,sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", "Segoe UI Variable", Arial, sans-serif;
 }
 
-body{
-    background:var(--background);
-    color:var(--text);
+body {
+    background: var(--background);
+    color: var(--text);
+    font-size: 14px;
 }
 
-a{
-    color:inherit;
-    text-decoration:none;
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
-.mobile-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.35);
-    opacity:0;
-    visibility:hidden;
-    transition:.2s;
-    z-index:99;
+button {
+    font: inherit;
 }
 
-.mobile-overlay.open{
-    opacity:1;
-    visibility:visible;
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
 }
 
-.mobile-menu{
-    display:none;
-    position:fixed;
-    left:16px;
-    top:16px;
-    z-index:150;
-    width:44px;
-    height:44px;
-    border:none;
-    border-radius:10px;
-    background:white;
-    box-shadow:0 4px 18px rgba(0,0,0,.12);
-    cursor:pointer;
-    font-size:20px;
+.mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transition: .2s;
 }
 
-.sidebar{
-    position:fixed;
-    inset:0 auto 0 0;
-    width:270px;
-    background:white;
-    border-right:1px solid var(--border);
-    display:flex;
-    flex-direction:column;
-    z-index:100;
+.mobile-overlay.open {
+    opacity: 1;
+    visibility: visible;
 }
 
-.brand{
-    padding:24px;
-    border-bottom:1px solid var(--border);
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
 }
 
-.brand img{
-    width:160px;
-    max-width:100%;
-    display:block;
-    margin-bottom:15px;
+.brand {
+    min-height: 76px;
+    padding: 17px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
 }
 
-.brand h1{
-    font-size:20px;
-    font-weight:650;
+.brand img {
+    width: 39px;
+    height: 39px;
+    object-fit: contain;
 }
 
-.brand p{
-    margin-top:6px;
-    color:var(--muted);
-    font-size:12px;
+.brand h1 {
+    font-size: 16px;
+    font-weight: 650;
+    letter-spacing: -.3px;
 }
 
-.nav-label{
-    padding:20px 24px 8px;
-    color:var(--muted);
-    font-size:10px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:1px;
+.brand p {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
 }
 
-.nav{
-    display:flex;
-    flex-direction:column;
-    padding:0 12px;
-    gap:4px;
+.nav-label {
+    padding: 22px 20px 9px;
+    color: #737373;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
 }
 
-.nav a{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px 14px;
-    border-radius:10px;
-    color:#536172;
-    transition:.2s;
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 10px;
 }
 
-.nav a:hover{
-    background:#f6f8fb;
+.nav a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 42px;
+    padding: 10px 12px;
+    border-radius: 5px;
+    color: #424242;
+    font-size: 13px;
+    transition: background .15s;
 }
 
-.nav a.active{
-    background:var(--brand-light);
-    color:var(--brand);
-    font-weight:600;
+.nav a:hover {
+    background: #f5f5f5;
 }
 
-.nav-svg{
-    width:18px;
-    height:18px;
-    object-fit:contain;
+.nav a.active {
+    background: var(--brand-light);
+    color: var(--brand);
+    font-weight: 600;
+    box-shadow: inset 3px 0 var(--brand);
 }
 
-.sidebar-footer{
-    margin-top:auto;
-    padding:24px;
-    color:var(--muted);
-    font-size:12px;
-    border-top:1px solid var(--border);
+.nav-icon {
+    width: 19px;
+    height: 19px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: currentColor;
 }
 
-.main{
-    margin-left:270px;
-    min-height:100vh;
+.nav-icon svg {
+    width: 19px;
+    height: 19px;
 }
 
-@media(max-width:768px){
+.sidebar-footer {
+    margin-top: auto;
+    padding: 18px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
 
-    .mobile-menu{
-        display:block;
+.mobile-menu {
+    display: none;
+    position: fixed;
+    left: 12px;
+    top: 14px;
+    z-index: 150;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.main {
+    min-height: 100vh;
+    margin-left: var(--sidebar-width);
+}
+
+.topbar {
+    height: 64px;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+}
+
+.breadcrumb {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.breadcrumb strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.account-menu {
+    position: relative;
+}
+
+.account-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 5px 8px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.account-button:hover,
+.account-button[aria-expanded="true"] {
+    background: #f5f5f5;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    background: var(--brand);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: .2px;
+}
+
+.user-details {
+    text-align: left;
+    min-width: 0;
+}
+
+.user-details strong {
+    display: block;
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.user-details span {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.chevron {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 260px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    z-index: 200;
+}
+
+.account-dropdown[hidden] {
+    display: none;
+}
+
+.dropdown-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+}
+
+.dropdown-heading strong {
+    display: block;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.dropdown-role {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 5px 0;
+}
+
+.dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 11px 10px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: #f5f5f5;
+}
+
+.logout-item {
+    color: #b42318;
+}
+
+.content {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.welcome {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.welcome h2 {
+    font-size: 29px;
+    font-weight: 600;
+    letter-spacing: -.8px;
+    line-height: 1.3;
+}
+
+.welcome p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.welcome-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.button {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.button:hover {
+    background: #f4f4f4;
+}
+
+.button-primary {
+    color: #fff;
+    background: var(--brand);
+    border-color: var(--brand);
+}
+
+.button-primary:hover {
+    background: var(--brand-dark);
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 14px;
+}
+
+.section-heading h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.section-heading p {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.stat-link {
+    display: block;
+    min-width: 0;
+}
+
+.stat-card {
+    height: 100%;
+    min-height: 145px;
+    padding: 19px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+
+.stat-card:hover {
+    border-color: #bdcbd9;
+    box-shadow: 0 4px 14px rgba(0,0,0,.05);
+    transform: translateY(-1px);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.stat-card h4 {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.stat-icon,
+.action-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    background: var(--brand-light);
+    color: var(--brand);
+    border-radius: 6px;
+}
+
+.stat-icon {
+    width: 34px;
+    height: 34px;
+}
+
+.stat-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.stat-card h3 {
+    font-size: 29px;
+    font-weight: 600;
+    letter-spacing: -.5px;
+}
+
+.stat-card p {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.panel {
+    min-width: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.panel-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.panel-header p {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.panel-body {
+    padding: 12px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+th {
+    padding: 12px 18px;
+    background: #fafafa;
+    color: var(--muted);
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+td {
+    padding: 14px 18px;
+    border-top: 1px solid #eeeeee;
+    font-size: 12px;
+}
+
+td:first-child {
+    font-weight: 500;
+}
+
+.empty-state {
+    padding: 25px 18px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+}
+
+.quick-actions {
+    display: grid;
+    gap: 5px;
+}
+
+.action-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+    border-radius: 6px;
+    transition: background .15s;
+}
+
+.action-link:hover {
+    background: #f7f8fa;
+}
+
+.action-icon {
+    width: 39px;
+    height: 39px;
+}
+
+.action-icon svg {
+    width: 19px;
+    height: 19px;
+}
+
+.action-link strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.action-link small {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+@media (max-width: 1150px) {
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .sidebar{
-        transform:translateX(-100%);
-        transition:.25s;
+    .workspace-grid {
+        grid-template-columns: 1fr;
     }
-
-    .sidebar.open{
-        transform:translateX(0);
-    }
-
-    .main{
-        margin-left:0;
-    }
-
 }
 
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: grid;
+        place-items: center;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .22s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .topbar {
+        padding: 0 16px 0 66px;
+    }
+
+    .content {
+        padding: 22px 16px;
+    }
+
+    .welcome {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .welcome h2 {
+        font-size: 25px;
+    }
+
+    .user-details {
+        display: none;
+    }
+
+    .chevron {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        min-height: 135px;
+        padding: 14px;
+    }
+
+    .stat-card h3 {
+        font-size: 25px;
+    }
+
+    .stat-top {
+        align-items: flex-start;
+    }
+
+    .welcome-actions {
+        width: 100%;
+    }
+
+    .welcome-actions .button {
+        flex: 1;
+    }
+
+    .panel-header {
+        padding: 16px;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<div
-    id="mobileOverlay"
-    class="mobile-overlay">
-</div>
+<div id="mobileOverlay" class="mobile-overlay"></div>
 
-<button
-    id="mobileMenu"
-    class="mobile-menu"
-    type="button">
-
-    ☰
-
+<button id="mobileMenu" class="mobile-menu" type="button"
+        aria-label="Open navigation" aria-expanded="false">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.8">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
 </button>
 
 <aside class="sidebar" id="sidebar">
-
     <div class="brand">
-
-        assets/logo.svg
-
-        <h1 id="companyName">
-            Brampton Develop
-        </h1>
-
-        <p id="portalName">
-            Training and Development Portal
-        </p>
-
+        <img src="assets/logo.svg" alt="Brampton Develop logo">
+        <div>
+            <h1>Brampton Develop</h1>
+            <p>Training and Development</p>
+        </div>
     </div>
 
-    <p class="nav-label">
-        Workspace
-    </p>
-
-    <nav class="nav">
-
-        <a
-            href="dashboard.html"
-            class="active">
-
-            assets/dashboard.svg
-
+    <p class="nav-label">Workspace</p>
+    <nav class="nav" aria-label="Workspace">
+        <a href="dashboard.html" class="active" aria-current="page">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.7">
+                    <rect x="3" y="3" width="8" height="8" rx="1"/>
+                    <rect x="14" y="3" width="7" height="5" rx="1"/>
+                    <rect x="14" y="11" width="7" height="10" rx="1"/>
+                    <rect x="3" y="14" width="8" height="7" rx="1"/>
+                </svg>
+            </span>
             Dashboard
-
         </a>
 
         <a href="forms.html">
-
-            assets/forms.svg
-
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.7">
+                    <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
+                    <path d="M14 3v5h5M9 13h7M9 17h7"/>
+                </svg>
+            </span>
             Forms
-
         </a>
 
         <a href="responses.html">
-
-            assets/responses.svg
-
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.7">
+                    <path d="M4 19V5M4 19h17"/>
+                    <path d="m7 15 4-4 3 2 6-7"/>
+                </svg>
+            </span>
             Responses
-
         </a>
 
         <a href="certificates.html">
-
-            assets/certificate.svg
-
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.7">
+                    <circle cx="12" cy="8" r="5"/>
+                    <path d="m8 12-1 9 5-3 5 3-1-9"/>
+                    <path d="m10 8 1.4 1.4L14.5 6"/>
+                </svg>
+            </span>
             Certificates
-
         </a>
-
     </nav>
 
-    <p class="nav-label">
-        Administration
-    </p>
-
-    <nav class="nav">
-
+    <p class="nav-label">Administration</p>
+    <nav class="nav" aria-label="Administration">
         <a href="users.html">
-
-            assets/users.svg
-
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.7">
+                    <circle cx="9" cy="8" r="3.5"/>
+                    <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20"/>
+                    <path d="M16 5a3.5 3.5 0 0 1 0 6.8M18 14a5.5 5.5 0 0 1 3.5 5.2"/>
+                </svg>
+            </span>
             Users
-
         </a>
 
         <a href="settings.html">
-
-            assets/settings.svg
-
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.7">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.6-1.4-2.4 1.4-1.1a7 7 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.6 1.4 2.4-1.4 1.1a7 7 0 0 1 0 2Z"
+                          transform="translate(-1 -1) scale(1.05)"/>
+                </svg>
+            </span>
             Settings
-
         </a>
-
     </nav>
 
     <div class="sidebar-footer">
-
-        Brampton Develop<br>
+        <strong>Brampton Develop</strong><br>
         Professional Development Portal
-
     </div>
-
 </aside>
 
 <main class="main">
-<style>
-
-.topbar{
-    min-height:82px;
-    padding:18px 34px;
-    background:white;
-    border-bottom:1px solid var(--border);
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
-}
-
-.page-title h2{
-    font-size:24px;
-    font-weight:650;
-    letter-spacing:-.5px;
-}
-
-.page-title p{
-    margin-top:5px;
-    color:var(--muted);
-    font-size:13px;
-}
-
-.account-menu{
-    position:relative;
-    flex-shrink:0;
-}
-
-.account-button{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 10px;
-
-    background:transparent;
-    border:1px solid transparent;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.account-button:hover{
-    background:var(--brand-light);
-}
-
-.avatar{
-    width:42px;
-    height:42px;
-
-    display:grid;
-    place-items:center;
-
-    border-radius:50%;
-
-    background:var(--brand-light);
-
-    color:var(--brand);
-
-    font-weight:700;
-}
-
-.user-details strong{
-    display:block;
-    font-size:13px;
-}
-
-.user-details span{
-    display:block;
-    margin-top:4px;
-    color:var(--muted);
-    font-size:11px;
-}
-
-.account-dropdown{
-
-    position:absolute;
-
-    right:0;
-
-    top:calc(100% + 10px);
-
-    width:260px;
-
-    background:white;
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.12);
-
-    padding:8px;
-
-    z-index:300;
-}
-
-.account-dropdown[hidden]{
-    display:none;
-}
-
-.dropdown-heading{
-
-    display:flex;
-
-    gap:12px;
-
-    align-items:center;
-
-    padding:10px;
-}
-
-.dropdown-role{
-    margin-top:4px;
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-}
-
-.dropdown-divider{
-
-    height:1px;
-
-    background:var(--border);
-
-    margin:8px 0;
-}
-
-.dropdown-item{
-
-    width:100%;
-
-    border:none;
-
-    background:none;
-
-    text-align:left;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:11px 10px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    font-size:13px;
-}
-
-.dropdown-item:hover{
-
-    background:var(--brand-light);
-
-}
-
-.logout-item{
-    color:#b42318;
-}
-
-.content{
-
-    padding:32px;
-
-    max-width:1600px;
-
-    margin:auto;
-
-}
-
-.welcome{
-
-    background:white;
-
-    border:1px solid var(--border);
-
-    border-radius:16px;
-
-    padding:28px;
-
-    margin-bottom:24px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:20px;
-}
-
-.welcome h3{
-
-    font-size:28px;
-
-    font-weight:650;
-
-    margin-bottom:8px;
-}
-
-.welcome p{
-
-    color:var(--muted);
-
-    font-size:13px;
-}
-
-.button{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:12px 18px;
-
-    border-radius:8px;
-
-    text-decoration:none;
-
-    font-size:13px;
-
-    font-weight:650;
-}
-
-.button-light{
-
-    background:var(--brand);
-
-    color:white;
-}
-
-.button-light:hover{
-
-    background:var(--brand-dark);
-
-}
-
-@media(max-width:768px){
-
-    .topbar{
-
-        padding:20px 20px 20px 70px;
-
-    }
-
-    .content{
-
-        padding:18px;
-
-    }
-
-    .welcome{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-    }
-
-}
-
-</style>
-
-<header class="topbar">
-
-    <div class="page-title">
-
-        <h2>
-            Dashboard
-        </h2>
-
-        <p>
-            Overview of your training portal
-        </p>
-
-    </div>
-
-    <div class="account-menu">
-
-        <button
-            id="accountButton"
-            class="account-button"
-            type="button"
-            aria-expanded="false">
-
-            <div
-                id="userAvatar"
-                class="avatar">
-
-                U
-
-            </div>
-
-            <div class="user-details">
-
-                <strong id="currentUser">
-                    Loading...
-                </strong>
-
-                <span
-                    id="currentRole"
-                    hidden>
-                </span>
-
-            </div>
-
-        </button>
-
-        <div
-            id="accountDropdown"
-            class="account-dropdown"
-            hidden>
-
-            <div class="dropdown-heading">
-
-                <div
-                    id="dropdownAvatar"
-                    class="avatar">
-
-                    U
-
+    <header class="topbar">
+        <div class="breadcrumb">Brampton Develop <span aria-hidden="true">/</span>
+            <strong>Home</strong>
+        </div>
+
+        <div class="account-menu">
+            <button id="accountButton" class="account-button" type="button"
+                    aria-expanded="false" aria-controls="accountDropdown">
+                <div id="userAvatar" class="avatar" aria-label="Your initials">U</div>
+                <div class="user-details">
+                    <strong id="currentUser">Loading account...</strong>
+                    <span id="currentRole" hidden></span>
                 </div>
-
-                <div>
-
-                    <strong id="dropdownName">
-                        Loading...
-                    </strong>
-
-                    <span
-                        id="dropdownRole"
-                        class="dropdown-role"
-                        hidden>
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="dropdown-divider"></div>
-
-            <a
-                href="profile.html"
-                class="dropdown-item">
-
-                Profile
-
-            </a>
-
-            <button
-                id="switchUserButton"
-                type="button"
-                class="dropdown-item">
-
-                Switch Account
-
+                <span class="chevron" aria-hidden="true">▾</span>
             </button>
 
-            <div class="dropdown-divider"></div>
+            <div id="accountDropdown" class="account-dropdown" hidden>
+                <div class="dropdown-heading">
+                    <div id="dropdownAvatar" class="avatar">U</div>
+                    <div>
+                        <strong id="dropdownName">Loading account...</strong>
+                        <span id="dropdownRole" class="dropdown-role" hidden></span>
+                    </div>
+                </div>
 
-            <button
-                id="logoutButton"
-                type="button"
-                class="dropdown-item logout-item">
+                <div class="dropdown-divider"></div>
+                <a href="profile.html" class="dropdown-item">Your account</a>
+                <button id="switchUserButton" type="button" class="dropdown-item">
+                    Switch account
+                </button>
+                <div class="dropdown-divider"></div>
+                <button id="logoutButton" type="button"
+                        class="dropdown-item logout-item">Sign out</button>
+            </div>
+        </div>
+    </header>
 
-                Log Out
+    <section class="content">
+        <div class="welcome">
+            <div>
+                <h2 id="welcomeGreeting">Welcome</h2>
+                <p id="todayDate">Your Brampton Develop workspace</p>
+            </div>
 
-            </button>
-
+            <div class="welcome-actions">
+                <a href="create-user.html" class="button">
+                    <span aria-hidden="true">＋</span> Create user
+                </a>
+                <a href="create-form.html" class="button button-primary">
+                    <span aria-hidden="true">＋</span> Create form
+                </a>
+            </div>
         </div>
 
-    </div>
-
-</header>
-
-<section class="content">
-
-    <div class="welcome">
-
-        <div>
-
-            <h3 id="welcomeGreeting">
-                Welcome
-            </h3>
-
-            <p id="todayDate">
-                Loading...
-            </p>
-
+        <div class="section-heading">
+            <div>
+                <h3>Your workspace</h3>
+                <p>A quick overview of your training portal.</p>
+            </div>
         </div>
 
-        <div
-            style="
-            display:flex;
-            gap:12px;
-            flex-wrap:wrap;
-        ">
-
-            <a
-                href="create-user.html"
-                class="button button-light">
-
-                Create User
-
+        <div class="stats">
+            <a href="users.html" class="stat-link">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <h4>Total users</h4>
+                        <span class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="1.7">
+                                <circle cx="9" cy="8" r="3.5"/>
+                                <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20"/>
+                                <path d="M16 5a3.5 3.5 0 0 1 0 6.8"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <h3 id="userCount">0</h3>
+                    <p>Registered portal accounts</p>
+                </div>
             </a>
 
-            <a
-                href="create-form.html"
-                class="button button-light">
-
-                Create Form
-
+            <a href="forms.html" class="stat-link">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <h4>Training forms</h4>
+                        <span class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="1.7">
+                                <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
+                                <path d="M14 3v5h5M9 13h7M9 17h7"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <h3 id="formCount">0</h3>
+                    <p>Available learning forms</p>
+                </div>
             </a>
 
+            <a href="responses.html" class="stat-link">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <h4>Responses</h4>
+                        <span class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="1.7">
+                                <path d="M4 19V5M4 19h17"/>
+                                <path d="m7 15 4-4 3 2 6-7"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <h3 id="responseCount">0</h3>
+                    <p>Submitted assessments</p>
+                </div>
+            </a>
+
+            <a href="certificates.html" class="stat-link">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <h4>Certificates</h4>
+                        <span class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="1.7">
+                                <circle cx="12" cy="8" r="5"/>
+                                <path d="m8 12-1 9 5-3 5 3-1-9"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <h3 id="certificateCount">0</h3>
+                    <p>Issued certificates</p>
+                </div>
+            </a>
         </div>
 
-    </div>
-
-    <style>
-
-.stats{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(
-            4,
-            minmax(0,1fr)
-        );
-
-    gap:18px;
-
-    margin-bottom:24px;
-
-}
-
-.stat-link{
-
-    text-decoration:none;
-
-    color:inherit;
-
-}
-
-.stat-card{
-
-    background:white;
-
-    border:1px solid var(--border);
-
-    border-radius:16px;
-
-    padding:22px;
-
-    transition:.2s;
-
-}
-
-.stat-card:hover{
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 12px 30px
-        rgba(0,0,0,.08);
-
-}
-
-.stat-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:18px;
-
-}
-
-.stat-card h3{
-
-    color:var(--muted);
-
-    font-size:12px;
-
-    font-weight:600;
-
-}
-
-.stat-icon{
-
-    width:38px;
-
-    height:38px;
-
-    border-radius:10px;
-
-    background:var(--brand-light);
-
-    display:grid;
-
-    place-items:center;
-}
-
-.stat-icon img{
-
-    width:18px;
-    height:18px;
-}
-
-.stat-card h1{
-
-    font-size:32px;
-
-    font-weight:700;
-
-    letter-spacing:-1px;
-
-}
-
-.stat-card p{
-
-    margin-top:6px;
-
-    color:var(--muted);
-
-    font-size:12px;
-
-}
-
-.grid{
-
-    display:grid;
-
-    grid-template-columns:
-        minmax(0,1.8fr)
-        minmax(280px,1fr);
-
-    gap:20px;
-
-}
-
-.panel{
-
-    background:white;
-
-    border:1px solid var(--border);
-
-    border-radius:16px;
-
-    overflow:hidden;
-
-}
-
-.panel-header{
-
-    padding:22px;
-
-    border-bottom:1px solid var(--border);
-
-}
-
-.panel-header h3{
-
-    font-size:16px;
-
-    margin-bottom:5px;
-
-}
-
-.panel-header p{
-
-    color:var(--muted);
-
-    font-size:12px;
-
-}
-
-.panel-body{
-
-    padding:22px;
-
-}
-
-.table-wrap{
-
-    overflow-x:auto;
-
-}
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-}
-
-th{
-
-    padding:14px 18px;
-
-    text-align:left;
-
-    background:#f8fafc;
-
-    color:var(--muted);
-
-    font-size:12px;
-
-}
-
-td{
-
-    padding:15px 18px;
-
-    border-top:1px solid var(--border);
-
-    font-size:13px;
-}
-
-.quick-actions{
-
-    display:grid;
-
-    gap:12px;
-
-}
-
-.action-link{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:15px;
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    transition:.2s;
-}
-
-.action-link:hover{
-
-    background:#fafcff;
-
-    border-color:#c9d5e2;
-
-}
-
-.action-icon{
-
-    width:42px;
-
-    height:42px;
-
-    border-radius:10px;
-
-    background:var(--brand-light);
-
-    display:grid;
-
-    place-items:center;
-
-    flex-shrink:0;
-}
-
-.action-icon img{
-
-    width:20px;
-    height:20px;
-}
-
-.action-link strong{
-
-    display:block;
-
-    font-size:13px;
-
-}
-
-.action-link small{
-
-    display:block;
-
-    margin-top:3px;
-
-    color:var(--muted);
-
-    font-size:11px;
-
-}
-
-@media(max-width:1150px){
-
-    .stats{
-
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0,1fr)
-            );
-
-    }
-
-    .grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-@media(max-width:600px){
-
-    .stats{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-</style>
-
-<div class="stats">
-
-    <a
-        href="users.html"
-        class="stat-link">
-
-        <div class="stat-card">
-
-            <div class="stat-top">
-
-                <h3>
-                    Total Users
-                </h3>
-
-                <div class="stat-icon">
-
-                    assets/users.svg
-
+        <div class="workspace-grid">
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Recent forms</h3>
+                    <p>Your recently created learning and assessment forms.</p>
                 </div>
 
-            </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Form name</th>
+                                <th>Pass mark</th>
+                                <th>CPD hours</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentForms">
+                            <tr>
+                                <td colspan="3" class="empty-state">Loading forms...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-            <h1 id="userCount">
-                —
-            </h1>
-
-            <p>
-                Registered portal accounts
-            </p>
-
-        </div>
-
-    </a>
-
-    <a
-        href="forms.html"
-        class="stat-link">
-
-        <div class="stat-card">
-
-            <div class="stat-top">
-
-                <h3>
-                    Training Forms
-                </h3>
-
-                <div class="stat-icon">
-
-                    assets/forms.svg
-
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Quick actions</h3>
+                    <p>Shortcuts to frequently used tools.</p>
                 </div>
 
-            </div>
+                <div class="panel-body">
+                    <div class="quick-actions">
+                        <a href="create-user.html" class="action-link">
+                            <span class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.7">
+                                    <circle cx="9" cy="8" r="3.5"/>
+                                    <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20M18 8v6M15 11h6"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Create a user</strong>
+                                <small>Add a new portal account</small>
+                            </span>
+                        </a>
 
-            <h1 id="formCount">
-                —
-            </h1>
+                        <a href="create-form.html" class="action-link">
+                            <span class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.7">
+                                    <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
+                                    <path d="M14 3v5h5M12 12v6M9 15h6"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Create a form</strong>
+                                <small>Set up a new learning assessment</small>
+                            </span>
+                        </a>
 
-            <p>
-                Available learning forms
-            </p>
+                        <a href="responses.html" class="action-link">
+                            <span class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.7">
+                                    <path d="M4 19V5M4 19h17"/>
+                                    <path d="m7 15 4-4 3 2 6-7"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Review responses</strong>
+                                <small>View submitted assessment results</small>
+                            </span>
+                        </a>
 
-        </div>
-
-    </a>
-
-    <a
-        href="responses.html"
-        class="stat-link">
-
-        <div class="stat-card">
-
-            <div class="stat-top">
-
-                <h3>
-                    Responses
-                </h3>
-
-                <div class="stat-icon">
-
-                    assets/responses.svg
-
+                        <a href="certificates.html" class="action-link">
+                            <span class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.7">
+                                    <circle cx="12" cy="8" r="5"/>
+                                    <path d="m8 12-1 9 5-3 5 3-1-9"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Manage certificates</strong>
+                                <small>View and manage issued awards</small>
+                            </span>
+                        </a>
+                    </div>
                 </div>
-
-            </div>
-
-            <h1 id="responseCount">
-                —
-            </h1>
-
-            <p>
-                Submitted assessments
-            </p>
-
+            </section>
         </div>
-
-    </a>
-
-    <a
-        href="certificates.html"
-        class="stat-link">
-
-        <div class="stat-card">
-
-            <div class="stat-top">
-
-                <h3>
-                    Certificates
-                </h3>
-
-                <div class="stat-icon">
-
-                    assets/certificate.svg
-
-                </div>
-
-            </div>
-
-            <h1 id="certificateCount">
-                —
-            </h1>
-
-            <p>
-                Issued certificates
-            </p>
-
-        </div>
-
-    </a>
-
-</div>
-
-<div class="grid">
-
-    <section class="panel">
-
-        <div class="panel-header">
-
-            <h3>
-                Recent Forms
-            </h3>
-
-            <p>
-                Recently created learning and assessment forms
-            </p>
-
-        </div>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Form Name
-                        </th>
-
-                        <th>
-                            Pass Mark
-                        </th>
-
-                        <th>
-                            CPD Hours
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="recentForms">
-
-                    <tr>
-
-                        <td
-                            colspan="3">
-
-                            Loading forms...
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
     </section>
+</main>
 
-    <section class="panel">
-
-        <div class="panel-header">
-
-            <h3>
-                Quick Actions
-            </h3>
-
-            <p>
-                Frequently used tools
-            </p>
-
-        </div>
-
-        <div class="panel-body">
-
-            <div class="quick-actions">
-
-                <a
-                    href="create-user.html"
-                    class="action-link">
-
-                    <div class="action-icon">
-
-                        assets/users.svg
-
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Create User
-                        </strong>
-
-                        <small>
-                            Add a new portal account
-                        </small>
-
-                    </div>
-
-                </a>
-
-                <a
-                    href="create-form.html"
-                    class="action-link">
-
-                    <div class="action-icon">
-
-                        assets/forms.svg
-
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Create Form
-                        </strong>
-
-                        <small>
-                            Publish a new course
-                        </small>
-
-                    </div>
-
-                </a>
-
-                <a
-                    href="responses.html"
-                    class="action-link">
-
-                    <div class="action-icon">
-
-                        assets/responses.svg
-
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Review Responses
-                        </strong>
-
-                        <small>
-                            View assessment results
-                        </small>
-
-                    </div>
-
-                </a>
-
-                <a
-                    href="certificates.html"
-                    class="action-link">
-
-                    <div class="action-icon">
-
-                        assets/certificate.svg
-
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Certificates
-                        </strong>
-
-                        <small>
-                            Manage issued awards
-                        </small>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-</div>
-
-</section>
-
-    </main>
-
+<!-- Keep these paths aligned with your existing JavaScript files. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-js/config.jsscript>
-js/supabase.jsscript>
-<script srcsscript>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
 
 <script>
+"use strict";
 
-const sidebar =
-    document.getElementById(
-        "sidebar"
-    );
+const sidebar = document.getElementById("sidebar");
+const mobileMenu = document.getElementById("mobileMenu");
+const mobileOverlay = document.getElementById("mobileOverlay");
+const accountButton = document.getElementById("accountButton");
+const accountDropdown = document.getElementById("accountDropdown");
 
-const mobileMenu =
-    document.getElementById(
-        "mobileMenu"
-    );
+function setMobileMenu(open) {
+    sidebar.classList.toggle("open", open);
+    mobileOverlay.classList.toggle("open", open);
+    mobileMenu.setAttribute("aria-expanded", String(open));
+}
 
-const mobileOverlay =
-    document.getElementById(
-        "mobileOverlay"
-    );
+mobileMenu.addEventListener("click", () => {
+    setMobileMenu(!sidebar.classList.contains("open"));
+});
 
-mobileMenu?.addEventListener(
-    "click",
-    () => {
+mobileOverlay.addEventListener("click", () => setMobileMenu(false));
 
-        sidebar.classList.add(
-            "open"
-        );
-
-        mobileOverlay.classList.add(
-            "open"
-        );
-
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        accountDropdown.hidden = true;
+        accountButton.setAttribute("aria-expanded", "false");
+        setMobileMenu(false);
     }
-);
+});
 
-mobileOverlay?.addEventListener(
-    "click",
-    () => {
-
-        sidebar.classList.remove(
-            "open"
-        );
-
-        mobileOverlay.classList.remove(
-            "open"
-        );
-
-    }
-);
-
-function getInitials(name){
-
-    const words =
-        String(name || "User")
+function getInitials(name) {
+    const words = String(name || "User")
         .trim()
         .split(/\s+/)
         .filter(Boolean);
 
-    if(words.length === 0){
+    if (!words.length) return "U";
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
 
-        return "U";
-
-    }
-
-    if(words.length === 1){
-
-        return words[0]
-            .substring(0,2)
-            .toUpperCase();
-
-    }
-
-    return (
-        words[0][0] +
-        words[
-            words.length - 1
-        ][0]
-    ).toUpperCase();
-
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
 }
 
-function loadAccountDetails(){
+function getGreeting(hour) {
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+}
 
-    const account =
-        getCurrentUser();
+function loadAccountDetails() {
+    if (typeof getCurrentUser !== "function") {
+        console.error("getCurrentUser() was not found. Check your authentication script.");
+        document.getElementById("currentUser").textContent = "Your account";
+        document.getElementById("dropdownName").textContent = "Your account";
+        document.getElementById("welcomeGreeting").textContent = "Welcome";
+        return;
+    }
 
-    const name =
+    const account = getCurrentUser();
+
+    if (account && typeof account.then === "function") {
+        account.then(renderAccountDetails).catch(error => {
+            console.error("Unable to load account details:", error);
+        });
+        return;
+    }
+
+    renderAccountDetails(account);
+}
+
+function renderAccountDetails(account) {
+    const name = String(
         account?.display_name ||
         account?.full_name ||
         account?.username ||
         account?.email ||
-        "User";
+        "User"
+    );
 
-    const role =
-        account?.role || "";
+    const role = String(account?.role || "");
+    const initials = getInitials(name);
 
-    const initials =
-        getInitials(name);
+    document.getElementById("currentUser").textContent = name;
+    document.getElementById("dropdownName").textContent = name;
+    document.getElementById("userAvatar").textContent = initials;
+    document.getElementById("dropdownAvatar").textContent = initials;
 
-    document.getElementById(
-        "currentUser"
-    ).textContent =
-        name;
+    const currentRole = document.getElementById("currentRole");
+    currentRole.textContent = role;
+    currentRole.hidden = !role;
 
-    document.getElementById(
-        "dropdownName"
-    ).textContent =
-        name;
+    const dropdownRole = document.getElementById("dropdownRole");
+    dropdownRole.textContent = role;
+    dropdownRole.hidden = !role;
 
-    document.getElementById(
-        "userAvatar"
-    ).textContent =
-        initials;
+    document.getElementById("welcomeGreeting").textContent =
+        `${getGreeting(new Date().getHours())}, ${name}`;
 
-    document.getElementById(
-        "dropdownAvatar"
-    ).textContent =
-        initials;
-
-    const currentRole =
-        document.getElementById(
-            "currentRole"
-        );
-
-    if(currentRole){
-
-        currentRole.textContent =
-            role;
-
-        currentRole.hidden =
-            !role;
-
-    }
-
-    const dropdownRole =
-        document.getElementById(
-            "dropdownRole"
-        );
-
-    if(dropdownRole){
-
-        dropdownRole.textContent =
-            role;
-
-        dropdownRole.hidden =
-            !role;
-
-    }
-
-    const hour =
-        new Date().getHours();
-
-    let greeting =
-        "Good afternoon";
-
-    if(hour < 12){
-
-        greeting =
-            "Good morning";
-
-    }
-    else if(hour >= 18){
-
-        greeting =
-            "Good evening";
-
-    }
-
-    document.getElementById(
-        "welcomeGreeting"
-    ).textContent =
-        `${greeting}, ${name}`;
-
-    document.getElementById(
-        "todayDate"
-    ).textContent =
-        new Date()
-        .toLocaleDateString(
-            "en-GB",
-            {
-                weekday:"long",
-                day:"numeric",
-                month:"long",
-                year:"numeric"
-            }
-        );
-
+    document.getElementById("todayDate").textContent =
+        new Date().toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
 }
 
-async function loadStats(){
+accountButton.addEventListener("click", () => {
+    const open = accountDropdown.hidden;
+    accountDropdown.hidden = !open;
+    accountButton.setAttribute("aria-expanded", String(open));
+});
 
-    try{
-
-        const stats =
-            await getDashboardStats();
-
-        document.getElementById(
-            "userCount"
-        ).textContent =
-            stats.users;
-
-        document.getElementById(
-            "formCount"
-        ).textContent =
-            stats.forms;
-
-        document.getElementById(
-            "responseCount"
-        ).textContent =
-            stats.responses;
-
-        document.getElementById(
-            "certificateCount"
-        ).textContent =
-            stats.certificates;
-
+document.addEventListener("click", event => {
+    if (!event.target.closest(".account-menu")) {
+        accountDropdown.hidden = true;
+        accountButton.setAttribute("aria-expanded", "false");
     }
-    catch(error){
+});
 
-        console.error(
-            "Unable to load stats",
-            error
-        );
-
-    }
-
-}
-
-async function loadRecentForms(){
-
-    const table =
-        document.getElementById(
-            "recentForms"
-        );
-
-    if(!table){
+async function loadStats() {
+    if (typeof getDashboardStats !== "function") {
+        console.warn("getDashboardStats() was not found in your existing scripts.");
         return;
     }
 
-    try{
+    try {
+        const stats = await getDashboardStats();
 
-        const forms =
-            await getForms();
-
-        if(
-            !forms ||
-            !forms.length
-        ){
-
-            table.innerHTML = `
-            <tr>
-                <td colspan="3">
-                    No forms found
-                </td>
-            </tr>
-            `;
-
-            return;
-
-        }
-
-        table.innerHTML = "";
-
-        forms
-            .slice(0,5)
-            .forEach(form => {
-
-                table.innerHTML += `
-                <tr>
-
-                    <td>
-                        ${form.name || "Unnamed Form"}
-                    </td>
-
-                    <td>
-                        ${form.passmark || APP.defaultPassMark}%
-                    </td>
-
-                    <td>
-                        ${form.cpdhours || APP.defaultCPDHours}
-                    </td>
-
-                </tr>
-                `;
-
-            });
-
+        document.getElementById("userCount").textContent = stats.users ?? "—";
+        document.getElementById("formCount").textContent = stats.forms ?? "—";
+        document.getElementById("responseCount").textContent = stats.responses ?? "—";
+        document.getElementById("certificateCount").textContent =
+            stats.certificates ?? "—";
+    } catch (error) {
+        console.error("Unable to load dashboard statistics:", error);
     }
-    catch(error){
-
-        console.error(
-            "Unable to load forms",
-            error
-        );
-
-    }
-
 }
 
-const accountButton =
-    document.getElementById(
-        "accountButton"
-    );
+function appendCell(row, value) {
+    const cell = document.createElement("td");
+    cell.textContent = String(value);
+    row.appendChild(cell);
+}
 
-const accountDropdown =
-    document.getElementById(
-        "accountDropdown"
-    );
+async function loadRecentForms() {
+    const table = document.getElementById("recentForms");
 
-accountButton?.addEventListener(
-    "click",
-    () => {
-
-        const open =
-            accountDropdown.hidden;
-
-        accountDropdown.hidden =
-            !open;
-
-        accountButton.setAttribute(
-            "aria-expanded",
-            open
-        );
-
+    if (typeof getForms !== "function") {
+        table.replaceChildren();
+        const row = table.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 3;
+        cell.className = "empty-state";
+        cell.textContent = "Form data is currently unavailable.";
+        console.warn("getForms() was not found in your existing scripts.");
+        return;
     }
-);
 
-document.addEventListener(
-    "click",
-    event => {
+    try {
+        const forms = await getForms();
+        table.replaceChildren();
 
-        if(
-            !event.target.closest(
-                ".account-menu"
-            )
-        ){
-
-            accountDropdown.hidden =
-                true;
-
+        if (!Array.isArray(forms) || !forms.length) {
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 3;
+            cell.className = "empty-state";
+            cell.textContent = "No forms found.";
+            return;
         }
 
+        const defaultPassMark =
+            typeof APP !== "undefined" ? APP.defaultPassMark : "—";
+        const defaultCPDHours =
+            typeof APP !== "undefined" ? APP.defaultCPDHours : "—";
+
+        forms.slice(0, 5).forEach(form => {
+            const row = table.insertRow();
+
+            appendCell(row, form.name || "Unnamed form");
+            appendCell(row, `${form.passmark ?? defaultPassMark}%`);
+            appendCell(row, form.cpdhours ?? defaultCPDHours);
+        });
+    } catch (error) {
+        console.error("Unable to load recent forms:", error);
+        table.replaceChildren();
+
+        const row = table.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 3;
+        cell.className = "empty-state";
+        cell.textContent = "Unable to load forms.";
     }
-);
+}
 
-document
-.getElementById(
-    "logoutButton"
-)
-?.addEventListener(
-    "click",
-    async () => {
-
+async function signOut() {
+    if (typeof logoutUser === "function") {
         await logoutUser();
-
+        return;
     }
-);
 
-document
-.getElementById(
-    "switchUserButton"
-)
-?.addEventListener(
-    "click",
-    async () => {
+    // This fallback only redirects; it does not invalidate a server session.
+    // Use your Worker-backed logout function for a secure sign-out.
+    window.location.assign("index.html");
+}
 
-        await logoutUser();
+document.getElementById("logoutButton").addEventListener("click", signOut);
+document.getElementById("switchUserButton").addEventListener("click", signOut);
 
-    }
-);
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-        loadAccountDetails();
-
-        await Promise.all([
-
-            loadStats(),
-            loadRecentForms()
-
-        ]);
-
-    }
-);
-
+document.addEventListener("DOMContentLoaded", async () => {
+    loadAccountDetails();
+    await Promise.all([loadStats(), loadRecentForms()]);
+});
 </script>
 
 </body>
