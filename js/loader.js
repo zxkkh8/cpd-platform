@@ -1,75 +1,121 @@
-
 (() => {
-    const loader = document.getElementById("loading");
+    "use strict";
 
-    if (loader) {
-        window.showLoader = (message = "Loading...") => {
-            const text = loader.querySelector(".loading-text");
-            if (text) text.textContent = message;
-            loader.classList.remove("hidden");
-        };
+    if (window.__bramptonLoaderInitialised) return;
+    window.__bramptonLoaderInitialised = true;
 
-        window.hideLoader = () => {
-            loader.classList.add("hidden");
-        };
+    const style = document.createElement("style");
+    style.textContent = `
+        #pageLoader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 18px;
+            background: #f5f7fa;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity .2s ease, visibility .2s ease;
+        }
 
-        window.addEventListener("load", () => {
-            window.hideLoader();
-        });
+        #pageLoader.loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-        document.addEventListener("click", (event) => {
-            const link = event.target.closest("a");
+        #pageLoader .oval-loader {
+            width: 46px;
+            height: 46px;
+            border: 4px solid #dce5ef;
+            border-top-color: #335882;
+            border-radius: 50%;
+            animation: bramptonSpin .75s linear infinite;
+        }
 
-            if (
-                !link ||
-                event.defaultPrevented ||
-                event.button !== 0 ||
-                event.ctrlKey ||
-                event.metaKey ||
-                event.shiftKey ||
-                event.altKey ||
-                link.target === "_blank" ||
-                link.hasAttribute("download")
-            ) return;
+        #pageLoader .loader-text {
+            color: #335882;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .2px;
+        }
 
-            const url = new URL(link.href, location.href);
+        @keyframes bramptonSpin {
+            to { transform: rotate(360deg); }
+        }
 
-            if (
-                url.origin === location.origin &&
-                url.pathname.endsWith(".html") &&
-                url.href !== location.href
-            ) {
-                window.showLoader();
+        @media (prefers-reduced-motion: reduce) {
+            #pageLoader .oval-loader {
+                animation-duration: 1.8s;
             }
-        });
+        }
+    `;
+    document.head.appendChild(style);
+
+    let loader = document.getElementById("pageLoader");
+
+    if (!loader) {
+        loader = document.createElement("div");
+        loader.id = "pageLoader";
+        loader.setAttribute("role", "status");
+        loader.setAttribute("aria-live", "polite");
+        loader.innerHTML = `
+            <div class="oval-loader" aria-hidden="true"></div>
+            <div class="loader-text">Loading Brampton Develop...</div>
+        `;
+        document.body.prepend(loader);
     }
 
-    // Initialise Supabase using config.js
-    if (!window.APP?.supabase) {
-        console.error("[Brampton Develop] config.js has not loaded.");
-        return;
+    let hideTimer;
+
+    window.showLoader = function (message = "Loading Brampton Develop...") {
+        clearTimeout(hideTimer);
+
+        const text = loader.querySelector(".loader-text");
+        if (text) text.textContent = message;
+
+        loader.classList.remove("loader-hidden");
+    };
+
+    window.hideLoader = function () {
+        loader.classList.add("loader-hidden");
+    };
+
+    function finishLoading() {
+        hideTimer = setTimeout(window.hideLoader, 150);
     }
 
-    if (!window.supabase?.createClient) {
-        console.error("[Brampton Develop] Supabase library has not loaded.");
-        return;
+    if (document.readyState === "complete") {
+        finishLoading();
+    } else {
+        window.addEventListener("load", finishLoading, { once: true });
     }
 
-    const { url, key } = window.APP.supabase;
+    document.addEventListener("click", event => {
+        const link = event.target.closest("a[href]");
+        if (!link || event.defaultPrevented ||
+            event.button !== 0 ||
+            event.ctrlKey || event.metaKey ||
+            event.shiftKey || event.altKey ||
+            link.target === "_blank" ||
+            link.hasAttribute("download")) return;
 
-    if (!url || !key) {
-        console.error("[Brampton Develop] Supabase URL or key is missing.");
-        return;
-    }
+        let destination;
 
-    try {
-        window.supabaseClient = window.supabase.createClient(
-            url.replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, ""),
-            key
-        );
+        try {
+            destination = new URL(link.href, window.location.href);
+        } catch {
+            return;
+        }
 
-        console.info("[Brampton Develop] Supabase initialised.");
-    } catch (error) {
-        console.error("[Brampton Develop] Supabase initialisation failed:", error);
-    }
+        if (destination.origin !== window.location.origin ||
+            !/\.html?$/i.test(destination.pathname) ||
+            destination.href === window.location.href) return;
+
+        window.showLoader("Opening page...");
+    });
 })();
