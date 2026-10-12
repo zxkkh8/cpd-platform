@@ -12,72 +12,124 @@
         "/404.html"
     ];
 
-    // Only allow public pages at the website root.
-    const script = document.querySelector(
-        "script[data-master-auth-guard]"
-    );
-
-    if (!script) {
-        document.documentElement.style.visibility = "visible";
-        console.error("Master authentication guard script not found.");
-        return;
-    }
-
-    const scriptUrl = new URL(script.src);
-    const siteRoot = new URL("../", scriptUrl);
-    const loginUrl = new URL("index.html", siteRoot).href;
-
-    const pagePath = path.replace(/\/+$/, "") || "/";
+    const pagePath =
+        path.replace(/\/+$/, "") || "/";
 
     if (publicPages.includes(pagePath)) {
+        document.documentElement.style.visibility = "visible";
         return;
     }
 
-    document.documentElement.style.visibility = "hidden";
+    document.documentElement.style.visibility =
+        "hidden";
 
     function showError() {
-        document.documentElement.style.visibility = "visible";
+
+        document.documentElement.style.visibility =
+            "visible";
 
         document.body.innerHTML = `
             <main style="
-                font-family: Arial, sans-serif;
-                max-width: 500px;
-                margin: 100px auto;
-                padding: 24px;
-                text-align: center;
+                font-family:Segoe UI,Arial,sans-serif;
+                max-width:500px;
+                margin:100px auto;
+                padding:24px;
+                text-align:center;
             ">
                 <h2>Unable to verify your login</h2>
-                <p>Please check your connection and try again.</p>
-                <a href="${loginUrl}">Return to login</a>
+
+                <p>
+                    Please sign in again to continue.
+                </p>
+
+                <a href="index.html">
+                    Return to login
+                </a>
             </main>
         `;
     }
 
     try {
-        const client = window.supabaseClient;
 
-        if (!client?.auth?.getUser) {
-            throw new Error(
-                "Supabase client is unavailable. Check config.js and supabase.js."
+        const response =
+            await fetch(
+                "/api/session",
+                {
+                    method: "GET",
+                    credentials: "same-origin",
+                    cache: "no-store"
+                }
             );
-        }
 
-        const { data, error } = await client.auth.getUser();
+        if (!response.ok) {
 
-        if (error || !data?.user) {
-            window.location.replace(loginUrl);
+            localStorage.removeItem(
+                "currentUser"
+            );
+
+            window.location.replace(
+                "index.html"
+            );
+
             return;
         }
 
-        document.documentElement.style.visibility = "visible";
+        const result =
+            await response.json();
 
-        client.auth.onAuthStateChange((event) => {
-            if (event === "SIGNED_OUT") {
-                window.location.replace(loginUrl);
-            }
-        });
+        if (
+            !result ||
+            result.authenticated !== true ||
+            !result.profile
+        ) {
+
+            localStorage.removeItem(
+                "currentUser"
+            );
+
+            window.location.replace(
+                "index.html"
+            );
+
+            return;
+        }
+
+        const profile =
+            result.profile;
+
+        localStorage.setItem(
+            "currentUser",
+            JSON.stringify(profile)
+        );
+
+        window.currentUser =
+            profile;
+
+        document.dispatchEvent(
+            new CustomEvent(
+                "authReady",
+                {
+                    detail: profile
+                }
+            )
+        );
+
+        document.documentElement.style.visibility =
+            "visible";
+
     } catch (error) {
-        console.error("Authentication guard:", error);
+
+        console.error(
+            "[Auth Guard]",
+            error
+        );
+
+        localStorage.removeItem(
+            "currentUser"
+        );
+
         showError();
+
     }
+
 })();
