@@ -86,26 +86,100 @@ async function getCurrentSession() {
     return data.session;
 }
 
-function getCurrentUser() {
+async function getCurrentUser() {
+
     try {
-        const user = localStorage.getItem("currentUser");
-        return user ? JSON.parse(user) : null;
-    } catch {
+
+        const cachedUser =
+            localStorage.getItem(
+                "currentUser"
+            );
+
+        if (cachedUser) {
+
+            return JSON.parse(
+                cachedUser
+            );
+
+        }
+
+        const response =
+            await fetch(
+                "/api/session",
+                {
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+        if (!response.ok) {
+
+            return null;
+
+        }
+
+        const result =
+            await response.json();
+
+        if (
+            !result.authenticated ||
+            !result.profile
+        ) {
+
+            return null;
+
+        }
+
+        localStorage.setItem(
+            "currentUser",
+            JSON.stringify(
+                result.profile
+            )
+        );
+
+        return result.profile;
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load user:",
+            error
+        );
+
         return null;
+
     }
+
 }
 
 async function logoutUser() {
-    localStorage.removeItem("currentUser");
 
-    const { error } =
-        await supabaseClient.auth.signOut();
+    localStorage.removeItem(
+        "currentUser"
+    );
 
-    if (error) {
-        console.error("Logout error:", error);
+    try {
+
+        await fetch(
+            "/api/logout",
+            {
+                method: "POST",
+                credentials:
+                    "same-origin"
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
     }
 
-    window.location.href = APP.logoutPage || "login.html";
+    window.location.href =
+        "index.html";
+
 }
 
 async function getUsers() {
