@@ -785,10 +785,24 @@ td:first-child { font-weight: 500; }
                 <div class="dropdown-heading">
                     <div id="dropdownAvatar" class="avatar">U</div>
                     <div>
-                        <strong id="dropdownName">Loading account...</strong>
-                        <span id="dropdownRole" class="dropdown-role">User</span>
-                    </div>
-                </div>
+                    <strong id="dropdownName">
+                    Loading account...
+                    </strong>
+
+                    <span
+                    id="dropdownRole"
+                    class="dropdown-role"
+                    >
+                    Staff Member
+                    </span>
+
+                    <span
+                id="dropdownEmail"
+                class="dropdown-role"
+                >
+                account@example.com
+                </span>
+            </div>
 
                 <div class="dropdown-divider"></div>
                 <a href="profile.html" class="dropdown-item">Your account</a>
@@ -1051,8 +1065,21 @@ async function loadAccountDetails() {
     }
 
     try {
-        const account = await getCurrentUser();
-        renderAccountDetails(account);
+    const account =
+    await getCurrentUser();
+
+    if (!account) {
+
+    window.location.href =
+        "index.html";
+
+    return;
+
+}
+
+renderAccountDetails(
+    account
+);
     } catch (error) {
         console.error("Unable to load account details:", error);
         document.getElementById("welcomeGreeting").textContent = "Welcome";
@@ -1065,14 +1092,12 @@ function renderAccountDetails(account) {
       function. Do not use email as the display name unless necessary.
     */
     const name = String(
-        account?.display_name ||
-        account?.displayName ||
-        account?.full_name ||
-        account?.fullName ||
-        account?.name ||
-        account?.username ||
-        "User"
-    );
+    account?.display_name ||
+    account?.full_name ||
+    account?.username ||
+    account?.email ||
+    "User"
+);
 
     const role = String(account?.role || "User");
     const initials = getInitials(name);
@@ -1084,6 +1109,8 @@ function renderAccountDetails(account) {
     document.getElementById("dropdownName").textContent = name;
     document.getElementById("dropdownRole").textContent = role;
     document.getElementById("dropdownRole").hidden = false;
+
+    document.getElementById("dropdownEmail").textContent = account.email || "";
 
     document.getElementById("userAvatar").textContent = initials;
     document.getElementById("dropdownAvatar").textContent = initials;
