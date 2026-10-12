@@ -1065,16 +1065,31 @@ async function loadAccountDetails() {
     }
 
     try {
-    const account =
+const account =
     await getCurrentUser();
 
-    if (!account) {
+if (!account) {
 
-    window.location.href =
-        "index.html";
+    console.warn(
+        "No account found."
+    );
+
+    document.getElementById(
+        "currentUser"
+    ).textContent =
+        "Account unavailable";
+
+    document.getElementById(
+        "dropdownName"
+    ).textContent =
+        "Account unavailable";
+
+    document.getElementById(
+        "welcomeGreeting"
+    ).textContent =
+        "Welcome";
 
     return;
-
 }
 
 renderAccountDetails(
