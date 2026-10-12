@@ -45,13 +45,13 @@ jobs:
               output,
               dirs_exist_ok=True,
               ignore=shutil.ignore_patterns(
-                  ".git", ".github", "_site", "__pycache__"
+                  ".git", ".github", "_site", "__pycache__
               )
           )
 
           guard_file = output / "js" / "auth-guard.js"
 
-          if not guard_file.exists():
+          if not guard_file.is_file():
               raise SystemExit("ERROR: js/auth-guard.js is missing.")
 
           public_pages = {
@@ -67,8 +67,10 @@ jobs:
           for page in output.rglob("*.html"):
               relative = page.relative_to(output)
 
-              # Keep only the root-level public pages public.
-              if len(relative.parts) == 1 and relative.name.lower() in public_pages:
+              if (
+                  len(relative.parts) == 1
+                  and relative.name.lower() in public_pages
+              ):
                   print(f"PUBLIC: {relative}")
                   continue
 
@@ -76,58 +78,84 @@ jobs:
 
               if not re.search(r"</body\s*>", content, re.I):
                   raise SystemExit(
-                      f"ERROR: {relative} has no closing body tag."
+                      f"ERROR: No closing body tag in {relative}"
                   )
 
               depth = len(relative.parts) - 1
               prefix = "../" * depth
 
+              # Remove all old master guard tags.
+              content = re.sub(
+                  r"<script\b(?=[^>]*data-master-auth-guard)[^>]*>"
+                  r"\s*</script\s*>",
+                  "",
+                  content,
+                  flags=re.I
+              )
+
+              # Remove old auth-guard script tags, too.
+              content = re.sub(
+                  r"<script\b(?=[^>]*src\s*=\s*['\"][^'\"]*"
+                  r"auth-guard\.js[^'\"]*['\"])[^>]*>"
+                  r"\s*</script\s*>",
+                  "",
+                  content,
+                  flags=re.I
+              )
+
+              # Load Supabase configuration before the guard.
+              # Existing scripts are retained; missing scripts are added.
+              required_scripts = [
+                  (
+                      r"supabase-js",
+                      '<script src="https://cdn.jsdelivr.net/npm/'
+                      '@supabase/supabase-js@2"></script>'
+                  ),
+                  (
+                      r"js/config\.js",
+                      f'<script src="{prefix}js/config.js"></script>'
+                  ),
+                  (
+                      r"js/supabase\.js",
+                      f'<script src="{prefix}js/supabase.js"></script>'
+                  )
+              ]
+
               additions = []
 
-              def has_script(pattern):
-                  return re.search(
+              for pattern, tag in required_scripts:
+                  if not re.search(
                       r"<script\b[^>]*\bsrc\s*=\s*['\"][^'\"]*"
                       + pattern
                       + r"[^'\"]*['\"]",
                       content,
                       re.I
-                  ) is not None
+                  ):
+                      additions.append(tag)
 
-              if not has_script(r"supabase-js"):
-                  additions.append(
-                      '<script src="https://cdn.jsdelivr.net/npm/'
-                      '@supabase/supabase-js@2"></script>'
-                  )
+              guard_tag = (
+                  f'<script data-master-auth-guard '
+                  f'src="{prefix}js/auth-guard.js"></script>'
+              )
 
-              if not has_script(r"js/config\.js"):
-                  additions.append(
-                      f'<script src="{prefix}js/config.js"></script>'
-                  )
+              additions.append(guard_tag)
 
-              if not has_script(r"js/supabase\.js"):
-                  additions.append(
-                      f'<script src="{prefix}js/supabase.js"></script>'
-                  )
+              insertion = "\n" + "\n".join(additions) + "\n"
 
-              if not has_script(r"js/auth-guard\.js"):
-                  additions.append(
-                      f'<script data-master-auth-guard '
-                      f'src="{prefix}js/auth-guard.js"></script>'
-                  )
+              content = re.sub(
+                  r"</body\s*>",
+                  lambda match: insertion + match.group(0),
+                  content,
+                  count=1,
+                  flags=re.I
+              )
 
-              if additions:
-                  insertion = "\n" + "\n".join(additions) + "\n"
-                  content = re.sub(
-                      r"</body\s*>",
-                      lambda match: insertion + match.group(0),
-                      content,
-                      count=1,
-                      flags=re.I
-                  )
-                  page.write_text(content, encoding="utf-8")
-
+              page.write_text(content, encoding="utf-8")
               protected_count += 1
               print(f"PROTECTED: {relative}")
+
+          if protected_count == 0:
+              raise SystemExit("ERROR: No protected HTML pages found.")
 
           print(f"Protected HTML pages processed: {protected_count}")
           PY
