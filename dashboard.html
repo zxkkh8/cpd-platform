@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <link rel="icon" type="image/png" href="/assets/icon1.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#335882">
@@ -14,6 +13,7 @@
     --brand-dark: #274666;
     --brand-light: #edf3f9;
     --background: #f5f6f8;
+    --surface: #fff;
     --border: #e5e7eb;
     --text: #242424;
     --muted: #616161;
@@ -34,23 +34,13 @@ body {
     font-size: 14px;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+[hidden] { display: none !important; }
 
-button {
-    font: inherit;
-}
-
-button:focus-visible,
-a:focus-visible {
+button:focus-visible, a:focus-visible, input:focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: 3px;
-}
-
-[hidden] {
-    display: none !important;
 }
 
 .mobile-overlay {
@@ -135,9 +125,7 @@ a:focus-visible {
     transition: background .15s;
 }
 
-.nav a:hover {
-    background: #f5f5f5;
-}
+.nav a:hover { background: #f5f5f5; }
 
 .nav a.active {
     background: var(--brand-light);
@@ -208,9 +196,7 @@ a:focus-visible {
     font-weight: 600;
 }
 
-.account-menu {
-    position: relative;
-}
+.account-menu { position: relative; }
 
 .account-button {
     display: flex;
@@ -320,13 +306,8 @@ a:focus-visible {
     cursor: pointer;
 }
 
-.dropdown-item:hover {
-    background: #f5f5f5;
-}
-
-.logout-item {
-    color: #b42318;
-}
+.dropdown-item:hover { background: #f5f5f5; }
+.logout-item { color: #b42318; }
 
 .content {
     max-width: 1600px;
@@ -394,9 +375,11 @@ a:focus-visible {
     font-size: 12px;
 }
 
-.welcome-search input::placeholder {
-    color: #858585;
+.welcome-search input:focus-visible {
+    outline: none;
 }
+
+.welcome-search input::placeholder { color: #858585; }
 
 .button {
     min-height: 40px;
@@ -416,9 +399,7 @@ a:focus-visible {
     transition: background .15s;
 }
 
-.button:hover {
-    background: #f4f4f4;
-}
+.button:hover { background: #f4f4f4; }
 
 .button-primary {
     color: #fff;
@@ -426,9 +407,7 @@ a:focus-visible {
     border-color: var(--brand);
 }
 
-.button-primary:hover {
-    background: var(--brand-dark);
-}
+.button-primary:hover { background: var(--brand-dark); }
 
 .section-heading {
     display: flex;
@@ -491,8 +470,7 @@ a:focus-visible {
     font-weight: 600;
 }
 
-.stat-icon,
-.action-icon {
+.stat-icon, .action-icon {
     display: grid;
     place-items: center;
     flex-shrink: 0;
@@ -548,13 +526,9 @@ a:focus-visible {
     font-size: 12px;
 }
 
-.panel-body {
-    padding: 12px;
-}
+.panel-body { padding: 12px; }
 
-.table-wrap {
-    overflow-x: auto;
-}
+.table-wrap { overflow-x: auto; }
 
 table {
     width: 100%;
@@ -577,9 +551,7 @@ td {
     font-size: 12px;
 }
 
-td:first-child {
-    font-weight: 500;
-}
+td:first-child { font-weight: 500; }
 
 .empty-state {
     padding: 25px 18px;
@@ -602,9 +574,7 @@ td:first-child {
     transition: background .15s;
 }
 
-.action-link:hover {
-    background: #f7f8fa;
-}
+.action-link:hover { background: #f7f8fa; }
 
 .action-icon {
     width: 39px;
@@ -631,13 +601,8 @@ td:first-child {
 }
 
 @media (max-width: 1150px) {
-    .stats {
-        grid-template-columns: repeat(2,minmax(0,1fr));
-    }
-
-    .workspace-grid {
-        grid-template-columns: 1fr;
-    }
+    .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .workspace-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -651,21 +616,11 @@ td:first-child {
         transition: transform .22s ease;
     }
 
-    .sidebar.open {
-        transform: translateX(0);
-    }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
 
-    .main {
-        margin-left: 0;
-    }
-
-    .topbar {
-        padding: 0 16px 0 66px;
-    }
-
-    .content {
-        padding: 22px 16px;
-    }
+    .topbar { padding: 0 16px 0 66px; }
+    .content { padding: 22px 16px; }
 
     .welcome {
         align-items: stretch;
@@ -673,24 +628,12 @@ td:first-child {
         gap: 18px;
     }
 
-    .welcome h2 {
-        font-size: 25px;
-    }
+    .welcome h2 { font-size: 25px; }
 
-    .welcome-actions {
-        justify-content: flex-start;
-        width: 100%;
-    }
+    .welcome-actions { justify-content: flex-start; }
+    .welcome-search { flex: 1; width: auto; }
 
-    .welcome-search {
-        flex: 1;
-        width: auto;
-    }
-
-    .user-details,
-    .chevron {
-        display: none;
-    }
+    .user-details, .chevron { display: none; }
 }
 
 @media (max-width: 480px) {
@@ -699,18 +642,9 @@ td:first-child {
         gap: 10px;
     }
 
-    .stat-card {
-        min-height: 115px;
-        padding: 14px;
-    }
-
-    .stat-card h3 {
-        font-size: 25px;
-    }
-
-    .stat-top {
-        align-items: flex-start;
-    }
+    .stat-card { min-height: 115px; padding: 14px; }
+    .stat-card h3 { font-size: 25px; }
+    .stat-top { align-items: flex-start; }
 
     .welcome-actions {
         align-items: stretch;
@@ -723,13 +657,8 @@ td:first-child {
         flex: none;
     }
 
-    .welcome-actions .button {
-        width: 100%;
-    }
-
-    .panel-header {
-        padding: 16px;
-    }
+    .welcome-actions .button { width: 100%; }
+    .panel-header { padding: 16px; }
 }
 </style>
 </head>
@@ -846,7 +775,7 @@ td:first-child {
                 <div id="userAvatar" class="avatar">U</div>
                 <div class="user-details">
                     <strong id="currentUser">Loading account...</strong>
-                    <span id="currentRole" hidden></span>
+                    <span id="currentRole">User</span>
                 </div>
                 <span class="chevron" aria-hidden="true">▾</span>
             </button>
@@ -856,7 +785,7 @@ td:first-child {
                     <div id="dropdownAvatar" class="avatar">U</div>
                     <div>
                         <strong id="dropdownName">Loading account...</strong>
-                        <span id="dropdownRole" class="dropdown-role" hidden></span>
+                        <span id="dropdownRole" class="dropdown-role">User</span>
                     </div>
                 </div>
 
@@ -866,9 +795,8 @@ td:first-child {
                     Switch account
                 </button>
                 <div class="dropdown-divider"></div>
-                <button id="logoutButton" type="button" class="dropdown-item logout-item">
-                    Sign out
-                </button>
+                <button id="logoutButton" type="button"
+                        class="dropdown-item logout-item">Sign out</button>
             </div>
         </div>
     </header>
@@ -970,7 +898,7 @@ td:first-child {
         <div class="workspace-grid">
             <section class="panel">
                 <div class="panel-header">
-                    <h3>Recent forms</h3>
+                    <h3>Recent Forms</h3>
                     <p>Your recently created learning and assessment forms.</p>
                 </div>
 
@@ -1000,7 +928,8 @@ td:first-child {
 
                 <div class="panel-body">
                     <div class="quick-actions">
-                        <a href="create-user.html" class="action-link" id="createUserAction" hidden>
+                        <a href="create-user.html" class="action-link"
+                           id="createUserAction" hidden>
                             <span class="action-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                                     <circle cx="9" cy="8" r="3.5"/>
@@ -1075,6 +1004,7 @@ function setMobileMenu(open) {
     sidebar.classList.toggle("open", open);
     mobileOverlay.classList.toggle("open", open);
     mobileMenu.setAttribute("aria-expanded", String(open));
+    mobileOverlay.classList.toggle("open", open);
 }
 
 mobileMenu.addEventListener("click", () => {
@@ -1092,7 +1022,10 @@ document.addEventListener("keydown", event => {
 });
 
 function getInitials(name) {
-    const words = String(name || "User").trim().split(/\s+/).filter(Boolean);
+    const words = String(name || "User")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
 
     if (!words.length) return "U";
     if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
@@ -1106,57 +1039,53 @@ function getGreeting(hour) {
     return "Good Evening";
 }
 
-function loadAccountDetails() {
+async function loadAccountDetails() {
     if (typeof getCurrentUser !== "function") {
         console.error("getCurrentUser() was not found. Check js/supabase.js.");
         document.getElementById("currentUser").textContent = "Your account";
         document.getElementById("dropdownName").textContent = "Your account";
         document.getElementById("welcomeGreeting").textContent = "Welcome";
+        document.getElementById("adminNavigation").hidden = true;
         return;
     }
 
-    const account = getCurrentUser();
-
-    if (account && typeof account.then === "function") {
-        account.then(renderAccountDetails).catch(error => {
-            console.error("Unable to load account details:", error);
-        });
-    } else {
+    try {
+        const account = await getCurrentUser();
         renderAccountDetails(account);
+    } catch (error) {
+        console.error("Unable to load account details:", error);
+        document.getElementById("welcomeGreeting").textContent = "Welcome";
     }
 }
 
 function renderAccountDetails(account) {
-    const hour = new Date().getHours();
+    /*
+      Prefer the display name returned by your existing authentication
+      function. Do not use email as the display name unless necessary.
+    */
+    const name = String(
+        account?.display_name ||
+        account?.displayName ||
+        account?.full_name ||
+        account?.fullName ||
+        account?.name ||
+        account?.username ||
+        "User"
+    );
 
-let greeting;
-
-if (hour < 12) {
-    greeting = "Good Morning";
-} else if (hour < 18) {
-    greeting = "Good Afternoon";
-} else {
-    greeting = "Good Evening";
-}
-
-document.getElementById("welcomeGreeting").textContent =
-    `${greeting}, ${name}`;
-
-    const role = String(account?.role || "");
+    const role = String(account?.role || "User");
     const initials = getInitials(name);
 
     document.getElementById("currentUser").textContent = name;
+    document.getElementById("currentRole").textContent = role;
+    document.getElementById("currentRole").hidden = false;
+
     document.getElementById("dropdownName").textContent = name;
+    document.getElementById("dropdownRole").textContent = role;
+    document.getElementById("dropdownRole").hidden = false;
+
     document.getElementById("userAvatar").textContent = initials;
     document.getElementById("dropdownAvatar").textContent = initials;
-
-    const currentRole = document.getElementById("currentRole");
-    currentRole.textContent = role || "User";
-    currentRole.hidden = false;
-
-    const dropdownRole = document.getElementById("dropdownRole");
-    dropdownRole.textContent = role || "User";
-    dropdownRole.hidden = false;
 
     document.getElementById("welcomeGreeting").textContent =
         `${getGreeting(new Date().getHours())}, ${name}`;
@@ -1212,11 +1141,13 @@ async function loadRecentForms() {
 
     if (typeof getForms !== "function") {
         table.replaceChildren();
+
         const row = table.insertRow();
         const cell = row.insertCell();
         cell.colSpan = 3;
         cell.className = "empty-state";
         cell.textContent = "Form data is currently unavailable.";
+
         console.warn("getForms() was not found.");
         return;
     }
@@ -1237,13 +1168,15 @@ async function loadRecentForms() {
         forms.slice(0, 5).forEach(form => {
             const row = table.insertRow();
 
-            const passAverage = form.pass_average ??
+            const passAverage =
+                form.pass_average ??
                 form.passAverage ??
                 form.average_pass ??
                 form.averagePass ??
                 form.pass_average_percentage;
 
-            const averageTime = form.average_time ??
+            const averageTime =
+                form.average_time ??
                 form.averageTime ??
                 form.avg_time ??
                 form.avgTime ??
@@ -1262,7 +1195,9 @@ async function loadRecentForms() {
 
             appendCell(
                 row,
-                averageTime == null || averageTime === "" ? "—" : averageTime
+                averageTime == null || averageTime === ""
+                    ? "—"
+                    : averageTime
             );
         });
     } catch (error) {
@@ -1277,18 +1212,13 @@ async function loadRecentForms() {
     }
 }
 
-const globalSearchForm = document.getElementById("globalSearchForm");
-const globalSearchInput = document.getElementById("globalSearch");
-
-globalSearchForm.addEventListener("submit", event => {
+document.getElementById("globalSearchForm").addEventListener("submit", event => {
     event.preventDefault();
 
-    const query = globalSearchInput.value.trim();
+    const query = document.getElementById("globalSearch").value.trim();
     if (!query) return;
 
-    const encodedQuery = encodeURIComponent(query);
     const lowerQuery = query.toLowerCase();
-
     let destination = "forms.html";
 
     if (/user|staff|account|person|people/.test(lowerQuery)) {
@@ -1301,7 +1231,9 @@ globalSearchForm.addEventListener("submit", event => {
         destination = "settings.html";
     }
 
-    window.location.assign(`${destination}?search=${encodedQuery}`);
+    window.location.assign(
+        `${destination}?search=${encodeURIComponent(query)}`
+    );
 });
 
 async function signOut() {
@@ -1317,7 +1249,7 @@ document.getElementById("logoutButton").addEventListener("click", signOut);
 document.getElementById("switchUserButton").addEventListener("click", signOut);
 
 document.addEventListener("DOMContentLoaded", async () => {
-    loadAccountDetails();
+    await loadAccountDetails();
     await Promise.all([loadStats(), loadRecentForms()]);
 });
 </script>
