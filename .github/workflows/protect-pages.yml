@@ -45,7 +45,7 @@ jobs:
               output,
               dirs_exist_ok=True,
               ignore=shutil.ignore_patterns(
-                  ".git", ".github", "_site", "__pycache__
+                  ".git", ".github", "_site", "__pycache__"
               )
           )
 
