@@ -154,10 +154,10 @@ export async function getSession(request, env) {
 
   if (!sessions?.length) return null;
 
-  const profiles = await databaseRequest(
-    env,
-    `profiles?id=eq.${encodeURIComponent(sessions[0].profile_id)}&select=id,email,full_name,role,is_active&limit=1`
-  );
+const profiles = await databaseRequest(
+  env,
+  `profiles?id=eq.${encodeURIComponent(sessions[0].profile_id)}&select=id,username,display_name,email,full_name,role,is_active&limit=1`
+);
 
   const profile = profiles?.[0];
 
