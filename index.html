@@ -290,10 +290,32 @@
             const message = document.getElementById("message");
             const button = document.getElementById("submitButton");
 
-            function showMessage(text, success = false) {
-                message.textContent = text;
-                message.classList.toggle("success", success);
-            }
+           function setBusy(busy) {
+
+            button.disabled = busy;
+
+            usernameInput.readOnly = busy;
+            passwordInput.readOnly = busy;
+
+            if (busy) {
+
+        button.textContent = "Signing in";
+
+        if (typeof window.showLoader === "function") {
+            window.showLoader("Signing you in...");
+        }
+
+        } else {
+
+        button.textContent = "Sign in";
+
+        if (typeof window.hideLoader === "function") {
+            window.hideLoader();
+        }
+
+    }
+
+}
 
             function setBusy(busy) {
                 button.disabled = busy;
@@ -370,11 +392,19 @@
                         return;
                     }
 
+                    if (typeof window.showLoader === "function") {
+                    window.showLoader("Loading dashboard...");
+                    }
+
                     window.location.replace("dashboard.html");
                 } catch (error) {
                     console.error(
                         "[Brampton Develop] Server-side login request failed."
                     );
+
+                    if (typeof window.hideLoader === "function") {
+                    window.hideLoader();
+                    }
 
                     showMessage(
                         "Unable to contact the sign-in service. Please try again."
