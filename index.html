@@ -345,6 +345,7 @@
             
             form.addEventListener("submit", async event => {
                 event.preventDefault();
+                console.log("Form submitted");
 
                 const username = usernameInput.value.trim();
                 const password = passwordInput.value;
@@ -356,6 +357,8 @@
 
                 setBusy(true);
                 showMessage("Signing in…", true);
+                
+                console.log("Sending login request");
 
                 try {
                     const response = await fetch("/api/login", {
@@ -369,7 +372,9 @@
                             password: password
                         })
                     });
-
+                    
+                    console.log("Response received", response);
+                    
                     const result = await response.json().catch(() => null);
 
                     if (!response.ok || !result || result.success !== true) {
